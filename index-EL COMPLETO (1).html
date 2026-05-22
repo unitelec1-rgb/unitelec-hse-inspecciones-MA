@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspección SST - UNITELEC</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-size: 14px; }
+
+  /* LOGIN */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('fondo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+.login-box {
+    background: rgba(255,255,255,0.92);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    text-align: center;
+    backdrop-filter: blur(8px);
+  }
+  .login-logo { font-size: 28px; font-weight: bold; color: #1F4E79; margin-bottom: 4px; }
+  .login-subtitle { color: #666; font-size: 13px; margin-bottom: 30px; }
+  .login-box h2 { color: #1F4E79; margin-bottom: 20px; font-size: 18px; }
+  .login-box input, .login-box select {
+    width: 100%; padding: 12px 16px; border: 2px solid #ddd;
+    border-radius: 8px; font-size: 14px; margin-bottom: 12px; transition: border-color 0.3s;
+  }
+  .login-box input:focus, .login-box select:focus { outline: none; border-color: #1F4E79; }
+  .btn-login {
+    width: 100%; padding: 14px; background: #1F4E79; color: white;
+    border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
+    cursor: pointer; transition: background 0.3s;
+  }
+  .btn-login:hover { background: #2E75B6; }
+  .login-error { color: #C55A11; font-size: 13px; margin-top: 12px; display: none; }
+
+  /* FORM */
+  #form-screen { display: none; }
+  .header {
+    background: #1F4E79; color: white; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  .header-logo { font-size: 20px; font-weight: bold; }
+  .header-title { font-size: 14px; opacity: 0.9; }
+  .header-user { font-size: 12px; opacity: 0.8; }
+  .btn-logout {
+    background: rgba(255,255,255,0.2); color: white;
+    border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px;
+    border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+  .progress-bar { background: #e0e0e0; border-radius: 10px; height: 8px; margin-bottom: 20px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, #1F4E79, #2E75B6); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+
+  .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .card-title { font-size: 16px; font-weight: bold; color: #1F4E79; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1F4E79; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label { font-size: 12px; font-weight: bold; color: #555; text-transform: uppercase; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 6px;
+    font-size: 14px; transition: border-color 0.3s; font-family: Arial, sans-serif;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1F4E79; }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .seccion-header {
+    border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .seccion-vg { background: #1F4E79; color: white; }
+  .seccion-ge { background: #C55A11; color: white; }
+  .seccion-re { background: #6B2C91; color: white; }
+  .seccion-titulo { font-size: 15px; font-weight: bold; }
+.seccion-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.seccion-arrow {
+  font-size: 20px;
+  transition: transform 0.3s;
+  margin-left: 10px;
+}
+
+.seccion-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+
+.seccion-content {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.seccion-content.collapsed {
+  display: none;
+}
+.draft-banner {
+  background: #FFF3CD;
+  border: 1px solid #FFC107;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.draft-banner.visible { display: flex; }
+.draft-banner span { font-size: 13px; color: #856404; font-weight: bold; }
+.btn-clear-draft {
+  padding: 4px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+  .badge-count { background: rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 10px; font-size: 12px; margin-left: 8px; }
+
+  .estado-general-select {
+    padding: 8px 12px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.15); color: white; font-size: 13px;
+    font-weight: bold; cursor: pointer; min-width: 200px;
+  }
+  .estado-general-select option { background: #333; color: white; }
+
+  .item-card {
+    background: #fafafa; border: 1.5px solid #e8e8e8;
+    border-radius: 8px; padding: 14px; margin-bottom: 10px; transition: border-color 0.3s;
+  }
+  .item-card:hover { border-color: #1F4E79; }
+  .item-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .item-codigo { background: #1F4E79; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; flex-shrink: 0; }
+  .item-codigo-ge { background: #C55A11; }
+  .item-codigo-re { background: #6B2C91; }
+  .item-descripcion { font-size: 13px; color: #444; line-height: 1.5; }
+
+  .item-respuesta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .btn-respuesta { padding: 8px 16px; border: 2px solid #ddd; border-radius: 20px; background: white; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.2s; color: #555; }
+  .btn-respuesta.cumple.active { background: #1E6B3C; border-color: #1E6B3C; color: white; }
+  .btn-respuesta.nocumple.active { background: #C00000; border-color: #C00000; color: white; }
+  .btn-respuesta.na.active { background: #666; border-color: #666; color: white; }
+
+  .item-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  @media (max-width: 600px) { .item-extra { grid-template-columns: 1fr; } }
+  .item-obs label { font-size: 11px; color: #888; font-weight: bold; margin-bottom: 4px; display: block; }
+  .item-obs textarea { width: 100%; padding: 8px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 12px; resize: vertical; min-height: 60px; font-family: Arial, sans-serif; }
+
+  .evidencia-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .evidencia-toggle label { font-size: 12px; color: #666; font-weight: bold; }
+  .toggle-btn { display: flex; gap: 6px; }
+  .toggle-btn button { padding: 4px 12px; border-radius: 12px; border: 1.5px solid #ddd; background: white; cursor: pointer; font-size: 11px; transition: all 0.2s; }
+  .toggle-btn button.active-si { background: #1E6B3C; border-color: #1E6B3C; color: white; }
+  .toggle-btn button.active-no { background: #999; border-color: #999; color: white; }
+  .evidencia-section { display: none; }
+  .evidencia-section.visible { display: block; }
+  .file-upload { border: 2px dashed #ccc; border-radius: 6px; padding: 12px; text-align: center; cursor: pointer; background: white; transition: border-color 0.3s; }
+  .file-upload:hover { border-color: #1F4E79; }
+  .file-upload input { display: none; }
+  .file-upload-label { font-size: 12px; color: #888; cursor: pointer; display: block; }
+  .file-preview { max-width: 100%; max-height: 120px; border-radius: 4px; margin-top: 8px; display: none; }
+
+  .firma-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 600px) { .firma-container { grid-template-columns: 1fr; } }
+  .firma-box { border: 2px solid #ddd; border-radius: 8px; overflow: hidden; }
+  .firma-titulo { background: #1F4E79; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 13px; }
+  canvas { width: 100%; height: 150px; cursor: crosshair; touch-action: none; display: block; }
+  .firma-actions { display: flex; gap: 8px; padding: 8px; background: #f5f5f5; justify-content: flex-end; }
+  .btn-limpiar { padding: 6px 14px; background: #C55A11; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+
+  .btn-enviar { width: 100%; padding: 18px; background: #1E6B3C; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+  .btn-enviar:hover { background: #155c32; }
+  .btn-enviar:disabled { background: #999; cursor: not-allowed; }
+
+  #success-screen { display: none; min-height: 100vh; background: linear-gradient(135deg, #1E6B3C, #27ae60); align-items: center; justify-content: center; }
+  .success-box { background: white; border-radius: 16px; padding: 50px 40px; text-align: center; max-width: 450px; width: 90%; }
+  .success-icon { font-size: 60px; margin-bottom: 20px; }
+  .success-title { font-size: 24px; font-weight: bold; color: #1E6B3C; margin-bottom: 10px; }
+  .success-msg { color: #666; margin-bottom: 20px; }
+  .success-codigo { font-size: 18px; font-weight: bold; color: #1F4E79; }
+  .btn-nueva { margin-top: 24px; padding: 14px 30px; background: #1F4E79; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+
+  .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+  .loading-overlay.visible { display: flex; }
+  .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-top: 5px solid white; border-radius: 50%; animation: spin 1s linear infinite; }
+ .loading-text { color: white; font-size: 16px; font-weight: bold; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Enviando inspección...</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+<img src="logo.png" alt="UNITELEC" style="width:250px;margin-bottom:10px;" onerror="this.style.display='none'" />
+<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg" width="28" height="28" />
+  <span style="color:#0078D4;font-weight:bold;font-size:16px;">Outlook</span>
+</div>
+<h2>Inicia sesión para continuar</h2>
+<div style="text-align:left;margin-bottom:4px;">
+  <label style="font-size:12px;font-weight:bold;color:#333;text-transform:uppercase;letter-spacing:1px;">CORREO CORPORATIVO *</label>
+</div>
+<div style="position:relative;">
+  <span style="position:absolute;left:12px;top:13px;color:#555;">✉</span>
+  <input type="email" id="login-email" placeholder="@unitelec.com.pe" style="width:100%;padding:12px 12px 12px 36px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:12px;" />
+</div>
+<div style="position:relative;">
+  <input type="password" id="login-password" placeholder="Introduce tu contraseña" style="width:100%;padding:12px 40px 12px 16px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:12px;" />
+  <span id="ojo" onclick="togglePassword()" style="position:absolute;right:12px;top:13px;cursor:pointer;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+  </span>
+</div>
+    <button class="btn-login" onclick="login()" style="background:#0D1B2A;border-radius:8px;font-size:16px;letter-spacing:1px;">Iniciar sesión</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- FORMULARIO -->
+<div id="form-screen">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img src="logo.png" alt="UNITELEC" style="height:38px;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none'" />
+      <div>
+        <div class="header-logo">UNITELEC HSE</div>
+        <div class="header-title">Inspección de Seguridad y Salud</div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="header-user" id="header-user"></div>
+      <button class="btn-logout" onclick="logout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="draft-banner" id="draft-banner">
+  <span>📋 Tienes un borrador guardado. ¿Deseas continuar donde lo dejaste?</span>
+  <div style="display:flex;gap:8px;">
+    <button class="btn-clear-draft" onclick="limpiarBorrador()">🗑️ Descartar</button>
+  </div>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <!-- DATOS GENERALES -->
+    <div class="card">
+      <div class="card-title">📋 1. Información General</div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Cliente *</label>
+          <select id="cliente" required>
+            <option value="">Seleccionar...</option>
+            <option>PLUZ</option>
+            <option>ISA</option>
+            <option>ORYGEN</option>
+            <option>ATLANTICA</option>
+            <option>ENGY</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Responsable de la Inspección *</label>
+          <select id="responsable" required>
+            <option value="">Seleccionar...</option>
+            <option>ALI RONALD COLCHADO VEGA</option>
+            <option>MYRIAM LAURA CAMPOS MARTINEZ</option>
+            <option>JOSE PAULO CESAR GUERRERO CABRERA</option>
+            <option>CLOUS LYSEN CUYOTUPA NUÑEZ</option>
+            <option>CLAUDIA DAYANA MONTES HUAMANÍ</option>
+            <option>JUAN ERNESTO AGUILAR GUILLEN</option>
+            <option>JEREME JESUS VELASQUEZ LOPEZ</option>
+            <option>JANSEN ANTHONY QUISPE LAGUNA</option>
+            <option>JORGE GONZALO RIVAS TOVALINO</option>
+            <option>MAXWELL ALEXIS BARTRA BURGOS</option>
+            <option>RAMIRO CALISAYA RAMIREZ</option>
+            <option>HUGO DELFIN PIMENTEL MALVACEDA</option>
+            <option>MARCO PAOLO SOVERO HUAMANI</option>
+            <option>MANUEL CASTRO TAFUR</option>
+            <option>CHARLES ENOC PAREDES SAAVEDRA</option>
+            <option>ROBESPIERRE BAUDELAIRE MENA ARANA</option>
+            <option>ALFREDO ALEJANDRO QUEVEDO VALDERRAMA</option>
+            <option>MIRIAM DEYSI SONCCO QUISPE</option>
+            <option>ALEJANDRO ENRIQUE JULCA SALVADOR</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de Apertura *</label>
+          <input type="date" id="fecha_apertura" required />
+        </div>
+
+        <div class="form-group">
+          <label>Estado de Ejecución *</label>
+          <select id="estado_ejecucion" required>
+            <option value="">Seleccionar...</option>
+            <option>Abierto</option>
+            <option>En progreso</option>
+            <option selected>Cerrado</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Proyecto *</label>
+          <select id="proyecto" required>
+            <option value="">Seleccionar...</option>
+            <option>Anillo Vial</option>
+            <option>Mantenimiento de Transformadores Pluz</option>
+            <option>Mantenimiento de Transformadores Orygen</option>
+            <option>Mantenimiento de Líneas</option>
+            <option>Caudivilla</option>
+            <option>Yaros</option>
+            <option>Chimú</option>
+            <option>Chevez</option>
+            <option>Pico</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Área Inspectora *</label>
+          <select id="area_inspectora" required>
+            <option value="">Seleccionar...</option>
+            <option>SEGURIDAD LABORAL</option>
+            <option>OPERACIONES</option>
+            <option>AUDITORÍA</option>
+            <option>GERENCIA GENERAL</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Área Inspeccionada *</label>
+          <select id="area_inspeccionada" required>
+            <option value="">Seleccionar...</option>
+            <option>OBRAS CIVILES</option>
+            <option>MONTAJE ELECTROMECÁNICO</option>
+            <option>MM.TT.LÍNEAS</option>
+            <option>MM.TT.TRAFOS</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Empresa Inspectora *</label>
+          <select id="empresa_inspectora" required>
+            <option value="">Seleccionar...</option>
+            <option>Interno</option>
+            <option>Externo</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Inspección *</label>
+          <select id="tipo_inspeccion" required>
+            <option value="Estándar" selected>Estándar</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Distrito *</label>
+          <select id="distrito" required>
+            <option value="">Seleccionar...</option>
+            <option>Ancón</option><option>Ate</option><option>Barranco</option>
+            <option>Breña</option><option>Carabayllo</option><option>Chaclacayo</option>
+            <option>Chorrillos</option><option>Cieneguilla</option><option>Comas</option>
+            <option>El Agustino</option><option>Independencia</option><option>Jesús María</option>
+            <option>La Molina</option><option>La Victoria</option><option>Lince</option>
+            <option>Los Olivos</option><option>Lurigancho</option><option>Lurín</option>
+            <option>Magdalena del Mar</option><option>Miraflores</option><option>Pachacámac</option>
+            <option>Pueblo Libre</option><option>Puente Piedra</option><option>Rímac</option>
+            <option>San Borja</option><option>San Isidro</option>
+            <option>San Juan de Lurigancho</option><option>San Juan de Miraflores</option>
+            <option>San Luis</option><option>San Martín de Porres</option>
+            <option>San Miguel</option><option>Santa Anita</option>
+            <option>Santiago de Surco</option><option>Surquillo</option>
+            <option>Villa El Salvador</option><option>Villa María del Triunfo</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Dirección *</label>
+          <input type="text" id="direccion" placeholder="Av. Ejemplo 123" required />
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Orden de Trabajo *</label>
+          <select id="tipo_orden" required>
+            <option value="">Seleccionar...</option>
+            <option>LCL</option>
+            <option>OT</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>N° de Trabajo *</label>
+          <input type="text" id="num_trabajo" placeholder="LCL-XXXXXXXXXX" required />
+        </div>
+
+        <div class="form-group full">
+          <label>Descripción de la Tarea *</label>
+          <textarea id="descripcion_tarea" placeholder="Describe la tarea a inspeccionar..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>N° de Contrato</label>
+          <input type="number" id="num_contrato" placeholder="5200000000" />
+        </div>
+
+        <div class="form-group">
+          <label>Jefe de Cuadrilla *</label>
+          <input type="text" id="jefe_cuadrilla" placeholder="Apellidos y Nombres" required />
+        </div>
+
+        <div class="form-group">
+          <label>DNI / C.E Jefe de Cuadrilla *</label>
+          <input type="number" id="dni_jefe" placeholder="12345678" required />
+        </div>
+
+        <div class="form-group">
+          <label>Supervisor Operativo</label>
+          <input type="text" id="supervisor" placeholder="Apellidos y Nombres" />
+        </div>
+
+        <div class="form-group">
+          <label>DNI/CE Supervisor Operativo</label>
+          <input type="number" id="dni_supervisor" placeholder="12345678" />
+        </div>
+
+        <div class="form-group">
+          <label>Subproceso *</label>
+          <select id="subproceso" required>
+            <option value="">Seleccionar...</option>
+            <option>Mantenimiento Líneas AT</option>
+            <option>Mantenimiento SETS</option>
+            <option>Obras Líneas AT</option>
+            <option>Obras SETs AT</option>
+            <option>Mantenimiento de Transformadores</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Actividad *</label>
+          <select id="tipo_actividad" required>
+            <option value="">Seleccionar...</option>
+            <option>Eléctrico</option>
+            <option>Excavación</option>
+            <option>Izaje de cargas</option>
+            <option>Trabajos en altura</option>
+            <option>Trabajos en espacios confinados</option>
+            <option>Civil</option>
+            <option>Otros</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instalación Inspeccionada *</label>
+          <select id="instalacion" required>
+            <option value="">Seleccionar...</option>
+            <option>SET (SET de Transmisión)</option>
+            <option>Vía Pública</option>
+            <option>Centrales Hidroeléctricas</option>
+            <option>Centrales Térmicas</option>
+            <option>Redes AT</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VERIFICACIÓN GENERAL -->
+    <div class="card">
+      <div class="seccion-header seccion-vg">
+        <div class="seccion-toggle" onclick="toggleSeccion('vg')">
+          <div class="seccion-titulo">VERIFICACIÓN GENERAL (OBLIGATORIO) <span class="badge-count">28 ítems</span></div>
+          <span class="seccion-arrow" id="arrow-vg">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('vg', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>        
+        </select>
+      </div>
+      <div class="seccion-content" id="content-vg">
+        <div id="items-vg"></div>
+      </div>
+    </div>
+
+    <!-- GESTIÓN EMERGENCIAS -->
+    <div class="card">
+      <div class="seccion-header seccion-ge">
+        <div class="seccion-toggle" onclick="toggleSeccion('ge')">
+          <div class="seccion-titulo">GESTIÓN DE EMERGENCIAS (OBLIGATORIO) <span class="badge-count">3 ítems</span></div>
+          <span class="seccion-arrow" id="arrow-ge">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('ge', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>          
+        </select>
+      </div>
+      <div class="seccion-content" id="content-ge">
+        <div id="items-ge"></div>
+      </div>
+    </div>
+
+    <!-- RIESGO EXCAVACIÓN -->
+    <div class="card">
+      <div class="seccion-header seccion-re">
+        <div class="seccion-toggle" onclick="toggleSeccion('re')">
+          <div class="seccion-titulo">RIESGO DE EXCAVACIÓN <span class="badge-count">4 ítems</span></div>
+          <span class="seccion-arrow" id="arrow-re">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('re', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option> 
+        </select>
+      </div>
+      <div class="seccion-content" id="content-re">
+        <div id="items-re"></div>
+      </div>
+    </div>
+
+    <!-- FIRMAS -->
+    <div class="card">
+      <div class="card-title">✍️ 2. Firmas</div>
+      <div class="firma-container">
+        <div class="firma-box">
+          <div class="firma-titulo">INSPECTOR HSE</div>
+          <canvas id="canvas-inspector" ontouchstart="startDraw(event,'inspector')" ontouchmove="draw(event,'inspector')" ontouchend="stopDraw('inspector')" onmousedown="startDraw(event,'inspector')" onmousemove="draw(event,'inspector')" onmouseup="stopDraw('inspector')" onmouseleave="stopDraw('inspector')"></canvas>
+          <div class="firma-actions"><button class="btn-limpiar" onclick="limpiarFirma('inspector')">Limpiar</button></div>
+          <div style="padding:8px;font-size:12px;color:#666;text-align:center" id="nombre-inspector"></div>
+        </div>
+        <div class="firma-box">
+          <div class="firma-titulo">JEFE DE CUADRILLA</div>
+          <canvas id="canvas-jefe" ontouchstart="startDraw(event,'jefe')" ontouchmove="draw(event,'jefe')" ontouchend="stopDraw('jefe')" onmousedown="startDraw(event,'jefe')" onmousemove="draw(event,'jefe')" onmouseup="stopDraw('jefe')" onmouseleave="stopDraw('jefe')"></canvas>
+          <div class="firma-actions"><button class="btn-limpiar" onclick="limpiarFirma('jefe')">Limpiar</button></div>
+          <div style="padding:8px;font-size:12px;color:#666;text-align:center" id="nombre-jefe"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-enviar" onclick="mostrarRevision()" id="btn-enviar">SIGUIENTE</button>
+  </div>
+</div>
+
+<!-- REVISIÓN -->
+<div id="revision-screen" style="display:none;">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img src="logo.png" alt="UNITELEC" style="height:38px;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none'" />
+      <div>
+        <div class="header-logo">UNITELEC HSE</div>
+        <div class="header-title">Revisión de Inspección</div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="header-user" id="header-user-rev"></div>
+    </div>
+  </div>
+  <div class="container">
+
+    <div style="background:#FFF3CD;border:1px solid #FFC107;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#856404;font-weight:bold;">
+      ⚠️ Revisa toda la información antes de enviar. Una vez enviada no podrás modificarla.
+    </div>
+
+    <!-- DATOS GENERALES -->
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        📋 1. Información General
+        <button onclick="editarSeccion('datos')" style="padding:6px 14px;background:#1F4E79;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-datos"></div>
+    </div>
+
+    <!-- VERIFICACIÓN GENERAL -->
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        ✅ Verificación General
+        <button onclick="editarSeccion('vg')" style="padding:6px 14px;background:#1F4E79;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-vg"></div>
+    </div>
+
+    <!-- GESTIÓN EMERGENCIAS -->
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        🚨 Gestión de Emergencias
+        <button onclick="editarSeccion('ge')" style="padding:6px 14px;background:#C55A11;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-ge"></div>
+    </div>
+
+    <!-- RIESGO EXCAVACIÓN -->
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        ⛏️ Riesgo de Excavación
+        <button onclick="editarSeccion('re')" style="padding:6px 14px;background:#6B2C91;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-re"></div>
+    </div>
+
+    <!-- BOTONES -->
+    <div style="display:flex;gap:12px;margin-top:10px;">
+      <button onclick="volverFormulario()" style="flex:1;padding:16px;background:#666;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;">
+        ← Volver a editar
+      </button>
+      <button onclick="enviarInspeccion()" id="btn-confirmar" style="flex:2;padding:16px;background:#1E6B3C;color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;">
+        📤 CONFIRMAR Y ENVIAR
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ÉXITO -->
+<div id="success-screen" style="display:none;min-height:100vh;background-image:url('fondo.png');background-size:cover;background-position:center;background-repeat:no-repeat;align-items:center;justify-content:center;">
+  <div class="success-box" style="background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-radius:16px;padding:50px 40px;text-align:center;max-width:450px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <img src="logo.png" alt="UNITELEC" style="width:180px;margin-bottom:20px;object-fit:contain;" onerror="this.style.display='none'" />
+    <div style="font-size:60px;margin-bottom:20px;filter:grayscale(1) brightness(0.25);">✅</div>
+    <div style="font-size:24px;font-weight:bold;color:#1E6B3C;margin-bottom:10px;">¡Inspección Enviada!</div>
+    <div style="color:#666;margin-bottom:20px;">Registrada exitosamente en el sistema UNITELEC.</div>
+    <div style="font-size:18px;font-weight:bold;color:#1F4E79;" id="success-codigo"></div>
+    <br>
+    <div style="font-size:13px;color:#888">Recibirás el PDF por correo en los próximos minutos.</div>
+    <button style="margin-top:24px;padding:14px 30px;background:#1F4E79;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;" onclick="location.reload()">Nueva Inspección</button>
+  </div>
+</div>
+
+<script>
+// ─── USUARIOS ───
+const USUARIOS = {
+  'klavado@unitelec.com.pe':     { password: '75357275', nombre: 'K. LAVADO' },
+  'djulca@unitelec.com.pe':      { password: '76503586', nombre: 'D. JULCA' },
+  'jacruz@unitelec.com.pe':      { password: '71618904', nombre: 'J. CRUZ' },
+  'mbartra@unitelec.com.pe':     { password: '70663144', nombre: 'M. BARTRA' },
+  'jrivas@unitelec.com.pe':      { password: '73641293', nombre: 'J. RIVAS' },
+  'acolchado@unitelec.com.pe':   { password: 'unitelec4827', nombre: 'A. COLCHADO' },
+  'mcampos@rscconstructores.pe': { password: 'unitelec1509', nombre: 'M. CAMPOS' },
+  'jguerrero@unitelec.com.pe':   { password: 'unitelec7364', nombre: 'J. GUERRERO' },
+  'ccuyotupa@unitelec.com.pe':   { password: 'unitelec2918', nombre: 'C. CUYOTUPA' },
+  'cmontes@unitelec.com.pe':     { password: 'unitelec6043', nombre: 'C. MONTES' },
+  'jaguilar@unitelec.com.pe':    { password: 'unitelec8751', nombre: 'J. AGUILAR' },
+  'jvelasquez@unitelec.com.pe':  { password: 'unitelec3196', nombre: 'J. VELASQUEZ' },
+  'jansenquispe@unitelec.com.pe':{ password: 'unitelec4420', nombre: 'J. QUISPE' },
+  'msovero@unitelec.com.pe':     { password: 'unitelec9873', nombre: 'M. SOVERO' },
+  'hpimentel@unitelec.com.pe':   { password: 'unitelec1285', nombre: 'H. PIMENTEL' },
+  'mcastro@unitelec.com.pe':     { password: 'unitelec5601', nombre: 'M. CASTRO' },
+  'rcalisaya@unitelec.com.pe':   { password: 'unitelec7748', nombre: 'R. CALISAYA' },
+  'cparedes@unitelec.com.pe':     { password: 'unitelec2369', nombre: 'C. PAREDES' },
+  'rmena@unitelec.com.pe':   { password: 'unitelec6932', nombre: 'R. MENA' },
+  'aquevedo@unitelec.com.pe':     { password: 'unitelec5601', nombre: 'A. QUEVEDO' },
+  'msoncco@unitelec.com.pe':   { password: 'unitelec7748', nombre: 'M. SONCCO' },
+  'ajulca@unitelec.com.pe':   { password: 'unitelec7748', nombre: 'A. JULCA' },
+  'flavado@unitelec.com.pe':   { password: '75356469', nombre: 'F. LAVADO' },
+};
+
+// ─── CLOUDINARY CONFIG ───
+const CLOUDINARY_CLOUD = 'df17abwyo';
+const CLOUDINARY_PRESET = 'unitelec_hse';
+
+async function comprimirImagen(base64, maxWidth = 800) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', 0.6));
+    };
+    img.src = base64;
+  });
+}
+
+async function subirACloudinary(base64, nombre, folder) {
+  if (!base64) return null;
+  try {
+    const comp = await comprimirImagen(base64);
+    const fd = new FormData();
+    fd.append('file', comp);
+    fd.append('upload_preset', CLOUDINARY_PRESET);
+    fd.append('public_id', `${nombre}_${Date.now()}`);
+    fd.append('folder', `inspecciones/${folder}`);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+      method: 'POST', body: fd
+    });
+    const d = await res.json();
+    return d.secure_url || null;
+  } catch(e) { console.error('Error Cloudinary:', e); return null; }
+}
+
+async function subirArchivoACloudinary(file, nombre) {
+  if (!file) return null;
+  try {
+    const comp = await new Promise(resolve => {
+      const r = new FileReader();
+      r.onload = async e => resolve(await comprimirImagen(e.target.result));
+      r.readAsDataURL(file);
+    });
+    const fd = new FormData();
+    fd.append('file', comp);
+    fd.append('upload_preset', CLOUDINARY_PRESET);
+    fd.append('public_id', `${nombre}_${Date.now()}`);
+    fd.append('folder', 'inspecciones/evidencias');
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+      method: 'POST', body: fd
+    });
+    const d = await res.json();
+    return d.secure_url || null;
+  } catch(e) { console.error('Error evidencia:', e); return null; }
+}
+
+// ─── ITEMS CHECKLIST ───
+const itemsVG = [
+  {id:'1_1',  codigo:'1.1',  campo:'1.1. Los trabajadores dentro del área de trabajo están claramente identificados y coinciden con los roles y nombres autorizados que figuran en la documentación de trabajo: (áreas de entrega, registros, permiso de trabajo, etc.)', obsField:'Observaciones Item 1.1', evidSiNoField:'Evidencias iteam 1.1', evidField:'Evidencia item 1.1', desc:'1.1. Los trabajadores dentro del área de trabajo están claramente identificados y coinciden con los roles y nombres autorizados que figuran en la documentación de trabajo (áreas de entrega, registros, permiso de trabajo, etc.)'},
+  {id:'1_3',  codigo:'1.3',  campo:'1.3. Para actividades que no son de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.', obsField:'Observaciones item 1.3.', evidSiNoField:'Evidencias iteam 1.3', evidField:'Evidencia item 1.3', desc:'1.3. Para actividades que no son de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.'},
+  {id:'1_4',  codigo:'1.4',  campo:'1.4. Para actividades que no son de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas.', obsField:'Observaciones Item 1.4.', evidSiNoField:'Evidencias iteam 1.4', evidField:'Evidencia item 1.4', desc:'1.4. Para actividades que no son de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas.'},
+  {id:'1_5',  codigo:'1.5',  campo:'1.5. La inspección previa fue realizada, documentada y disponible para consulta, se ajusta a la actividad y se ha completado correctamente.', obsField:'Observaciones iteam 1.5.', evidSiNoField:'Evidencias iteam 1.5', evidField:'Evidencia item 1.5', desc:'1.5. La inspección previa fue realizada, documentada y disponible para consulta, se ajusta a la actividad y se ha completado correctamente.'},
+  {id:'1_6',  codigo:'1.6',  campo:'1.6. La evaluación de riesgos (charla preoperacional escrita y grabada) está disponible y corresponde al contexto y actividades ejecutadas, en ejecución o por ejecutar.', obsField:'Observaciones iteam 1.6.', evidSiNoField:'Evidencias iteam 1.6', evidField:'Evidencia item 1.6', desc:'1.6. La evaluación de riesgos (charla preoperacional escrita y grabada) está disponible y corresponde al contexto y actividades ejecutadas, en ejecución o por ejecutar.'},
+  {id:'1_7',  codigo:'1.7',  campo:'1.7. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 1.7.', evidSiNoField:'Evidencias iteam 1.7', evidField:'Evidencia item 1.7', desc:'1.7. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas.'},
+  {id:'1_8',  codigo:'1.8',  campo:'1.8. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.', obsField:'Observaciones iteam 1.8.', evidSiNoField:'Evidencias iteam 1.8', evidField:'Evidencia item 1.8', desc:'1.8. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO que se llevan puestos (en uso) son eficaces y adecuados según exigencias normativas y se utilizan correctamente.'},
+  {id:'1_9',  codigo:'1.9',  campo:'1.9. Los equipos/herramientas contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), están en buen estado y son adecuados para la actividad.', obsField:'Observaciones iteam 1.9.', evidSiNoField:'Evidencias iteam 1.9', evidField:'Evidencia item 1.9', desc:'1.9. Los equipos/herramientas contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), están en buen estado y son adecuados para la actividad.'},
+  {id:'1_10', codigo:'1.10', campo:'1.10. Los equipos/herramientas contra RIESGO GENÉRICO que se utilizan (en uso), están en buen estado, son adecuados para la actividad. Y cuentan con su check list de revisión de pre uso.', obsField:'Observaciones iteam 1.10.', evidSiNoField:'Evidencias iteam 1.10', evidField:'Evidencia item 1.10', desc:'1.10. Los equipos/herramientas contra RIESGO GENÉRICO que se utilizan (en uso), están en buen estado, son adecuados para la actividad y cuentan con su check list de revisión de pre uso.'},
+  {id:'1_12', codigo:'1.12', campo:'1.12. Los vehículos/maquinaria y sus accesorios están operativos, certificados, autorizados y son adecuados para el trabajo. Asimismo estos vehículos fueron verificadas con el check list de pre uso.', obsField:'Observaciones iteam 1.12.', evidSiNoField:'Evidencias iteam 1.12', evidField:'Evidencia item 1.12', desc:'1.12. Los vehículos/maquinaria y sus accesorios están operativos, certificados, autorizados y son adecuados para el trabajo. Asimismo estos vehículos fueron verificados con el check list de pre uso.'},
+  {id:'1_17', codigo:'1.17', campo:'1.17. La actividad cuenta con autorización de trabajo vigente por parte de PLUZ. Si existe la autorización, pero no se cuenta con el documento en campo, entonces no aplica este incumplimiento.', obsField:'Observaciones iteam 1.17.', evidSiNoField:'Evidencias iteam 1.17', evidField:'Evidencia item 1.17', desc:'1.17. La actividad cuenta con autorización de trabajo vigente por parte de PLUZ. Si existe la autorización, pero no se cuenta con el documento en campo, entonces no aplica este incumplimiento.'},
+  {id:'1_18', codigo:'1.18', campo:'1.18. Los procedimientos/métodos de trabajo están disponibles, son adecuados y corresponden al contexto de la actividad detallando las tareas a realizar y aplicando los controles preventivos', obsField:'Observaciones iteam 1.18.', evidSiNoField:'Evidencias iteam 1.18', evidField:'Evidencia item 1.18', desc:'1.18. Los procedimientos/métodos de trabajo están disponibles, son adecuados y corresponden al contexto de la actividad detallando las tareas a realizar y aplicando los controles preventivos.'},
+  {id:'1_19', codigo:'1.19', campo:'1.19. Las actividades con RIESGOS GENÉRICOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 1.19.', evidSiNoField:'Evidencias iteam 1.19', evidField:'Evidencia item 1.19', desc:'1.19. Las actividades con RIESGOS GENÉRICOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+  {id:'1_20', codigo:'1.20', campo:'1.20. La documentación del trabajo se completó de manera adecuada, de acuerdo al contexto de la actividad y los controles a efectuar.', obsField:'Observaciones iteam 1.20.', evidSiNoField:'Evidencias iteam 1.20', evidField:'Evidencia item 1.20', desc:'1.20. La documentación del trabajo se completó de manera adecuada, de acuerdo al contexto de la actividad y los controles a efectuar.'},
+  {id:'1_21', codigo:'1.21', campo:'1.21. Todo el personal involucrado en la actividad conoce la "PARALIZACIÓN DE TRABAJO".', obsField:'Observaciones iteam 1.21.', evidSiNoField:'Evidencias iteam 1.21', evidField:'Evidencia item 1.21', desc:'1.21. Todo el personal involucrado en la actividad conoce la "PARALIZACIÓN DE TRABAJO".'},
+  {id:'1_22', codigo:'1.22', campo:'1.22. Las condiciones climáticas son adecuadas para la realización de las actividades previstas.', obsField:'Observaciones iteam 1.22.', evidSiNoField:'Evidencias iteam 1.22', evidField:'Evidencia item 1.22', desc:'1.22. Las condiciones climáticas son adecuadas para la realización de las actividades previstas.'},
+  {id:'1_23', codigo:'1.23', campo:'1.23. Los lugares de trabajo se mantienen en condiciones de limpieza y el almacenamiento es adecuado.', obsField:'Observaciones iteam 1.23.', evidSiNoField:'Evidencias iteam 1.23', evidField:'Evidencia item 1.23', desc:'1.23. Los lugares de trabajo se mantienen en condiciones de limpieza y el almacenamiento es adecuado.'},
+  {id:'1_24', codigo:'1.24', campo:'1.24. El lugar de trabajo fue completamente delimitado y señalizado de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ. Aplica este incumplimiento si no se cuenta con ningún elemento de señalización.', obsField:'Observaciones iteam 1.24.', evidSiNoField:'Evidencias iteam 1.24', evidField:'Evidencia item 1.24', desc:'1.24. El lugar de trabajo fue completamente delimitado y señalizado de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+  {id:'1_25', codigo:'1.25', campo:'1.25. El lugar de trabajo está delimitado y señalizado de manera adecuada. Se aplica incumplimiento si la zona de trabajo fue delimitado y señalizado de manera incompleta, falta elementos de señalización.', obsField:'Observaciones iteam 1.25.', evidSiNoField:'Evidencias iteam 1.25', evidField:'Evidencia item 1.25', desc:'1.25. El lugar de trabajo está delimitado y señalizado de manera adecuada. Se aplica incumplimiento si fue delimitado de manera incompleta.'},
+  {id:'1_26', codigo:'1.26', campo:'1.26. El área identificada para las actividades de carga y descarga es adecuada en términos de espacio y condiciones de la zona de trabajo', obsField:'Observaciones iteam 1.26.', evidSiNoField:'Evidencias iteam 1.26', evidField:'Evidencia item 1.26', desc:'1.26. El área identificada para las actividades de carga y descarga es adecuada en términos de espacio y condiciones de la zona de trabajo.'},
+  {id:'1_27', codigo:'1.27', campo:'1.27. Los miembros del equipo conocen el objetivo y los principios del Aliado de la Seguridad y saben cómo aplicarlos en la práctica. Todos los Aliados de la Seguridad han sido identificados y cumplen su rol en cada etapa del trabajo.', obsField:'Observaciones iteam 1.27.', evidSiNoField:'Evidencias iteam 1.27', evidField:'Evidencia item 1.27', desc:'1.27. Los miembros del equipo conocen el objetivo y los principios del Aliado de la Seguridad y saben cómo aplicarlos en la práctica.'},
+  {id:'1_28', codigo:'1.28', campo:'1.28. Las normas elementales de COMPORTAMIENTO SEGURO se cumplen al realizar el trabajo (Ej. Ojos en la tarea, sin prisas, sin distracciones, sin correr, sin saltar escalones, sin pasar por encima de una zanja y otros)', obsField:'Observaciones iteam 1.28.', evidSiNoField:'Evidencias iteam 1.28', evidField:'Evidencia item 1.28', desc:'1.28. Las normas elementales de COMPORTAMIENTO SEGURO se cumplen al realizar el trabajo (sin prisas, sin distracciones, sin correr, sin saltar escalones, etc.).'},
+  {id:'1_29', codigo:'1.29', campo:'1.29. Las Máquinas están equipadas con dispositivos de señalización/advertencia, sistema visual y/o acústico y dispositivos de seguridad/emergencia (como emergencia), guardas de seguridad, boton de parada de emergencias, y están intactas y funcionales', obsField:'Observaciones iteam 1.29.', evidSiNoField:'Evidencias iteam 1.29', evidField:'Evidencia item 1.29', desc:'1.29. Las Máquinas están equipadas con dispositivos de señalización/advertencia, sistema visual y/o acústico, guardas de seguridad, botón de parada de emergencias, y están intactas y funcionales.'},
+  {id:'1_30', codigo:'1.30', campo:'1.30. Los trabajadores mantienen distancias con respecto a la línea de fuego (Ej. objetos en movimiento, vehículos, proyecciones, desniveles, posibles cortes con equipos de rotación, etc.).', obsField:'Observaciones iteam 1.30.', evidSiNoField:'Evidencias iteam 1.30', evidField:'Evidencia item 1.30', desc:'1.30. Los trabajadores mantienen distancias con respecto a la línea de fuego (objetos en movimiento, vehículos, proyecciones, desniveles, etc.).'},
+  {id:'1_31', codigo:'1.31', campo:'1.31. Los trabajos de tipo manual (por ejemplo, manipulación manual de cargas, trabajos metal mecánica, trabajos de carpintería en general) se llevan a cabo de acuerdo con principios ergonómicos.', obsField:'Observaciones iteam 1.31.', evidSiNoField:'Evidencias iteam 1.31', evidField:'Evidencia item 1.31', desc:'1.31. Los trabajos de tipo manual (manipulación manual de cargas, trabajos metal mecánica, trabajos de carpintería) se llevan a cabo de acuerdo con principios ergonómicos.'},
+  {id:'1_32', codigo:'1.32', campo:'1.32. Para actividades de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas (Altura, Eléctrico, Excavación, Espacios confinados e Izaje de cargas)', obsField:'Observaciones iteam 1.32.', evidSiNoField:'Evidencias iteam 1.32', evidField:'Evidencia item 1.32', desc:'1.32. Para actividades de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas (Altura, Eléctrico, Excavación, Espacios confinados e Izaje de cargas).'},
+  {id:'1_33', codigo:'1.33', campo:'1.33. Las Empresas de Servicio Esporádico (ESE) son gestionadas de manera adecuada y cumple el estándar de gestión y seguridad exigido por PLUZ', obsField:'Observaciones iteam 1.33.', evidSiNoField:'Evidencias iteam 1.33', evidField:'Evidencia item 1.33', desc:'1.33. Las Empresas de Servicio Esporádico (ESE) son gestionadas de manera adecuada y cumplen el estándar de gestión y seguridad exigido por PLUZ.'},
+  {id:'1_34', codigo:'1.34', campo:'1.34. Para actividades de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.', obsField:'Observaciones iteam 1.34.', evidSiNoField:'Evidencias iteam 1.34', evidField:'Evidencia item 1.34', desc:'1.34. Para actividades de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.'},
+];
+
+const itemsGE = [
+  {id:'18_1', codigo:'18.1', campo:'18.1. El Plan de emergencias/procedimientos/instrucciones están disponibles en el lugar de trabajo, adecuados para el tipo y contexto de los trabajos. Los trabajadores conocen los procedimientos de emergencia que deben adoptarse.', obsField:'Observaciones iteam 18.1', evidSiNoField:'Evidencias iteam 18.1', evidField:'Evidencia item 18.1', desc:'18.1. El Plan de emergencias/procedimientos/instrucciones están disponibles en el lugar de trabajo, adecuados para el tipo y contexto de los trabajos. Los trabajadores conocen los procedimientos de emergencia que deben adoptarse.'},
+  {id:'18_2', codigo:'18.2', campo:'18.2. Todas las medidas contempladas en el plan/procedimiento/instrucción de emergencias, se implementan, son adecuadas, eficientes y se revisan periódicamente y funciona para los riesgos de la actividad en exposición.', obsField:'Observaciones iteam 18.2.', evidSiNoField:'Evidencias iteam 18.2', evidField:'Evidencia item 18.2', desc:'18.2. Todas las medidas contempladas en el plan de emergencias (extintores, botiquines, dispositivos de rescate, etc.) se implementan, son adecuadas, eficientes y se revisan periódicamente.'},
+  {id:'18_3', codigo:'18.3', campo:'18.3. Si los empleados TRABAJAN SOLOS y aislados, se implementa un dispositivo de comunicación para que el empleado pueda pedir ayuda en caso de emergencia. Los trabajadores están capacitados para su uso y conocen los procedimientos de emergencia.', obsField:'Observaciones iteam 18.3.', evidSiNoField:'Evidencias iteam 18.3', evidField:'Evidencia item 18.3', desc:'18.3. Si los empleados TRABAJAN SOLOS y aislados, se implementa un dispositivo de comunicación para que el empleado pueda pedir ayuda en caso de emergencia.'},
+];
+
+const itemsRE = [
+  {id:'7_1', codigo:'7.1', campo:'7.1. Las actividades de EXCAVACIÓN (excavaciones profundas mayores a 1.5 m.) se llevan a cabo correctamente para evitar el riesgo de colapso de estructuras/ terrenos (entibaciones según las profundidades, apuntalamiento, etc.)', obsField:'Observaciones iteam 7.1.', evidSiNoField:'Evidencias iteam 7.1', evidField:'Evidencia item 7.1', desc:'7.1. Las actividades de EXCAVACIÓN (excavaciones profundas mayores a 1.5 m.) se llevan a cabo correctamente para evitar el riesgo de colapso de estructuras/terrenos (entibaciones según las profundidades, apuntalamiento, etc.)'},
+  {id:'7_2', codigo:'7.2', campo:'7.2. Se realizó el sondeo con el detector de flujo para identificar posibles interferencias eléctricas.', obsField:'Observaciones iteam 7.2.', evidSiNoField:'Evidencias iteam 7.2', evidField:'Evidencia item 7.2', desc:'7.2. Se realizó el sondeo con el detector de flujo para identificar posibles interferencias eléctricas.'},
+  {id:'7_3', codigo:'7.3', campo:'7.3. La maquinaria (Retroexcavadora, Bobcat, otras) para la actividad de EXCAVACIÓN son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y están autorizadas.', obsField:'Observaciones iteam 7.3.', evidSiNoField:'Evidencias iteam 7.3', evidField:'Evidencia item 7.3', desc:'7.3. La maquinaria (Retroexcavadora, Bobcat, otras) para la actividad de EXCAVACIÓN son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y están autorizadas.'},
+  {id:'7_4', codigo:'7.4', campo:'7.4. Las actividades con riesgo de EXCAVACIÓN que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 7.4.', evidSiNoField:'Evidencias iteam 7.4', evidField:'Evidencia item 7.4', desc:'7.4. Las actividades con riesgo de EXCAVACIÓN que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+];
+
+// ─── ESTADO ───
+let usuarioActual = '';
+let respuestas = {};
+let drawing = { inspector: false, jefe: false };
+let lastPos = {};
+let firmas = { inspector: null, jefe: null };
+
+// ─── LOGIN ───
+function login() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const error = document.getElementById('login-error');
+  if (USUARIOS[email] && USUARIOS[email].password === password) {
+    usuarioActual = email;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('form-screen').style.display = 'block';
+    document.getElementById('header-user').textContent = email;
+    document.getElementById('nombre-inspector').textContent = USUARIOS[email].nombre;
+    const hoy = new Date().toISOString().split('T')[0];
+    const fi = document.getElementById('fecha_apertura');
+    fi.value = hoy; fi.min = hoy; fi.max = hoy;
+    renderItems();
+    initCanvas();
+    cargarBorrador();
+    updateProgress();
+    error.style.display = 'none';
+  } else {
+    error.style.display = 'block';
+    error.textContent = '❌ Correo o contraseña incorrectos.';
+  }
+}
+
+document.addEventListener('keypress', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') login();
+});
+
+function togglePassword() {
+  const input = document.getElementById('login-password');
+  const ojo = document.getElementById('ojo');
+  if (input.type === 'password') {
+    input.type = 'text';
+    ojo.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+  } else {
+    input.type = 'password';
+    ojo.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  }
+}
+
+function logout() { if (confirm('¿Deseas cerrar sesión?')) location.reload(); }
+
+// ─── RENDER ITEMS ───
+function renderItems() {
+  renderSeccion('items-vg', itemsVG, '');
+  renderSeccion('items-ge', itemsGE, 'ge');
+  renderSeccion('items-re', itemsRE, 're');
+}
+
+function renderSeccion(containerId, items, tipo) {
+  document.getElementById(containerId).innerHTML = items.map(item => itemHTML(item, tipo)).join('');
+}
+
+function itemHTML(item, tipo) {
+  const cc = tipo === 'ge' ? 'item-codigo-ge' : tipo === 're' ? 'item-codigo-re' : '';
+  return `
+    <div class="item-card" id="card-${item.id}">
+      <div class="item-header">
+        <span class="item-codigo ${cc}">${item.codigo}</span>
+        <span class="item-descripcion">${item.desc}</span>
+      </div>
+      <div class="item-respuesta">
+        <button class="btn-respuesta cumple" id="btn-${item.id}-cumple" onclick="setResp('${item.id}','Cumple')">Cumple</button>
+        <button class="btn-respuesta nocumple" id="btn-${item.id}-nocumple" onclick="setResp('${item.id}','No cumple')">No cumple</button>
+        <button class="btn-respuesta na" id="btn-${item.id}-na" onclick="setResp('${item.id}','N/A')">N/A</button>
+      </div>
+      <div class="item-extra">
+        <div class="item-obs">
+          <label>📝 Observaciones</label>
+          <textarea id="obs-${item.id}" placeholder="Observaciones..."></textarea>
+        </div>
+        <div>
+          <div class="evidencia-toggle">
+            <label>📷 ¿Adjuntar evidencia?</label>
+            <div class="toggle-btn">
+              <button id="esi-${item.id}" onclick="toggleEvid('${item.id}',true)">Sí</button>
+              <button id="eno-${item.id}" class="active-no" onclick="toggleEvid('${item.id}',false)">No</button>
+            </div>
+          </div>
+          <div class="evidencia-section" id="evid-${item.id}">
+            <div class="file-upload" onclick="document.getElementById('file-${item.id}').click()">
+              <input type="file" id="file-${item.id}" accept="image/*" onchange="previewImg('${item.id}',this)">
+              <label class="file-upload-label">📁 Toca para subir foto</label>
+              <img id="prev-${item.id}" class="file-preview" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ─── RESPUESTAS ───
+function setResp(id, val) {
+  respuestas[id] = val;
+  ['cumple','nocumple','na'].forEach(t => document.getElementById(`btn-${id}-${t}`)?.classList.remove('active'));
+  const m = {'Cumple':'cumple','No cumple':'nocumple','N/A':'na'};
+  document.getElementById(`btn-${id}-${m[val]}`)?.classList.add('active');
+  updateProgress();
+}
+
+function toggleSeccion(sec) {
+  const content = document.getElementById(`content-${sec}`);
+  const arrow = document.getElementById(`arrow-${sec}`);
+  content.classList.toggle('collapsed');
+  arrow.classList.toggle('collapsed');
+}
+
+function aplicarEstadoGeneral(sec, val) {
+  if (!val || val === 'Mixto') return;
+  const items = sec === 'vg' ? itemsVG : sec === 'ge' ? itemsGE : itemsRE;
+  items.forEach(item => setResp(item.id, val));
+}
+
+// ─── EVIDENCIAS ───
+function toggleEvid(id, show) {
+  document.getElementById(`evid-${id}`).classList.toggle('visible', show);
+  document.getElementById(`esi-${id}`).className = show ? 'active-si' : '';
+  document.getElementById(`eno-${id}`).className = show ? '' : 'active-no';
+}
+
+function previewImg(id, input) {
+  if (input.files?.[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const p = document.getElementById(`prev-${id}`);
+      p.src = e.target.result;
+      p.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ─── CANVAS FIRMAS ───
+function initCanvas() {
+  ['inspector','jefe'].forEach(t => {
+    const c = document.getElementById(`canvas-${t}`);
+    c.width = c.offsetWidth; c.height = 150;
+    const ctx = c.getContext('2d');
+    ctx.strokeStyle = '#1F4E79'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+  });
+}
+
+function getPos(e, c) {
+  const r = c.getBoundingClientRect();
+  const sx = c.width/r.width, sy = c.height/r.height;
+  const src = e.touches ? e.touches[0] : e;
+  return { x: (src.clientX-r.left)*sx, y: (src.clientY-r.top)*sy };
+}
+
+function startDraw(e,t) { e.preventDefault(); drawing[t]=true; lastPos[t]=getPos(e,document.getElementById(`canvas-${t}`)); }
+function draw(e,t) {
+  e.preventDefault(); if(!drawing[t]) return;
+  const c=document.getElementById(`canvas-${t}`); const ctx=c.getContext('2d'); const p=getPos(e,c);
+  ctx.beginPath(); ctx.moveTo(lastPos[t].x,lastPos[t].y); ctx.lineTo(p.x,p.y); ctx.stroke();
+  lastPos[t]=p;
+}
+function stopDraw(t) { drawing[t]=false; firmas[t]=document.getElementById(`canvas-${t}`).toDataURL(); }
+function limpiarFirma(t) { const c=document.getElementById(`canvas-${t}`); c.getContext('2d').clearRect(0,0,c.width,c.height); firmas[t]=null; }
+
+// ─── BORRADOR AUTOMÁTICO ───
+function guardarBorrador() {
+  if (!usuarioActual) return;
+  const datos = {
+    cliente: document.getElementById('cliente')?.value,
+    responsable: document.getElementById('responsable')?.value,
+    fecha_apertura: document.getElementById('fecha_apertura')?.value,
+    estado_ejecucion: document.getElementById('estado_ejecucion')?.value,
+    area_inspectora: document.getElementById('area_inspectora')?.value,
+    area_inspeccionada: document.getElementById('area_inspeccionada')?.value,
+    empresa_inspectora: document.getElementById('empresa_inspectora')?.value,
+    proyecto: document.getElementById('proyecto')?.value,
+    distrito: document.getElementById('distrito')?.value,
+    direccion: document.getElementById('direccion')?.value,
+    tipo_orden: document.getElementById('tipo_orden')?.value,
+    num_trabajo: document.getElementById('num_trabajo')?.value,
+    descripcion_tarea: document.getElementById('descripcion_tarea')?.value,
+    num_contrato: document.getElementById('num_contrato')?.value,
+    jefe_cuadrilla: document.getElementById('jefe_cuadrilla')?.value,
+    dni_jefe: document.getElementById('dni_jefe')?.value,
+    supervisor: document.getElementById('supervisor')?.value,
+    dni_supervisor: document.getElementById('dni_supervisor')?.value,
+    subproceso: document.getElementById('subproceso')?.value,
+    tipo_actividad: document.getElementById('tipo_actividad')?.value,
+    instalacion: document.getElementById('instalacion')?.value,
+    respuestas: respuestas,
+    usuario: usuarioActual,
+  };
+  localStorage.setItem('borrador_hse', JSON.stringify(datos));
+}
+
+function cargarBorrador() {
+  const guardado = localStorage.getItem('borrador_hse');
+  if (!guardado) return;
+  const datos = JSON.parse(guardado);
+  if (datos.usuario !== usuarioActual) return;
+
+  document.getElementById('draft-banner').classList.add('visible');
+
+  const campos = ['cliente','responsable','estado_ejecucion','area_inspectora',
+    'area_inspeccionada','empresa_inspectora','proyecto','distrito','direccion',
+    'tipo_orden','num_trabajo','descripcion_tarea','num_contrato','jefe_cuadrilla',
+    'dni_jefe','supervisor','dni_supervisor','subproceso','tipo_actividad','instalacion'];
+
+  campos.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && datos[id]) el.value = datos[id];
+  });
+
+  if (datos.respuestas) {
+    Object.entries(datos.respuestas).forEach(([id, val]) => {
+      setResp(id, val);
+    });
+  }
+}
+
+function limpiarBorrador() {
+  localStorage.removeItem('borrador_hse');
+  document.getElementById('draft-banner').classList.remove('visible');
+}
+
+// ─── REVISIÓN ───
+function mostrarRevision() {
+  const datosGen = [
+    ['Cliente', document.getElementById('cliente')?.value],
+    ['Responsable', document.getElementById('responsable')?.value],
+    ['Fecha Apertura', document.getElementById('fecha_apertura')?.value],
+    ['Estado', document.getElementById('estado_ejecucion')?.value],
+    ['Proyecto', document.getElementById('proyecto')?.value],
+    ['Área Inspectora', document.getElementById('area_inspectora')?.value],
+    ['Área Inspeccionada', document.getElementById('area_inspeccionada')?.value],
+    ['Empresa Inspectora', document.getElementById('empresa_inspectora')?.value],
+    ['Tipo Inspección', document.getElementById('tipo_inspeccion')?.value],
+    ['Distrito', document.getElementById('distrito')?.value],
+    ['Dirección', document.getElementById('direccion')?.value],
+    ['Tipo Orden', document.getElementById('tipo_orden')?.value],
+    ['N° Trabajo', document.getElementById('num_trabajo')?.value],
+    ['Descripción Tarea', document.getElementById('descripcion_tarea')?.value],
+    ['N° Contrato', document.getElementById('num_contrato')?.value],
+    ['Jefe de Cuadrilla', document.getElementById('jefe_cuadrilla')?.value],
+    ['DNI Jefe', document.getElementById('dni_jefe')?.value],
+    ['Supervisor Operativo', document.getElementById('supervisor')?.value],
+    ['DNI Supervisor', document.getElementById('dni_supervisor')?.value],
+    ['Subproceso', document.getElementById('subproceso')?.value],
+    ['Tipo Actividad', document.getElementById('tipo_actividad')?.value],
+    ['Instalación', document.getElementById('instalacion')?.value],
+  ];
+
+  document.getElementById('rev-datos').innerHTML = datosGen
+    .filter(([k, v]) => v)
+    .map(([k, v]) => `
+      <div style="display:flex;padding:8px 0;border-bottom:1px solid #eee;gap:12px;">
+        <div style="font-weight:bold;color:#555;font-size:13px;min-width:160px;">${k}</div>
+        <div style="font-size:13px;color:#333;">${v}</div>
+      </div>
+    `).join('');
+
+  const colores = {
+    'Cumple': '#1E6B3C',
+    'No cumple': '#C00000',
+    'N/A': '#666'
+  };
+
+  const renderRevItems = (items, containerId) => {
+    document.getElementById(containerId).innerHTML = items.map(item => {
+      const resp = respuestas[item.id] || '—';
+      const color = colores[resp] || '#999';
+      const obs = document.getElementById(`obs-${item.id}`)?.value || '';
+      return `
+        <div style="display:flex;align-items:flex-start;padding:8px 0;border-bottom:1px solid #eee;gap:12px;">
+          <div style="background:#1F4E79;color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:bold;white-space:nowrap;">${item.codigo}</div>
+          <div style="flex:1;font-size:12px;color:#444;">${item.desc}</div>
+          <div style="font-weight:bold;color:${color};font-size:12px;white-space:nowrap;">${resp}</div>
+          ${obs ? `<div style="font-size:11px;color:#888;font-style:italic;">${obs}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  };
+
+  renderRevItems(itemsVG, 'rev-vg');
+  renderRevItems(itemsGE, 'rev-ge');
+  renderRevItems(itemsRE, 'rev-re');
+
+  document.getElementById('form-screen').style.display = 'none';
+  document.getElementById('revision-screen').style.display = 'block';
+  document.getElementById('header-user-rev').textContent = usuarioActual;
+  window.scrollTo(0, 0);
+}
+
+function volverFormulario() {
+  document.getElementById('revision-screen').style.display = 'none';
+  document.getElementById('form-screen').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function editarSeccion(seccion) {
+  document.getElementById('revision-screen').style.display = 'none';
+  document.getElementById('form-screen').style.display = 'block';
+  window.scrollTo(0, 0);
+
+  setTimeout(() => {
+    const ids = {
+      'datos': 'area_inspectora',
+      'vg': 'items-vg',
+      'ge': 'items-ge',
+      're': 'items-re'
+    };
+    const el = document.getElementById(ids[seccion]);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function updateProgress() {
+  const total = itemsVG.length+itemsGE.length+itemsRE.length;
+  document.getElementById('progress').style.width = Math.round(Object.keys(respuestas).length/total*100)+'%';
+  guardarBorrador();
+}
+
+// ─── ENVIAR ───
+async function enviarInspeccion() {
+  const reqs = ['cliente','responsable','fecha_apertura','estado_ejecucion','area_inspectora','area_inspeccionada','empresa_inspectora','proyecto','distrito','direccion','tipo_orden','num_trabajo','descripcion_tarea','jefe_cuadrilla','dni_jefe','subproceso','tipo_actividad','instalacion'];
+  for (const id of reqs) {
+    const el = document.getElementById(id);
+    if (!el || !el.value) {
+      alert('Por favor completa todos los campos obligatorios (*)');
+      el?.focus();
+      return;
+    }
+  }
+
+  document.getElementById('loading').classList.add('visible');
+  document.getElementById('btn-confirmar').disabled = true;
+
+  try {
+    const firmaInspURL = await subirACloudinary(firmas.inspector, 'firma_inspector', 'firmas');
+
+    const evidURLs = {};
+    for (const item of [...itemsVG, ...itemsGE, ...itemsRE]) {
+      const fi = document.getElementById(`file-${item.id}`);
+      if (fi?.files?.[0]) {
+        const url = await subirArchivoACloudinary(fi.files[0], `evid_${item.id}`);
+        if (url) evidURLs[item.id] = url;
+      }
+    }
+
+    const campos = {
+      'FECHA DE APERTURA': document.getElementById('fecha_apertura').value,
+      'ESTADO DE LA EJECUCIÓN': document.getElementById('estado_ejecucion').value,
+      'Correo corporativo': usuarioActual,
+      'Responsable de la Inspección (Apellidos y Nombres)': document.getElementById('responsable').value,
+      'Área inspectora': document.getElementById('area_inspectora').value,
+      'Área inspeccionada': document.getElementById('area_inspeccionada').value,
+      'Empresa Inspectora': document.getElementById('empresa_inspectora').value,
+      'Tipo de inspección': document.getElementById('tipo_inspeccion').value,
+      'Distrito': document.getElementById('distrito').value,
+      'Dirección': document.getElementById('direccion').value,
+      'Tipo de orden de Trabajo': document.getElementById('tipo_orden').value,
+      'N° de trabajo': document.getElementById('num_trabajo').value,
+      'Descripción de la Tarea': document.getElementById('descripcion_tarea').value,
+      'Proyecto': document.getElementById('proyecto').value,
+      'Jefe de Cuadrilla': document.getElementById('jefe_cuadrilla').value,
+      'DNI/ C.E (Jefe de Cuadrilla)': Number(document.getElementById('dni_jefe').value) || null,
+      'Supervisor Operativo': document.getElementById('supervisor').value || null,
+      'DNI/CE /Supervisor Operativo': Number(document.getElementById('dni_supervisor').value) || null,
+      'Subproceso': document.getElementById('subproceso').value,
+      'Tipo de Actividad': document.getElementById('tipo_actividad').value,
+      'Instalación Inspeccionada': document.getElementById('instalacion').value,
+      'Cliente': document.getElementById('cliente').value,
+    };
+
+    const contrato = Number(document.getElementById('num_contrato').value);
+    if (contrato) campos['N° de Contrato'] = contrato;
+
+    Object.keys(campos).forEach(k => {
+      if (campos[k] === null || campos[k] === '' || campos[k] === undefined || campos[k] === 0) delete campos[k];
+    });
+
+    if (firmaInspURL) campos['FIRMA DEL INSPECTOR HSE'] = [{ url: firmaInspURL }];
+
+    [...itemsVG, ...itemsGE, ...itemsRE].forEach(item => {
+      if (respuestas[item.id]) campos[item.campo] = respuestas[item.id];
+      const obs = document.getElementById(`obs-${item.id}`)?.value;
+      if (obs && item.obsField) campos[item.obsField] = obs;
+      const tieneSi = document.getElementById(`esi-${item.id}`)?.classList.contains('active-si');
+      if (item.evidSiNoField) campos[item.evidSiNoField] = tieneSi ? 'Si' : 'No';
+      if (evidURLs[item.id] && item.evidField) campos[item.evidField] = [{ url: evidURLs[item.id] }];
+    });
+
+    const MAKE_WEBHOOK = 'https://hook.us2.make.com/pt0v8y4y7x95ctbhs3ceyorajvj9smfx';
+
+    const response = await fetch(MAKE_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(campos)
+    });
+
+    if (response.ok) {
+      document.getElementById('loading').classList.remove('visible');
+      document.getElementById('revision-screen').style.display = 'none';
+      limpiarBorrador();
+      const ss = document.getElementById('success-screen');
+      ss.style.display = 'flex';
+      document.getElementById('success-codigo').textContent = '¡Inspección registrada exitosamente!';
+    } else {
+      throw new Error('Error al enviar al servidor. Intenta nuevamente.');
+    }
+
+  } catch (err) {
+    document.getElementById('loading').classList.remove('visible');
+    document.getElementById('btn-confirmar').disabled = false;
+    alert('Error: ' + err.message);
+  }
+}
+
+// Actualizar nombre jefe + guardar borrador
+document.addEventListener('input', e => {
+  guardarBorrador();
+  if (e.target.id === 'jefe_cuadrilla') {
+    document.getElementById('nombre-jefe').textContent = e.target.value.toUpperCase();
+  }
+});
+</script>
+</body>
+</html>
