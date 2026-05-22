@@ -693,11 +693,11 @@
 <script>
 // ─── USUARIOS ───
 const USUARIOS = {
-  'klavado@unitelec.com.pe':     { password: 'unitelec2804', nombre: 'K. LAVADO' },
-  'djulca@unitelec.com.pe':      { password: 'unitelec2804', nombre: 'D. JULCA' },
-  'jacruz@unitelec.com.pe':      { password: 'unitelec2804', nombre: 'J. CRUZ' },
-  'mbartra@unitelec.com.pe':     { password: 'unitelec2804', nombre: 'M. BARTRA' },
-  'jrivas@unitelec.com.pe':      { password: 'unitelec6932', nombre: 'J. RIVAS' },
+  'klavado@unitelec.com.pe':     { password: '75357275', nombre: 'K. LAVADO' },
+  'djulca@unitelec.com.pe':      { password: '76503586', nombre: 'D. JULCA' },
+  'jacruz@unitelec.com.pe':      { password: '71618904', nombre: 'J. CRUZ' },
+  'mbartra@unitelec.com.pe':     { password: '70663144', nombre: 'M. BARTRA' },
+  'jrivas@unitelec.com.pe':      { password: '73641293', nombre: 'J. RIVAS' },
   'acolchado@unitelec.com.pe':   { password: 'unitelec4827', nombre: 'A. COLCHADO' },
   'mcampos@rscconstructores.pe': { password: 'unitelec1509', nombre: 'M. CAMPOS' },
   'jguerrero@unitelec.com.pe':   { password: 'unitelec7364', nombre: 'J. GUERRERO' },
@@ -710,6 +710,12 @@ const USUARIOS = {
   'hpimentel@unitelec.com.pe':   { password: 'unitelec1285', nombre: 'H. PIMENTEL' },
   'mcastro@unitelec.com.pe':     { password: 'unitelec5601', nombre: 'M. CASTRO' },
   'rcalisaya@unitelec.com.pe':   { password: 'unitelec7748', nombre: 'R. CALISAYA' },
+  'cparedes@unitelec.com.pe':     { password: 'unitelec2369', nombre: 'C. PAREDES' },
+  'rmena@unitelec.com.pe':   { password: 'unitelec6932', nombre: 'R. MENA' },
+  'aquevedo@unitelec.com.pe':     { password: 'unitelec5601', nombre: 'A. QUEVEDO' },
+  'msoncco@unitelec.com.pe':   { password: 'unitelec7748', nombre: 'M. SONCCO' },
+  'ajulca@unitelec.com.pe':   { password: 'unitelec7748', nombre: 'A. JULCA' },
+  'flavado@unitelec.com.pe':   { password: '75356469', nombre: 'F. LAVADO' },
 };
 
 // ─── CLOUDINARY ───
@@ -767,12 +773,12 @@ async function subirArchivoACloudinary(file, nombre) {
 
 // ─── ITEMS CHECKLIST ───
 const itemsS1 = [
-  { id:'gs3_1_1', codigo:'GS 3.1', campo:'GS 3.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados', obsField:'Obs GS 3.1', evidSiNoField:'Evid SiNo GS 3.1', evidField:'Evid GS 3.1', desc:'GS 3.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados.' },
-  { id:'gs3_1_1b', codigo:'GS 3.1.1', campo:'GS 3.1.1 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.1.1', evidSiNoField:'Evid SiNo GS 3.1.1', evidField:'Evid GS 3.1.1', desc:'GS 3.1.1 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.).' },
+  { id:'gs3_1_1', codigo:'GS 3.1.1', campo:'GS 3.1.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados', obsField:'Obs GS 3.1.1', evidSiNoField:'Evid SiNo GS 3.1.1', evidField:'Evid GS 3.1.1', desc:'GS 3.1.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados.' },
+  { id:'gs3_1_1b', codigo:'GS 3.1.2', campo:'GS 3.1.2 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.1.2', evidSiNoField:'Evid SiNo GS 3.1.2', evidField:'Evid GS 3.1.2', desc:'GS 3.1.2 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.).' },
 ];
 
 const itemsS2 = [
-  { id:'gs3_2_1', codigo:'GS 3.1.2', campo:'GS 3.1.2 Se ha evaluado el impacto de ruido ambiental', obsField:'Obs GS 3.1.2', evidSiNoField:'Evid SiNo GS 3.1.2', evidField:'Evid GS 3.1.2', desc:'GS 3.1.2 Se ha evaluado el impacto de ruido ambiental.' },
+  { id:'gs3_2_1', codigo:'GS 3.2.1', campo:'GS 3.2.1 Se ha evaluado el impacto de ruido ambiental', obsField:'Obs GS 3.2.1', evidSiNoField:'Evid SiNo GS 3.2.1', evidField:'Evid GS 3.2.1', desc:'GS 3.2.1 Se ha evaluado el impacto de ruido ambiental.' },
 ];
 
 const itemsS3 = [
