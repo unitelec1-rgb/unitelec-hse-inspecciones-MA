@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspección Medio Ambiente - UNITELEC</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-size: 14px; }
+
+  #login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background-image: url('fondo.png'); background-size: cover;
+    background-position: center; background-repeat: no-repeat;
+  }
+  .login-box {
+    background: rgba(255,255,255,0.92); border-radius: 12px; padding: 40px;
+    width: 100%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    text-align: center; backdrop-filter: blur(8px);
+  }
+  .login-box h2 { color: #1F4E79; margin-bottom: 20px; font-size: 18px; }
+  .login-box input {
+    width: 100%; padding: 12px 16px; border: 2px solid #ddd;
+    border-radius: 8px; font-size: 14px; margin-bottom: 12px; transition: border-color 0.3s;
+  }
+  .login-box input:focus { outline: none; border-color: #1F4E79; }
+  .btn-login {
+    width: 100%; padding: 14px; background: #0D1B2A; color: white;
+    border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
+    cursor: pointer; letter-spacing: 1px; transition: background 0.3s;
+  }
+  .btn-login:hover { background: #2E75B6; }
+  .login-error { color: #C55A11; font-size: 13px; margin-top: 12px; display: none; }
+
+  #form-screen { display: none; }
+  .header {
+    background: #1B5E20; color: white; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  .header-logo { font-size: 20px; font-weight: bold; }
+  .header-title { font-size: 14px; opacity: 0.9; }
+  .header-user { font-size: 12px; opacity: 0.8; }
+  .btn-logout {
+    background: rgba(255,255,255,0.2); color: white;
+    border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px;
+    border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+  .progress-bar { background: #e0e0e0; border-radius: 10px; height: 8px; margin-bottom: 20px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, #1B5E20, #43A047); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+
+  .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .card-title { font-size: 16px; font-weight: bold; color: #1B5E20; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1B5E20; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label { font-size: 12px; font-weight: bold; color: #555; text-transform: uppercase; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 6px;
+    font-size: 14px; transition: border-color 0.3s; font-family: Arial, sans-serif;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1B5E20; }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .seccion-header {
+    border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .seccion-s1 { background: #1B5E20; color: white; }
+  .seccion-s2 { background: #2E7D32; color: white; }
+  .seccion-s3 { background: #388E3C; color: white; }
+  .seccion-s4 { background: #C55A11; color: white; }
+  .seccion-s5 { background: #1565C0; color: white; }
+  .seccion-s6 { background: #6B2C91; color: white; }
+  .seccion-s7 { background: #4E342E; color: white; }
+  .seccion-titulo { font-size: 15px; font-weight: bold; }
+  .seccion-toggle {
+    cursor: pointer; user-select: none; display: flex;
+    align-items: center; justify-content: space-between; width: 100%;
+  }
+  .seccion-arrow { font-size: 20px; transition: transform 0.3s; margin-left: 10px; }
+  .seccion-arrow.collapsed { transform: rotate(-90deg); }
+  .seccion-content { transition: all 0.3s ease; overflow: hidden; }
+  .seccion-content.collapsed { display: none; }
+
+  .draft-banner {
+    background: #FFF3CD; border: 1px solid #FFC107; border-radius: 8px;
+    padding: 10px 16px; margin-bottom: 16px; display: none;
+    align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .draft-banner.visible { display: flex; }
+  .draft-banner span { font-size: 13px; color: #856404; font-weight: bold; }
+  .btn-clear-draft { padding: 4px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+
+  .badge-count { background: rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 10px; font-size: 12px; margin-left: 8px; }
+  .estado-general-select {
+    padding: 8px 12px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.15); color: white; font-size: 13px;
+    font-weight: bold; cursor: pointer; min-width: 200px;
+  }
+  .estado-general-select option { background: #333; color: white; }
+
+  .item-card {
+    background: #fafafa; border: 1.5px solid #e8e8e8;
+    border-radius: 8px; padding: 14px; margin-bottom: 10px; transition: border-color 0.3s;
+  }
+  .item-card:hover { border-color: #1B5E20; }
+  .item-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .item-codigo { background: #1B5E20; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; flex-shrink: 0; }
+  .item-codigo-s2 { background: #2E7D32; }
+  .item-codigo-s3 { background: #388E3C; }
+  .item-codigo-s4 { background: #C55A11; }
+  .item-codigo-s5 { background: #1565C0; }
+  .item-codigo-s6 { background: #6B2C91; }
+  .item-codigo-s7 { background: #4E342E; }
+  .item-descripcion { font-size: 13px; color: #444; line-height: 1.5; }
+
+  .item-respuesta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .btn-respuesta { padding: 8px 16px; border: 2px solid #ddd; border-radius: 20px; background: white; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.2s; color: #555; }
+  .btn-respuesta.cumple.active { background: #1E6B3C; border-color: #1E6B3C; color: white; }
+  .btn-respuesta.nocumple.active { background: #C00000; border-color: #C00000; color: white; }
+  .btn-respuesta.na.active { background: #666; border-color: #666; color: white; }
+
+  .item-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  @media (max-width: 600px) { .item-extra { grid-template-columns: 1fr; } }
+  .item-obs label { font-size: 11px; color: #888; font-weight: bold; margin-bottom: 4px; display: block; }
+  .item-obs textarea { width: 100%; padding: 8px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 12px; resize: vertical; min-height: 60px; font-family: Arial, sans-serif; }
+
+  .evidencia-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .evidencia-toggle label { font-size: 12px; color: #666; font-weight: bold; }
+  .toggle-btn { display: flex; gap: 6px; }
+  .toggle-btn button { padding: 4px 12px; border-radius: 12px; border: 1.5px solid #ddd; background: white; cursor: pointer; font-size: 11px; transition: all 0.2s; }
+  .toggle-btn button.active-si { background: #1E6B3C; border-color: #1E6B3C; color: white; }
+  .toggle-btn button.active-no { background: #999; border-color: #999; color: white; }
+  .evidencia-section { display: none; }
+  .evidencia-section.visible { display: block; }
+  .file-upload { border: 2px dashed #ccc; border-radius: 6px; padding: 12px; text-align: center; cursor: pointer; background: white; transition: border-color 0.3s; }
+  .file-upload:hover { border-color: #1B5E20; }
+  .file-upload input { display: none; }
+  .file-upload-label { font-size: 12px; color: #888; cursor: pointer; display: block; }
+  .file-preview { max-width: 100%; max-height: 120px; border-radius: 4px; margin-top: 8px; display: none; }
+
+  .firma-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 600px) { .firma-container { grid-template-columns: 1fr; } }
+  .firma-box { border: 2px solid #ddd; border-radius: 8px; overflow: hidden; }
+  .firma-titulo { background: #1B5E20; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 13px; }
+  canvas { width: 100%; height: 150px; cursor: crosshair; touch-action: none; display: block; }
+  .firma-actions { display: flex; gap: 8px; padding: 8px; background: #f5f5f5; justify-content: flex-end; }
+  .btn-limpiar { padding: 6px 14px; background: #C55A11; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+
+  .btn-enviar { width: 100%; padding: 18px; background: #1E6B3C; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 10px; }
+  .btn-enviar:hover { background: #155c32; }
+  .btn-enviar:disabled { background: #999; cursor: not-allowed; }
+
+  .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+  .loading-overlay.visible { display: flex; }
+  .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-top: 5px solid white; border-radius: 50%; animation: spin 1s linear infinite; }
+  .loading-text { color: white; font-size: 16px; font-weight: bold; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Enviando inspección...</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <img src="logo.png" alt="UNITELEC" style="width:250px;margin-bottom:10px;" onerror="this.style.display='none'" />
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg" width="28" height="28" />
+      <span style="color:#0078D4;font-weight:bold;font-size:16px;">Outlook</span>
+    </div>
+    <h2>Inicia sesión para continuar</h2>
+    <div style="text-align:left;margin-bottom:4px;">
+      <label style="font-size:12px;font-weight:bold;color:#333;text-transform:uppercase;letter-spacing:1px;">CORREO CORPORATIVO *</label>
+    </div>
+    <div style="position:relative;">
+      <span style="position:absolute;left:12px;top:13px;color:#555;">✉</span>
+      <input type="email" id="login-email" placeholder="@unitelec.com.pe" style="width:100%;padding:12px 12px 12px 36px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:12px;" />
+    </div>
+    <div style="position:relative;">
+      <input type="password" id="login-password" placeholder="Introduce tu contraseña" style="width:100%;padding:12px 40px 12px 16px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:12px;" />
+      <span id="ojo" onclick="togglePassword()" style="position:absolute;right:12px;top:13px;cursor:pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </span>
+    </div>
+    <button class="btn-login" onclick="login()">Iniciar sesión</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- FORMULARIO -->
+<div id="form-screen">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img src="logo.png" alt="UNITELEC" style="height:38px;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none'" />
+      <div>
+        <div class="header-logo">UNITELEC HSE</div>
+        <div class="header-title">Inspección de Medio Ambiente</div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="header-user" id="header-user"></div>
+      <button class="btn-logout" onclick="logout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="draft-banner" id="draft-banner">
+      <span>📋 Tienes un borrador guardado. ¿Deseas continuar donde lo dejaste?</span>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-clear-draft" onclick="limpiarBorrador()">🗑️ Descartar</button>
+      </div>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <!-- DATOS GENERALES -->
+    <div class="card">
+      <div class="card-title">📋 1. Información General</div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Cliente *</label>
+          <select id="cliente" required>
+            <option value="">Seleccionar...</option>
+            <option>PLUZ</option><option>ISA</option><option>ORYGEN</option>
+            <option>ATLANTICA</option><option>ENGY</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Responsable de la Inspección *</label>
+          <select id="responsable" required>
+            <option value="">Seleccionar...</option>
+            <option>ALI RONALD COLCHADO VEGA</option>
+            <option>MYRIAM LAURA CAMPOS MARTINEZ</option>
+            <option>JOSE PAULO CESAR GUERRERO CABRERA</option>
+            <option>CLOUS LYSEN CUYOTUPA NUÑEZ</option>
+            <option>CLAUDIA DAYANA MONTES HUAMANÍ</option>
+            <option>JUAN ERNESTO AGUILAR GUILLEN</option>
+            <option>JEREME JESUS VELASQUEZ LOPEZ</option>
+            <option>JANSEN ANTHONY QUISPE LAGUNA</option>
+            <option>JORGE GONZALO RIVAS TOVALINO</option>
+            <option>MAXWELL ALEXIS BARTRA BURGOS</option>
+            <option>RAMIRO CALISAYA RAMIREZ</option>
+            <option>HUGO DELFIN PIMENTEL MALVACEDA</option>
+            <option>MARCO PAOLO SOVERO HUAMANI</option>
+            <option>MANUEL CASTRO TAFUR</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de Apertura *</label>
+          <input type="date" id="fecha_apertura" required />
+        </div>
+
+        <div class="form-group">
+          <label>Estado de Ejecución *</label>
+          <select id="estado_ejecucion" required>
+            <option value="">Seleccionar...</option>
+            <option>Abierto</option><option>En progreso</option><option selected>Cerrado</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Proyecto *</label>
+          <select id="proyecto" required>
+            <option value="">Seleccionar...</option>
+            <option>Anillo Vial</option>
+            <option>Mantenimiento de Transformadores Pluz</option>
+            <option>Mantenimiento de Transformadores Orygen</option>
+            <option>Mantenimiento de Líneas</option>
+            <option>Caudivilla</option><option>Yaros</option><option>Chimú</option>
+            <option>Chevez</option><option>Pico</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Área Inspectora *</label>
+          <select id="area_inspectora" required>
+            <option value="">Seleccionar...</option>
+            <option>SEGURIDAD LABORAL</option><option>OPERACIONES</option>
+            <option>AUDITORÍA</option><option>GERENCIA GENERAL</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Área Inspeccionada *</label>
+          <select id="area_inspeccionada" required>
+            <option value="">Seleccionar...</option>
+            <option>OBRAS CIVILES</option><option>MONTAJE ELECTROMECÁNICO</option>
+            <option>MM.TT.LÍNEAS</option><option>MM.TT.TRAFOS</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Empresa Inspectora *</label>
+          <select id="empresa_inspectora" required>
+            <option value="">Seleccionar...</option>
+            <option>Interno</option><option>Externo</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Inspección *</label>
+          <select id="tipo_inspeccion" required>
+            <option value="Estándar" selected>Estándar</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Distrito *</label>
+          <select id="distrito" required>
+            <option value="">Seleccionar...</option>
+            <option>Ancón</option><option>Ate</option><option>Barranco</option>
+            <option>Breña</option><option>Carabayllo</option><option>Chaclacayo</option>
+            <option>Chorrillos</option><option>Cieneguilla</option><option>Comas</option>
+            <option>El Agustino</option><option>Independencia</option><option>Jesús María</option>
+            <option>La Molina</option><option>La Victoria</option><option>Lince</option>
+            <option>Los Olivos</option><option>Lurigancho</option><option>Lurín</option>
+            <option>Magdalena del Mar</option><option>Miraflores</option><option>Pachacámac</option>
+            <option>Pueblo Libre</option><option>Puente Piedra</option><option>Rímac</option>
+            <option>San Borja</option><option>San Isidro</option>
+            <option>San Juan de Lurigancho</option><option>San Juan de Miraflores</option>
+            <option>San Luis</option><option>San Martín de Porres</option>
+            <option>San Miguel</option><option>Santa Anita</option>
+            <option>Santiago de Surco</option><option>Surquillo</option>
+            <option>Villa El Salvador</option><option>Villa María del Triunfo</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Dirección *</label>
+          <input type="text" id="direccion" placeholder="Av. Ejemplo 123" required />
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Orden de Trabajo *</label>
+          <select id="tipo_orden" required>
+            <option value="">Seleccionar...</option>
+            <option>LCL</option><option>OT</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>N° de Trabajo *</label>
+          <input type="text" id="num_trabajo" placeholder="LCL-XXXXXXXXXX" required />
+        </div>
+
+        <div class="form-group full">
+          <label>Descripción de la Tarea *</label>
+          <textarea id="descripcion_tarea" placeholder="Describe la tarea a inspeccionar..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>N° de Contrato</label>
+          <input type="number" id="num_contrato" placeholder="5200000000" />
+        </div>
+
+        <div class="form-group">
+          <label>Jefe de Cuadrilla *</label>
+          <input type="text" id="jefe_cuadrilla" placeholder="Apellidos y Nombres" required />
+        </div>
+
+        <div class="form-group">
+          <label>DNI / C.E Jefe de Cuadrilla *</label>
+          <input type="number" id="dni_jefe" placeholder="12345678" required />
+        </div>
+
+        <div class="form-group">
+          <label>Supervisor Operativo</label>
+          <input type="text" id="supervisor" placeholder="Apellidos y Nombres" />
+        </div>
+
+        <div class="form-group">
+          <label>DNI/CE Supervisor Operativo</label>
+          <input type="number" id="dni_supervisor" placeholder="12345678" />
+        </div>
+
+        <div class="form-group">
+          <label>Subproceso *</label>
+          <select id="subproceso" required>
+            <option value="">Seleccionar...</option>
+            <option>Mantenimiento Líneas AT</option><option>Mantenimiento SETS</option>
+            <option>Obras Líneas AT</option><option>Obras SETs AT</option>
+            <option>Mantenimiento de Transformadores</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Actividad *</label>
+          <select id="tipo_actividad" required>
+            <option value="">Seleccionar...</option>
+            <option>Eléctrico</option><option>Excavación</option><option>Izaje de cargas</option>
+            <option>Trabajos en altura</option><option>Trabajos en espacios confinados</option>
+            <option>Civil</option><option>Otros</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instalación Inspeccionada *</label>
+          <select id="instalacion" required>
+            <option value="">Seleccionar...</option>
+            <option>SET (SET de Transmisión)</option><option>Vía Pública</option>
+            <option>Centrales Hidroeléctricas</option><option>Centrales Térmicas</option>
+            <option>Redes AT</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECCIÓN 1: GESTIÓN DE RESIDUOS -->
+    <div class="card">
+      <div class="seccion-header seccion-s1">
+        <div class="seccion-toggle" onclick="toggleSeccion('s1')">
+          <div class="seccion-titulo">GS 3.1 - GESTIÓN DE RESIDUOS <span class="badge-count">2 ítems</span></div>
+          <span class="seccion-arrow" id="arrow-s1">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s1', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>
+        </select>
+      </div>
+      <div class="seccion-content" id="content-s1">
+        <div id="items-s1"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: GESTIÓN DEL RUIDO -->
+    <div class="card">
+      <div class="seccion-header seccion-s2">
+        <div class="seccion-toggle" onclick="toggleSeccion('s2')">
+          <div class="seccion-titulo">GS 3.2 - GESTIÓN DEL RUIDO <span class="badge-count">1 ítem</span></div>
+          <span class="seccion-arrow" id="arrow-s2">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s2', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>
+        </select>
+      </div>
+      <div class="seccion-content" id="content-s2">
+        <div id="items-s2"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: GESTIÓN GASES SF6 -->
+    <div class="card">
+      <div class="seccion-header seccion-s3">
+        <div class="seccion-toggle" onclick="toggleSeccion('s3')">
+          <div class="seccion-titulo">GS 3.3 - GESTIÓN DE EQUIPOS CON GASES SF6 Y ACONDICIONAMIENTO <span class="badge-count">2 ítems</span></div>
+          <span class="seccion-arrow" id="arrow-s3">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s3', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>
+        </select>
+      </div>
+      <div class="seccion-content" id="content-s3">
+        <div id="items-s3"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 4: GESTIÓN DE ACEITES -->
+    <div class="card">
+      <div class="seccion-header seccion-s4">
+        <div class="seccion-toggle" onclick="toggleSeccion('s4')">
+          <div class="seccion-titulo">GS 3.4 - GESTIÓN DE ACEITES Y OTRAS SUSTANCIAS <span class="badge-count">2 ítems</span></div>
+          <span class="seccion-arrow" id="arrow-s4">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s4', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>
+        </select>
+      </div>
+      <div class="seccion-content" id="content-s4">
+        <div id="items-s4"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 5: ZONA DE TRABAJO -->
+    <div class="card">
+      <div class="seccion-header seccion-s5">
+        <div class="seccion-toggle" onclick="toggleSeccion('s5')">
+          <div class="seccion-titulo">GS 3.5 - ZONA DE TRABAJO <span class="badge-count">5 ítems</span></div>
+          <span class="seccion-arrow" id="arrow-s5">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s5', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>
+        </select>
+      </div>
+      <div class="seccion-content" id="content-s5">
+        <div id="items-s5"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 6: ÁREAS VERDES -->
+    <div class="card">
+      <div class="seccion-header seccion-s6">
+        <div class="seccion-toggle" onclick="toggleSeccion('s6')">
+          <div class="seccion-titulo">GS 3.6 - CUIDADO DE LAS ÁREAS VERDES <span class="badge-count">1 ítem</span></div>
+          <span class="seccion-arrow" id="arrow-s6">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s6', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>
+        </select>
+      </div>
+      <div class="seccion-content" id="content-s6">
+        <div id="items-s6"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 7: PERMISOS AMBIENTALES -->
+    <div class="card">
+      <div class="seccion-header seccion-s7">
+        <div class="seccion-toggle" onclick="toggleSeccion('s7')">
+          <div class="seccion-titulo">GS 3.7 - PERMISOS AMBIENTALES <span class="badge-count">1 ítem</span></div>
+          <span class="seccion-arrow" id="arrow-s7">▼</span>
+        </div>
+        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s7', this.value)">
+          <option value="">-- Estado general --</option>
+          <option value="Cumple">Todos CUMPLE</option>
+          <option value="No cumple">Todos NO CUMPLE</option>
+          <option value="N/A">Todos N/A</option>
+        </select>
+      </div>
+      <div class="seccion-content" id="content-s7">
+        <div id="items-s7"></div>
+      </div>
+    </div>
+
+    <!-- FIRMAS -->
+    <div class="card">
+      <div class="card-title">✍️ 2. Firmas</div>
+      <div class="firma-container">
+        <div class="firma-box">
+          <div class="firma-titulo">INSPECTOR HSE</div>
+          <canvas id="canvas-inspector"
+            ontouchstart="startDraw(event,'inspector')" ontouchmove="draw(event,'inspector')" ontouchend="stopDraw('inspector')"
+            onmousedown="startDraw(event,'inspector')" onmousemove="draw(event,'inspector')" onmouseup="stopDraw('inspector')" onmouseleave="stopDraw('inspector')"></canvas>
+          <div class="firma-actions"><button class="btn-limpiar" onclick="limpiarFirma('inspector')">Limpiar</button></div>
+          <div style="padding:8px;font-size:12px;color:#666;text-align:center" id="nombre-inspector"></div>
+        </div>
+        <div class="firma-box">
+          <div class="firma-titulo">JEFE DE CUADRILLA</div>
+          <canvas id="canvas-jefe"
+            ontouchstart="startDraw(event,'jefe')" ontouchmove="draw(event,'jefe')" ontouchend="stopDraw('jefe')"
+            onmousedown="startDraw(event,'jefe')" onmousemove="draw(event,'jefe')" onmouseup="stopDraw('jefe')" onmouseleave="stopDraw('jefe')"></canvas>
+          <div class="firma-actions"><button class="btn-limpiar" onclick="limpiarFirma('jefe')">Limpiar</button></div>
+          <div style="padding:8px;font-size:12px;color:#666;text-align:center" id="nombre-jefe"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-enviar" onclick="mostrarRevision()" id="btn-enviar">👁️ SIGUIENTE</button>
+  </div>
+</div>
+
+<!-- REVISIÓN -->
+<div id="revision-screen" style="display:none;">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img src="logo.png" alt="UNITELEC" style="height:38px;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none'" />
+      <div>
+        <div class="header-logo">UNITELEC HSE</div>
+        <div class="header-title">Revisión de Inspección MA</div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="header-user" id="header-user-rev"></div>
+    </div>
+  </div>
+  <div class="container">
+    <div style="background:#FFF3CD;border:1px solid #FFC107;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#856404;font-weight:bold;">
+      ⚠️ Revisa toda la información antes de enviar. Una vez enviada no podrás modificarla.
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        📋 1. Información General
+        <button onclick="editarSeccion('datos')" style="padding:6px 14px;background:#1B5E20;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-datos"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        GS 3.1 - Gestión de Residuos
+        <button onclick="editarSeccion('s1')" style="padding:6px 14px;background:#1B5E20;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-s1"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        GS 3.2 - Gestión del Ruido
+        <button onclick="editarSeccion('s2')" style="padding:6px 14px;background:#2E7D32;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-s2"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        GS 3.3 - Gestión Gases SF6
+        <button onclick="editarSeccion('s3')" style="padding:6px 14px;background:#388E3C;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-s3"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        GS 3.4 - Gestión de Aceites y Sustancias
+        <button onclick="editarSeccion('s4')" style="padding:6px 14px;background:#C55A11;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-s4"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        GS 3.5 - Zona de Trabajo
+        <button onclick="editarSeccion('s5')" style="padding:6px 14px;background:#1565C0;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-s5"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        GS 3.6 - Cuidado de Áreas Verdes
+        <button onclick="editarSeccion('s6')" style="padding:6px 14px;background:#6B2C91;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-s6"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+        GS 3.7 - Permisos Ambientales
+        <button onclick="editarSeccion('s7')" style="padding:6px 14px;background:#4E342E;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+      </div>
+      <div id="rev-s7"></div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-top:10px;">
+      <button onclick="volverFormulario()" style="flex:1;padding:16px;background:#666;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;">
+        ← Volver a editar
+      </button>
+      <button onclick="enviarInspeccion()" id="btn-confirmar" style="flex:2;padding:16px;background:#1E6B3C;color:white;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;">
+        📤 CONFIRMAR Y ENVIAR
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ÉXITO -->
+<div id="success-screen" style="display:none;min-height:100vh;background-image:url('fondo.png');background-size:cover;background-position:center;background-repeat:no-repeat;align-items:center;justify-content:center;">
+  <div style="background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-radius:16px;padding:50px 40px;text-align:center;max-width:450px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <img src="logo.png" alt="UNITELEC" style="width:180px;margin-bottom:20px;object-fit:contain;" onerror="this.style.display='none'" />
+    <div style="font-size:60px;margin-bottom:20px;filter:grayscale(1) brightness(0.25);">✅</div>
+    <div style="font-size:24px;font-weight:bold;color:#1E6B3C;margin-bottom:10px;">¡Inspección Enviada!</div>
+    <div style="color:#666;margin-bottom:20px;">Registrada exitosamente en el sistema UNITELEC.</div>
+    <div style="font-size:18px;font-weight:bold;color:#1B5E20;" id="success-codigo"></div>
+    <br>
+    <div style="font-size:13px;color:#888">Recibirás el PDF por correo en los próximos minutos.</div>
+    <button style="margin-top:24px;padding:14px 30px;background:#1B5E20;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;" onclick="location.reload()">Nueva Inspección</button>
+  </div>
+</div>
+
+<script>
+// ─── USUARIOS ───
+const USUARIOS = {
+  'klavado@unitelec.com.pe':     { password: 'unitelec2804', nombre: 'K. LAVADO' },
+  'djulca@unitelec.com.pe':      { password: 'unitelec2804', nombre: 'D. JULCA' },
+  'jacruz@unitelec.com.pe':      { password: 'unitelec2804', nombre: 'J. CRUZ' },
+  'mbartra@unitelec.com.pe':     { password: 'unitelec2804', nombre: 'M. BARTRA' },
+  'jrivas@unitelec.com.pe':      { password: 'unitelec6932', nombre: 'J. RIVAS' },
+  'acolchado@unitelec.com.pe':   { password: 'unitelec4827', nombre: 'A. COLCHADO' },
+  'mcampos@rscconstructores.pe': { password: 'unitelec1509', nombre: 'M. CAMPOS' },
+  'jguerrero@unitelec.com.pe':   { password: 'unitelec7364', nombre: 'J. GUERRERO' },
+  'ccuyotupa@unitelec.com.pe':   { password: 'unitelec2918', nombre: 'C. CUYOTUPA' },
+  'cmontes@unitelec.com.pe':     { password: 'unitelec6043', nombre: 'C. MONTES' },
+  'jaguilar@unitelec.com.pe':    { password: 'unitelec8751', nombre: 'J. AGUILAR' },
+  'jvelasquez@unitelec.com.pe':  { password: 'unitelec3196', nombre: 'J. VELASQUEZ' },
+  'jansenquispe@unitelec.com.pe':{ password: 'unitelec4420', nombre: 'J. QUISPE' },
+  'msovero@unitelec.com.pe':     { password: 'unitelec9873', nombre: 'M. SOVERO' },
+  'hpimentel@unitelec.com.pe':   { password: 'unitelec1285', nombre: 'H. PIMENTEL' },
+  'mcastro@unitelec.com.pe':     { password: 'unitelec5601', nombre: 'M. CASTRO' },
+  'rcalisaya@unitelec.com.pe':   { password: 'unitelec7748', nombre: 'R. CALISAYA' },
+};
+
+// ─── CLOUDINARY ───
+const CLOUDINARY_CLOUD = 'df17abwyo';
+const CLOUDINARY_PRESET = 'unitelec_hse';
+
+async function comprimirImagen(base64, maxWidth = 800) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', 0.6));
+    };
+    img.src = base64;
+  });
+}
+
+async function subirACloudinary(base64, nombre, folder) {
+  if (!base64) return null;
+  try {
+    const comp = await comprimirImagen(base64);
+    const fd = new FormData();
+    fd.append('file', comp);
+    fd.append('upload_preset', CLOUDINARY_PRESET);
+    fd.append('public_id', `${nombre}_${Date.now()}`);
+    fd.append('folder', `inspecciones/${folder}`);
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body: fd });
+    const d = await res.json();
+    return d.secure_url || null;
+  } catch(e) { return null; }
+}
+
+async function subirArchivoACloudinary(file, nombre) {
+  if (!file) return null;
+  try {
+    const comp = await new Promise(resolve => {
+      const r = new FileReader();
+      r.onload = async e => resolve(await comprimirImagen(e.target.result));
+      r.readAsDataURL(file);
+    });
+    const fd = new FormData();
+    fd.append('file', comp);
+    fd.append('upload_preset', CLOUDINARY_PRESET);
+    fd.append('public_id', `${nombre}_${Date.now()}`);
+    fd.append('folder', 'inspecciones/evidencias');
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body: fd });
+    const d = await res.json();
+    return d.secure_url || null;
+  } catch(e) { return null; }
+}
+
+// ─── ITEMS CHECKLIST ───
+const itemsS1 = [
+  { id:'gs3_1_1', codigo:'GS 3.1', campo:'GS 3.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados', obsField:'Obs GS 3.1', evidSiNoField:'Evid SiNo GS 3.1', evidField:'Evid GS 3.1', desc:'GS 3.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados.' },
+  { id:'gs3_1_1b', codigo:'GS 3.1.1', campo:'GS 3.1.1 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.1.1', evidSiNoField:'Evid SiNo GS 3.1.1', evidField:'Evid GS 3.1.1', desc:'GS 3.1.1 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.).' },
+];
+
+const itemsS2 = [
+  { id:'gs3_2_1', codigo:'GS 3.1.2', campo:'GS 3.1.2 Se ha evaluado el impacto de ruido ambiental', obsField:'Obs GS 3.1.2', evidSiNoField:'Evid SiNo GS 3.1.2', evidField:'Evid GS 3.1.2', desc:'GS 3.1.2 Se ha evaluado el impacto de ruido ambiental.' },
+];
+
+const itemsS3 = [
+  { id:'gs3_3_1', codigo:'GS 3.3.1', campo:'GS 3.3.1 El acondicionamiento/mantenimiento es efectuado por personal capacitado (por ejemplo, en prevención de fugas de gas, tratamiento/clasificación de polvo, filtros, solución utilizada)', obsField:'Obs GS 3.3.1', evidSiNoField:'Evid SiNo GS 3.3.1', evidField:'Evid GS 3.3.1', desc:'GS 3.3.1 El acondicionamiento/mantenimiento es efectuado por personal capacitado (en prevención de fugas de gas, tratamiento/clasificación de polvo, filtros, solución utilizada).' },
+  { id:'gs3_3_2', codigo:'GS 3.3.2', campo:'GS 3.3.2 El gas se entrega a una persona autorizada para su reciclaje/eliminación', obsField:'Obs GS 3.3.2', evidSiNoField:'Evid SiNo GS 3.3.2', evidField:'Evid GS 3.3.2', desc:'GS 3.3.2 El gas se entrega a una persona autorizada para su reciclaje/eliminación.' },
+];
+
+const itemsS4 = [
+  { id:'gs3_4_1', codigo:'GS 3.4.1', campo:'GS 3.4.1 Los productos químicos deben ser almacenados en lugares seguros, clasificados y debidamente separados', obsField:'Obs GS 3.4.1', evidSiNoField:'Evid SiNo GS 3.4.1', evidField:'Evid GS 3.4.1', desc:'GS 3.4.1 Los productos químicos deben ser almacenados en lugares seguros, clasificados y debidamente separados.' },
+  { id:'gs3_4_2', codigo:'GS 3.4.2', campo:'GS 3.4.2 Gestión correcta del uso, almacenamiento y transporte (cumplimiento de la normativa concerniente a los materiales peligrosos, planes de contingencia, porta y aplica el instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.4.2', evidSiNoField:'Evid SiNo GS 3.4.2', evidField:'Evid GS 3.4.2', desc:'GS 3.4.2 Gestión correcta del uso, almacenamiento y transporte (cumplimiento de la normativa de materiales peligrosos, planes de contingencia, instructivo, hojas MSDS, etc.).' },
+];
+
+const itemsS5 = [
+  { id:'gs3_5_1', codigo:'GS 3.5.1', campo:'GS 3.5.1 Los "materiales excavados" deben colocarse de forma correcta y eliminados en los tiempos previstos', obsField:'Obs GS 3.5.1', evidSiNoField:'Evid SiNo GS 3.5.1', evidField:'Evid GS 3.5.1', desc:'GS 3.5.1 Los "materiales excavados" deben colocarse de forma correcta y eliminados en los tiempos previstos.' },
+  { id:'gs3_5_2', codigo:'GS 3.5.2', campo:'GS 3.5.2 Se garantiza la capacidad de controlar y corregir (sistemas de protección) cualquier derrame de aceite u otros contaminantes', obsField:'Obs GS 3.5.2', evidSiNoField:'Evid SiNo GS 3.5.2', evidField:'Evid GS 3.5.2', desc:'GS 3.5.2 Se garantiza la capacidad de controlar y corregir (sistemas de protección) cualquier derrame de aceite u otros contaminantes.' },
+  { id:'gs3_5_3', codigo:'GS 3.5.3', campo:'GS 3.5.3 Se evita la afectación al patrimonio cultural en la ejecución de los trabajos', obsField:'Obs GS 3.5.3', evidSiNoField:'Evid SiNo GS 3.5.3', evidField:'Evid GS 3.5.3', desc:'GS 3.5.3 Se evita la afectación al patrimonio cultural en la ejecución de los trabajos.' },
+  { id:'gs3_5_4', codigo:'GS 3.5.4', campo:'GS 3.5.4 En los trabajos en la vía pública se minimiza la afectación al público (control de la obstrucción de accesos a propiedades particulares, implementación de sendas peatonales, porta y aplica instructivo, orden/limpieza, señalización, etc.)', obsField:'Obs GS 3.5.4', evidSiNoField:'Evid SiNo GS 3.5.4', evidField:'Evid GS 3.5.4', desc:'GS 3.5.4 En los trabajos en la vía pública se minimiza la afectación al público (obstrucción de accesos, sendas peatonales, instructivo, orden/limpieza, señalización, etc.).' },
+  { id:'gs3_5_5', codigo:'GS 3.5.5', campo:'GS 3.5.5 Se evita el levantamiento de polvo en la generación y eliminación del material excavado', obsField:'Obs GS 3.5.5', evidSiNoField:'Evid SiNo GS 3.5.5', evidField:'Evid GS 3.5.5', desc:'GS 3.5.5 Se evita el levantamiento de polvo en la generación y eliminación del material excavado.' },
+];
+
+const itemsS6 = [
+  { id:'gs3_6_1', codigo:'GS 3.6.1', campo:'GS 3.6.1 La poda se efectúa correctamente y aplica las normas locales sobre conservación de áreas verdes', obsField:'Obs GS 3.6.1', evidSiNoField:'Evid SiNo GS 3.6.1', evidField:'Evid GS 3.6.1', desc:'GS 3.6.1 La poda se efectúa correctamente y aplica las normas locales sobre conservación de áreas verdes.' },
+];
+
+const itemsS7 = [
+  { id:'gs3_7_1', codigo:'GS 3.7.1', campo:'GS 3.7.1 Cumplimiento de la legislación local/permisos locales sobre requisitos ambientales específicos (Autorizaciones municipales para rotura de pistas/veredas, poda; certificado vehicular RTV si está apto en la emisión de gases, etc.)', obsField:'Obs GS 3.7.1', evidSiNoField:'Evid SiNo GS 3.7.1', evidField:'Evid GS 3.7.1', desc:'GS 3.7.1 Cumplimiento de la legislación local/permisos locales sobre requisitos ambientales específicos (autorizaciones municipales para rotura de pistas/veredas, poda; certificado vehicular RTV, etc.).' },
+];
+
+const todasSecciones = [
+  { key: 's1', items: itemsS1 },
+  { key: 's2', items: itemsS2 },
+  { key: 's3', items: itemsS3 },
+  { key: 's4', items: itemsS4 },
+  { key: 's5', items: itemsS5 },
+  { key: 's6', items: itemsS6 },
+  { key: 's7', items: itemsS7 },
+];
+
+const coloresCodigo = { s1:'', s2:'item-codigo-s2', s3:'item-codigo-s3', s4:'item-codigo-s4', s5:'item-codigo-s5', s6:'item-codigo-s6', s7:'item-codigo-s7' };
+
+// ─── ESTADO ───
+let usuarioActual = '';
+let respuestas = {};
+let drawing = { inspector: false, jefe: false };
+let lastPos = {};
+let firmas = { inspector: null, jefe: null };
+
+// ─── LOGIN ───
+function login() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const error = document.getElementById('login-error');
+  if (USUARIOS[email] && USUARIOS[email].password === password) {
+    usuarioActual = email;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('form-screen').style.display = 'block';
+    document.getElementById('header-user').textContent = email;
+    document.getElementById('nombre-inspector').textContent = USUARIOS[email].nombre;
+    const hoy = new Date().toISOString().split('T')[0];
+    const fi = document.getElementById('fecha_apertura');
+    fi.value = hoy; fi.min = hoy; fi.max = hoy;
+    renderItems();
+    initCanvas();
+    cargarBorrador();
+    updateProgress();
+    error.style.display = 'none';
+  } else {
+    error.style.display = 'block';
+    error.textContent = '❌ Correo o contraseña incorrectos.';
+  }
+}
+
+document.addEventListener('keypress', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') login();
+});
+
+function togglePassword() {
+  const input = document.getElementById('login-password');
+  const ojo = document.getElementById('ojo');
+  if (input.type === 'password') {
+    input.type = 'text';
+    ojo.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+  } else {
+    input.type = 'password';
+    ojo.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  }
+}
+
+function logout() { if (confirm('¿Deseas cerrar sesión?')) location.reload(); }
+
+// ─── RENDER ───
+function renderItems() {
+  todasSecciones.forEach(({ key, items }) => {
+    document.getElementById(`items-${key}`).innerHTML = items.map(item => itemHTML(item, key)).join('');
+  });
+}
+
+function itemHTML(item, sec) {
+  const cc = coloresCodigo[sec] || '';
+  return `
+    <div class="item-card" id="card-${item.id}">
+      <div class="item-header">
+        <span class="item-codigo ${cc}">${item.codigo}</span>
+        <span class="item-descripcion">${item.desc}</span>
+      </div>
+      <div class="item-respuesta">
+        <button class="btn-respuesta cumple" id="btn-${item.id}-cumple" onclick="setResp('${item.id}','Cumple')">Cumple</button>
+        <button class="btn-respuesta nocumple" id="btn-${item.id}-nocumple" onclick="setResp('${item.id}','No cumple')">No cumple</button>
+        <button class="btn-respuesta na" id="btn-${item.id}-na" onclick="setResp('${item.id}','N/A')">N/A</button>
+      </div>
+      <div class="item-extra">
+        <div class="item-obs">
+          <label>📝 Observaciones</label>
+          <textarea id="obs-${item.id}" placeholder="Observaciones..."></textarea>
+        </div>
+        <div>
+          <div class="evidencia-toggle">
+            <label>📷 ¿Adjuntar evidencia?</label>
+            <div class="toggle-btn">
+              <button id="esi-${item.id}" onclick="toggleEvid('${item.id}',true)">Sí</button>
+              <button id="eno-${item.id}" class="active-no" onclick="toggleEvid('${item.id}',false)">No</button>
+            </div>
+          </div>
+          <div class="evidencia-section" id="evid-${item.id}">
+            <div class="file-upload" onclick="document.getElementById('file-${item.id}').click()">
+              <input type="file" id="file-${item.id}" accept="image/*" onchange="previewImg('${item.id}',this)">
+              <label class="file-upload-label">📁 Toca para subir foto</label>
+              <img id="prev-${item.id}" class="file-preview" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function setResp(id, val) {
+  respuestas[id] = val;
+  ['cumple','nocumple','na'].forEach(t => document.getElementById(`btn-${id}-${t}`)?.classList.remove('active'));
+  const m = {'Cumple':'cumple','No cumple':'nocumple','N/A':'na'};
+  document.getElementById(`btn-${id}-${m[val]}`)?.classList.add('active');
+  updateProgress();
+}
+
+function toggleSeccion(sec) {
+  document.getElementById(`content-${sec}`).classList.toggle('collapsed');
+  document.getElementById(`arrow-${sec}`).classList.toggle('collapsed');
+}
+
+function aplicarEstadoGeneral(sec, val) {
+  if (!val) return;
+  const map = { s1:itemsS1, s2:itemsS2, s3:itemsS3, s4:itemsS4, s5:itemsS5, s6:itemsS6, s7:itemsS7 };
+  (map[sec] || []).forEach(item => setResp(item.id, val));
+}
+
+function toggleEvid(id, show) {
+  document.getElementById(`evid-${id}`).classList.toggle('visible', show);
+  document.getElementById(`esi-${id}`).className = show ? 'active-si' : '';
+  document.getElementById(`eno-${id}`).className = show ? '' : 'active-no';
+}
+
+function previewImg(id, input) {
+  if (input.files?.[0]) {
+    const reader = new FileReader();
+    reader.onload = e => { const p = document.getElementById(`prev-${id}`); p.src = e.target.result; p.style.display = 'block'; };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ─── CANVAS ───
+function initCanvas() {
+  ['inspector','jefe'].forEach(t => {
+    const c = document.getElementById(`canvas-${t}`);
+    c.width = c.offsetWidth; c.height = 150;
+    const ctx = c.getContext('2d');
+    ctx.strokeStyle = '#1B5E20'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+  });
+}
+function getPos(e, c) {
+  const r = c.getBoundingClientRect();
+  const sx = c.width/r.width, sy = c.height/r.height;
+  const src = e.touches ? e.touches[0] : e;
+  return { x: (src.clientX-r.left)*sx, y: (src.clientY-r.top)*sy };
+}
+function startDraw(e,t) { e.preventDefault(); drawing[t]=true; lastPos[t]=getPos(e,document.getElementById(`canvas-${t}`)); }
+function draw(e,t) {
+  e.preventDefault(); if(!drawing[t]) return;
+  const c=document.getElementById(`canvas-${t}`); const ctx=c.getContext('2d'); const p=getPos(e,c);
+  ctx.beginPath(); ctx.moveTo(lastPos[t].x,lastPos[t].y); ctx.lineTo(p.x,p.y); ctx.stroke();
+  lastPos[t]=p;
+}
+function stopDraw(t) { drawing[t]=false; firmas[t]=document.getElementById(`canvas-${t}`).toDataURL(); }
+function limpiarFirma(t) { const c=document.getElementById(`canvas-${t}`); c.getContext('2d').clearRect(0,0,c.width,c.height); firmas[t]=null; }
+
+// ─── BORRADOR ───
+function guardarBorrador() {
+  if (!usuarioActual) return;
+  const campos = ['cliente','responsable','estado_ejecucion','area_inspectora','area_inspeccionada',
+    'empresa_inspectora','proyecto','distrito','direccion','tipo_orden','num_trabajo',
+    'descripcion_tarea','num_contrato','jefe_cuadrilla','dni_jefe','supervisor',
+    'dni_supervisor','subproceso','tipo_actividad','instalacion'];
+  const datos = { usuario: usuarioActual, respuestas };
+  campos.forEach(id => { const el = document.getElementById(id); if (el) datos[id] = el.value; });
+  localStorage.setItem('borrador_ma_hse', JSON.stringify(datos));
+}
+
+function cargarBorrador() {
+  const guardado = localStorage.getItem('borrador_ma_hse');
+  if (!guardado) return;
+  const datos = JSON.parse(guardado);
+  if (datos.usuario !== usuarioActual) return;
+  document.getElementById('draft-banner').classList.add('visible');
+  const campos = ['cliente','responsable','estado_ejecucion','area_inspectora','area_inspeccionada',
+    'empresa_inspectora','proyecto','distrito','direccion','tipo_orden','num_trabajo',
+    'descripcion_tarea','num_contrato','jefe_cuadrilla','dni_jefe','supervisor',
+    'dni_supervisor','subproceso','tipo_actividad','instalacion'];
+  campos.forEach(id => { const el = document.getElementById(id); if (el && datos[id]) el.value = datos[id]; });
+  if (datos.respuestas) Object.entries(datos.respuestas).forEach(([id, val]) => setResp(id, val));
+}
+
+function limpiarBorrador() {
+  localStorage.removeItem('borrador_ma_hse');
+  document.getElementById('draft-banner').classList.remove('visible');
+}
+
+// ─── PROGRESO ───
+function updateProgress() {
+  const todosItems = [...itemsS1,...itemsS2,...itemsS3,...itemsS4,...itemsS5,...itemsS6,...itemsS7];
+  document.getElementById('progress').style.width = Math.round(Object.keys(respuestas).length / todosItems.length * 100) + '%';
+  guardarBorrador();
+}
+
+// ─── REVISIÓN ───
+function mostrarRevision() {
+  const datosGen = [
+    ['Cliente', 'cliente'], ['Responsable', 'responsable'], ['Fecha Apertura', 'fecha_apertura'],
+    ['Estado', 'estado_ejecucion'], ['Proyecto', 'proyecto'], ['Área Inspectora', 'area_inspectora'],
+    ['Área Inspeccionada', 'area_inspeccionada'], ['Empresa Inspectora', 'empresa_inspectora'],
+    ['Tipo Inspección', 'tipo_inspeccion'], ['Distrito', 'distrito'], ['Dirección', 'direccion'],
+    ['Tipo Orden', 'tipo_orden'], ['N° Trabajo', 'num_trabajo'], ['Descripción Tarea', 'descripcion_tarea'],
+    ['N° Contrato', 'num_contrato'], ['Jefe de Cuadrilla', 'jefe_cuadrilla'], ['DNI Jefe', 'dni_jefe'],
+    ['Supervisor Operativo', 'supervisor'], ['DNI Supervisor', 'dni_supervisor'],
+    ['Subproceso', 'subproceso'], ['Tipo Actividad', 'tipo_actividad'], ['Instalación', 'instalacion'],
+  ];
+  document.getElementById('rev-datos').innerHTML = datosGen
+    .map(([label, id]) => [label, document.getElementById(id)?.value])
+    .filter(([, v]) => v)
+    .map(([k, v]) => `<div style="display:flex;padding:8px 0;border-bottom:1px solid #eee;gap:12px;"><div style="font-weight:bold;color:#555;font-size:13px;min-width:160px;">${k}</div><div style="font-size:13px;color:#333;">${v}</div></div>`)
+    .join('');
+
+  const colores = { 'Cumple': '#1E6B3C', 'No cumple': '#C00000', 'N/A': '#666' };
+  const renderRevItems = (items, containerId) => {
+    document.getElementById(containerId).innerHTML = items.map(item => {
+      const resp = respuestas[item.id] || '—';
+      const obs = document.getElementById(`obs-${item.id}`)?.value || '';
+      return `<div style="display:flex;align-items:flex-start;padding:8px 0;border-bottom:1px solid #eee;gap:12px;">
+        <div style="background:#1B5E20;color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:bold;white-space:nowrap;">${item.codigo}</div>
+        <div style="flex:1;font-size:12px;color:#444;">${item.desc}</div>
+        <div style="font-weight:bold;color:${colores[resp]||'#999'};font-size:12px;white-space:nowrap;">${resp}</div>
+        ${obs ? `<div style="font-size:11px;color:#888;font-style:italic;">${obs}</div>` : ''}
+      </div>`;
+    }).join('');
+  };
+
+  todasSecciones.forEach(({ key, items }) => renderRevItems(items, `rev-${key}`));
+
+  document.getElementById('form-screen').style.display = 'none';
+  document.getElementById('revision-screen').style.display = 'block';
+  document.getElementById('header-user-rev').textContent = usuarioActual;
+  window.scrollTo(0, 0);
+}
+
+function volverFormulario() {
+  document.getElementById('revision-screen').style.display = 'none';
+  document.getElementById('form-screen').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function editarSeccion(seccion) {
+  document.getElementById('revision-screen').style.display = 'none';
+  document.getElementById('form-screen').style.display = 'block';
+  window.scrollTo(0, 0);
+  setTimeout(() => {
+    const ids = { datos:'area_inspectora', s1:'items-s1', s2:'items-s2', s3:'items-s3', s4:'items-s4', s5:'items-s5', s6:'items-s6', s7:'items-s7' };
+    const el = document.getElementById(ids[seccion]);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ─── ENVIAR ───
+async function enviarInspeccion() {
+  const reqs = ['cliente','responsable','fecha_apertura','estado_ejecucion','area_inspectora',
+    'area_inspeccionada','empresa_inspectora','proyecto','distrito','direccion',
+    'tipo_orden','num_trabajo','descripcion_tarea','jefe_cuadrilla','dni_jefe',
+    'subproceso','tipo_actividad','instalacion'];
+  for (const id of reqs) {
+    const el = document.getElementById(id);
+    if (!el || !el.value) { alert('Por favor completa todos los campos obligatorios (*)'); el?.focus(); return; }
+  }
+
+  document.getElementById('loading').classList.add('visible');
+  document.getElementById('btn-confirmar').disabled = true;
+
+  try {
+    const firmaInspURL = await subirACloudinary(firmas.inspector, 'firma_inspector', 'firmas');
+    const todosItems = [...itemsS1,...itemsS2,...itemsS3,...itemsS4,...itemsS5,...itemsS6,...itemsS7];
+    const evidURLs = {};
+    for (const item of todosItems) {
+      const fi = document.getElementById(`file-${item.id}`);
+      if (fi?.files?.[0]) {
+        const url = await subirArchivoACloudinary(fi.files[0], `evid_${item.id}`);
+        if (url) evidURLs[item.id] = url;
+      }
+    }
+
+    const campos = {
+      'FECHA DE APERTURA': document.getElementById('fecha_apertura').value,
+      'ESTADO DE LA EJECUCIÓN': document.getElementById('estado_ejecucion').value,
+      'Correo corporativo': usuarioActual,
+      'Responsable de la Inspección (Apellidos y Nombres)': document.getElementById('responsable').value,
+      'Área inspectora': document.getElementById('area_inspectora').value,
+      'Área inspeccionada': document.getElementById('area_inspeccionada').value,
+      'Empresa Inspectora': document.getElementById('empresa_inspectora').value,
+      'Tipo de inspección': document.getElementById('tipo_inspeccion').value,
+      'Distrito': document.getElementById('distrito').value,
+      'Dirección': document.getElementById('direccion').value,
+      'Tipo de orden de Trabajo': document.getElementById('tipo_orden').value,
+      'N° de trabajo': document.getElementById('num_trabajo').value,
+      'Descripción de la Tarea': document.getElementById('descripcion_tarea').value,
+      'Proyecto': document.getElementById('proyecto').value,
+      'Jefe de Cuadrilla': document.getElementById('jefe_cuadrilla').value,
+      'DNI/ C.E (Jefe de Cuadrilla)': Number(document.getElementById('dni_jefe').value) || null,
+      'Supervisor Operativo': document.getElementById('supervisor').value || null,
+      'DNI/CE /Supervisor Operativo': Number(document.getElementById('dni_supervisor').value) || null,
+      'Subproceso': document.getElementById('subproceso').value,
+      'Tipo de Actividad': document.getElementById('tipo_actividad').value,
+      'Instalación Inspeccionada': document.getElementById('instalacion').value,
+      'Cliente': document.getElementById('cliente').value,
+    };
+
+    const contrato = Number(document.getElementById('num_contrato').value);
+    if (contrato) campos['N° de Contrato'] = contrato;
+    Object.keys(campos).forEach(k => { if (!campos[k]) delete campos[k]; });
+    if (firmaInspURL) campos['FIRMA DEL INSPECTOR HSE'] = [{ url: firmaInspURL }];
+
+    todosItems.forEach(item => {
+      if (respuestas[item.id]) campos[item.campo] = respuestas[item.id];
+      const obs = document.getElementById(`obs-${item.id}`)?.value;
+      if (obs && item.obsField) campos[item.obsField] = obs;
+      const tieneSi = document.getElementById(`esi-${item.id}`)?.classList.contains('active-si');
+      if (item.evidSiNoField) campos[item.evidSiNoField] = tieneSi ? 'Si' : 'No';
+      if (evidURLs[item.id] && item.evidField) campos[item.evidField] = [{ url: evidURLs[item.id] }];
+    });
+
+    const MAKE_WEBHOOK = 'https://hook.us2.make.com/pt0v8y4y7x95ctbhs3ceyorajvj9smfx';
+    const response = await fetch(MAKE_WEBHOOK, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(campos)
+    });
+
+    if (response.ok) {
+      document.getElementById('loading').classList.remove('visible');
+      document.getElementById('revision-screen').style.display = 'none';
+      limpiarBorrador();
+      document.getElementById('success-screen').style.display = 'flex';
+      document.getElementById('success-codigo').textContent = '¡Inspección de Medio Ambiente registrada exitosamente!';
+    } else {
+      throw new Error('Error al enviar al servidor. Intenta nuevamente.');
+    }
+  } catch (err) {
+    document.getElementById('loading').classList.remove('visible');
+    document.getElementById('btn-confirmar').disabled = false;
+    alert('Error: ' + err.message);
+  }
+}
+
+document.addEventListener('input', e => {
+  guardarBorrador();
+  if (e.target.id === 'jefe_cuadrilla') {
+    document.getElementById('nombre-jefe').textContent = e.target.value.toUpperCase();
+  }
+});
+</script>
+</body>
+</html>
