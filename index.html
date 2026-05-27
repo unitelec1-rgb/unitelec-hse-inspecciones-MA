@@ -570,9 +570,16 @@
           </select>
         </div>
 
+         <div class="form-group">
+          <label>INSPECCIÓN *</label>
+          <select id="INSPECCIÓN" required>
+            <option value="INSPECCIÓN DE MEDIO AMBIENTE" selected>INSPECCIÓN DE MEDIO AMBIENTE</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label>Distrito *</label>
-          <select id="distrito" required>
+          <select id="distrito">
             <option value="">Seleccionar...</option>
             <option>Ancón</option><option>Ate</option><option>Barranco</option>
             <option>Breña</option><option>Carabayllo</option><option>Chaclacayo</option>
@@ -593,7 +600,7 @@
 
         <div class="form-group">
           <label>Dirección *</label>
-          <input type="text" id="direccion" placeholder="Av. Ejemplo 123" required />
+          <input type="text" id="direccion" placeholder="Av. Ejemplo 123" />
         </div>
 
         <div class="form-group">
@@ -607,7 +614,7 @@
 
         <div class="form-group">
           <label>N° de Trabajo *</label>
-          <input type="text" id="num_trabajo" placeholder="LCL-XXXXXXXXXX" required />
+          <input type="text" id="num_trabajo" placeholder="LCL-XXXXXXXXXX / OT-XXXXXXX" required />
         </div>
 
         <div class="form-group full">
@@ -617,16 +624,16 @@
 
         <div class="form-group">
           <label>N° de Contrato</label>
-          <input type="number" id="num_contrato" placeholder="5200000000" />
+          <input type="number" id="num_contrato" placeholder="5200000000" required />
         </div>
 
         <div class="form-group">
-          <label>Jefe de Cuadrilla *</label>
+          <label>Jefe de Cuadrilla/Residente *</label>
           <input type="text" id="jefe_cuadrilla" placeholder="Apellidos y Nombres" required />
         </div>
 
         <div class="form-group">
-          <label>DNI / C.E Jefe de Cuadrilla *</label>
+          <label>DNI / C.E Jefe de Cuadrilla/Residente *</label>
           <input type="number" id="dni_jefe" placeholder="12345678" required />
         </div>
 
