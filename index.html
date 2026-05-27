@@ -3,40 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inspección Medio Ambiente - UNITELEC</title>
+<title>Inspección SST - UNITELEC</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; font-size: 14px; }
+  body { font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif; background: #f0f4f8; color: #333; font-size: 14px; }
 
+  /* LOGIN - NUEVO DISEÑO */
   #login-screen {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background-image: url('fondo.png'); background-size: cover;
-    background-position: center; background-repeat: no-repeat;
+    min-height: 100vh; display: flex; flex-direction: column;
+    position: relative; overflow: hidden; background: #0B1F3A;
   }
-  .login-box {
-    background: rgba(255,255,255,0.92); border-radius: 12px; padding: 40px;
-    width: 100%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    text-align: center; backdrop-filter: blur(8px);
-  }
-  .login-box h2 { color: #1F4E79; margin-bottom: 20px; font-size: 18px; }
-  .login-box input {
-    width: 100%; padding: 12px 16px; border: 2px solid #ddd;
-    border-radius: 8px; font-size: 14px; margin-bottom: 12px; transition: border-color 0.3s;
-  }
-  .login-box input:focus { outline: none; border-color: #1F4E79; }
-  .btn-login {
-    width: 100%; padding: 14px; background: #0D1B2A; color: white;
-    border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
-    cursor: pointer; letter-spacing: 1px; transition: background 0.3s;
-  }
-  .btn-login:hover { background: #2E75B6; }
-  .login-error { color: #C55A11; font-size: 13px; margin-top: 12px; display: none; }
-
-  #form-screen { display: none; }
-  .header {
-    background: #1B5E20; color: white; padding: 16px 20px;
+  .login-bg { position: absolute; inset: 0; background-image: url('fondo.png');
+    background-size: cover; background-position: center; opacity: 1.0; }
+  .login-overlay { position: absolute; inset: 0;
+    background: linear-gradient(115deg, rgba(2,10,25,0.82) 0%, rgba(7,22,48,0.62) 35%, rgba(15,50,110,0.32) 60%, rgba(2,10,25,0.78) 100%); }
+  .login-glow-1 { position: absolute; top: -150px; right: -150px; width: 500px; height: 500px;
+    border-radius: 50%; background: radial-gradient(circle, rgba(45,108,223,0.18) 0%, transparent 70%); pointer-events: none; }
+  .login-glow-2 { position: absolute; bottom: -100px; left: -100px; width: 350px; height: 350px;
+    border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%); pointer-events: none; }
+  .login-header { position: relative; z-index: 10; padding: 28px 40px; display: flex; align-items: center; gap: 12px; }
+  .login-header img { height: 36px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255,255,255,0.08)); image-rendering: -webkit-optimize-contrast; drop-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+  .login-header-text { color: white; font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px; }
+  .login-main { position: relative; z-index: 10; flex: 1; display: flex; align-items: center;
+    justify-content: center; padding: 20px; gap: 80px; }
+  .login-left { flex: 1; max-width: 420px; color: white; display: none; }
+  @media (min-width: 900px) { .login-left { display: block; } }
+  .login-left-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.45);
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+  .login-left h1 { font-size: 38px; font-weight: 800; line-height: 1.05; margin-bottom: 16px; letter-spacing: -1px; }
+  .login-left h1 span { color: #4F8CFF; }
+  .login-left-desc { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 36px; }
+  .login-features { display: flex; flex-direction: column; gap: 16px; }
+  .login-feature { display: flex; align-items: flex-start; gap: 14px; }
+  .login-feature-icon { width: 40px; height: 40px; flex-shrink: 0; background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25); border-radius: 10px; display: flex;
+    align-items: center; justify-content: center; font-size: 16px; }
+  .login-feature-text strong { display: block; font-size: 13px; font-weight: 700; color: white; margin-bottom: 2px; }
+  .login-feature-text span { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .login-card { width: 100%; max-width: 440px; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px 36px;
+    backdrop-filter: blur(20px); box-shadow: 0 30px 70px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04);
+    animation: loginFadeIn 0.5s ease; }
+  @keyframes loginFadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .login-card-logo { padding-bottom: 18px; text-align: center; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .login-card-logo img { height: 44px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255,255,255,0.08)); image-rendering: -webkit-optimize-contrast; transition: all 0.25s ease; }
+  .login-card-logo-fallback { font-size: 20px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+  .login-card-logo-sub { font-size: 10px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
+  .login-card-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 0 0 24px; }
+  .login-card-title { font-size: 20px; font-weight: 700; color: white; text-align: center; margin-bottom: 4px; letter-spacing: -0.4px; }
+  .login-card-subtitle { font-size: 13px; color: rgba(255,255,255,0.4); text-align: center; margin-bottom: 28px; }
+  .login-field-label { display: block; font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .login-field-wrap { position: relative; margin-bottom: 16px; }
+  .login-field-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: rgba(255,255,255,0.25); font-size: 14px; pointer-events: none; }
+  .login-input-field { width: 100%; padding: 12px 14px 12px 40px; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.8); border-radius: 18px; font-size: 15px; color: white;
+    font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif; transition: all 0.2s; outline: none; }
+  .login-input-field::placeholder { color: rgba(255,255,255,0.45); }
+  .login-input-field:focus { border-color: #3B82F6; background: rgba(255,255,255,0.1); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+  .login-box { background: transparent !important; border-radius: 0 !important; padding: 0 !important;
+    width: 100% !important; max-width: none !important; box-shadow: none !important;
+    text-align: left !important; backdrop-filter: none !important; }
+  .btn-login { width: 100%; padding: 13px 14px; background: linear-gradient(135deg, #1E4D8C, #2D6CDF);
+    color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif; letter-spacing: 0.02em; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(45,108,223,0.35); margin-top: 4px; }
+  .btn-login:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(45,108,223,0.45); }
+  .login-ms-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0;
+    color: rgba(255,255,255,0.2); font-size: 12px; }
+  .login-ms-divider::before, .login-ms-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+  .login-ms-btn { width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.12); border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7);
+    font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif; transition: all 0.2s; }
+  .login-ms-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+  .login-error { color: #FCA5A5; font-size: 13px; margin-top: 12px; display: none;
+    background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.2);
+    border-radius: 8px; padding: 8px 12px; text-align: center; }
+  .login-footer { position: relative; z-index: 10; padding: 20px 40px;
     display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    border-top: 1px solid rgba(255,255,255,0.05); }
+  .login-footer-copy { font-size: 11px; color: rgba(255,255,255,0.2); }
+  .login-footer-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.25); }
+  .login-footer-badge-icon { width: 20px; height: 20px; border-radius: 50%; background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.25); display: flex; align-items: center; justify-content: center; font-size: 10px; }
+
+  /* FORM */
+  #form-screen { display: none; min-height: 100vh; background: linear-gradient(135deg, #EEF3F9 0%, #F4F7FB 45%,#E7EEF8 100%); font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif; }
+  .header {
+    background: linear-gradient(135deg, rgba(11,31,58,0.98), rgba(22,59,105,0.96) ); color: white; padding: 18px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100; backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 40px rgba(0,0,0,0.18);
   }
   .header-logo { font-size: 20px; font-weight: bold; }
   .header-title { font-size: 14px; opacity: 0.9; }
@@ -46,57 +105,128 @@
     border: 1px solid rgba(255,255,255,0.4); padding: 6px 14px;
     border-radius: 6px; cursor: pointer; font-size: 12px;
   }
-  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 32px 28px; }
 
   .progress-bar { background: #e0e0e0; border-radius: 10px; height: 8px; margin-bottom: 20px; overflow: hidden; }
-  .progress-fill { background: linear-gradient(90deg, #1B5E20, #43A047); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
+  .progress-fill { background: linear-gradient(90deg, #1F4E79, #2E75B6); height: 100%; border-radius: 10px; transition: width 0.5s; width: 0%; }
 
-  .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-  .card-title { font-size: 16px; font-weight: bold; color: #1B5E20; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #1B5E20; }
+  .card { background: rgba(255,255,255,0.82); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,0.7); border-radius: 28px; padding: 34px; margin-bottom: 28px; box-shadow: 0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.04); transition: all .25s ease; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 18px 48px rgba(15,23,42,0.12); }
+  .card-title { font-size: 20px; font-weight: 800; color: #0B1F3A; margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1px solid rgba(15,23,42,0.08); letter-spacing: -0.4px; display: flex; align-items: center; gap: 12px; }
 
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
-  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 24px; }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; gap:18px; } .form-group.full { grid-column: 1 / -1; } .form-group input, .form-group select, .form-group textarea { width: 100%; min-width: 0; font-size: 16px; } .card { padding: 24px 18px; border-radius: 20px; } .container { padding: 14px; } .header { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 12px; } .header img { height: 34px !important; } .header-title { font-size: 13px; } .btn-logout { width: 100%; } }
+  .form-group { display: flex; flex-direction: column; gap: 10px; }
   .form-group.full { grid-column: 1 / -1; }
-  .form-group label { font-size: 12px; font-weight: bold; color: #555; text-transform: uppercase; }
+  .form-group label { font-size: 11px; font-weight: 700; color: #555; letter-spacing: 1.2px; text-transform: uppercase; color: #64748B; margin-left: 4px; }
   .form-group input, .form-group select, .form-group textarea {
-    padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 6px;
-    font-size: 14px; transition: border-color 0.3s; font-family: Arial, sans-serif;
+    width: 100%; min-width: 0; padding: 13px 16px; border:1.5px solid rgba(148,163,184,0.18); border-radius: 16px;
+    font-size: 16px; background: rgba(255,255,255,0.92); color: #0F172A; transition: all .25s ease; font-family: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
   }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1B5E20; }
-  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #2D6CDF; background: white; box-shadow: 0 0 0 5px rgba(45,108,223,0.12), 0 8px 24px rgba(45,108,223,0.08); }
+  .form-group textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
 
   .seccion-header {
     border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
     display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
   }
-  .seccion-s1 { background: #1B5E20; color: white; }
-  .seccion-s2 { background: #2E7D32; color: white; }
-  .seccion-s3 { background: #388E3C; color: white; }
-  .seccion-s4 { background: #C55A11; color: white; }
-  .seccion-s5 { background: #1565C0; color: white; }
-  .seccion-s6 { background: #6B2C91; color: white; }
-  .seccion-s7 { background: #4E342E; color: white; }
+  .seccion-vg   { background: linear-gradient(135deg, #163B69, #2D6CDF); color: white; transition: all 0.25s ease; }
+.seccion-vg:hover   { filter: brightness(1.1); }
+
+.seccion-rel  { background: linear-gradient(135deg, #92400E, #D97706); color: white; transition: all 0.25s ease; }
+.seccion-rel:hover  { filter: brightness(1.1); }
+
+.seccion-ca   { background: linear-gradient(135deg, #7F1D1D, #DC2626); color: white; transition: all 0.25s ease; }
+.seccion-ca:hover   { filter: brightness(1.1); }
+
+.seccion-co   { background: linear-gradient(135deg, #78350F, #B45309); color: white; transition: all 0.25s ease; }
+.seccion-co:hover   { filter: brightness(1.1); }
+
+.seccion-gi   { background: linear-gradient(135deg, #14532D, #16A34A); color: white; transition: all 0.25s ease; }
+.seccion-gi:hover   { filter: brightness(1.1); }
+
+.seccion-at   { background: linear-gradient(135deg, #1E3A5F, #2563EB); color: white; transition: all 0.25s ease; }
+.seccion-at:hover   { filter: brightness(1.1); }
+
+.seccion-re   { background: linear-gradient(135deg, #78350F, #C2410C); color: white; transition: all 0.25s ease; }
+.seccion-re:hover   { filter: brightness(1.1); }
+
+.seccion-rq   { background: linear-gradient(135deg, #14532D, #15803D); color: white; transition: all 0.25s ease; }
+.seccion-rq:hover   { filter: brightness(1.1); }
+
+.seccion-ri   { background: linear-gradient(135deg, #7F1D1D, #B91C1C); color: white; transition: all 0.25s ease; }
+.seccion-ri:hover   { filter: brightness(1.1); }
+
+.seccion-ec   { background: linear-gradient(135deg, #1C1917, #44403C); color: white; transition: all 0.25s ease; }
+.seccion-ec:hover   { filter: brightness(1.1); }
+
+.seccion-rex  { background: linear-gradient(135deg, #C55A11, #EA580C); color: white; transition: all 0.25s ease; }
+.seccion-rex:hover  { filter: brightness(1.1); }
+
+.seccion-rc   { background: linear-gradient(135deg, #831843, #BE185D); color: white; transition: all 0.25s ease; }
+.seccion-rc:hover   { filter: brightness(1.1); }
+
+.seccion-resc { background: linear-gradient(135deg, #0C4A6E, #0284C7); color: white; transition: all 0.25s ease; }
+.seccion-resc:hover { filter: brightness(1.1); }
+
+.seccion-pp   { background: linear-gradient(135deg, #3730A3, #4F46E5); color: white; transition: all 0.25s ease; }
+.seccion-pp:hover   { filter: brightness(1.1); }
+
+.seccion-ge   { background: linear-gradient(135deg, #6B2C91, #9333EA); color: white; transition: all 0.25s ease; }
+.seccion-ge:hover   { filter: brightness(1.1); }
+ 
   .seccion-titulo { font-size: 15px; font-weight: bold; }
-  .seccion-toggle {
-    cursor: pointer; user-select: none; display: flex;
-    align-items: center; justify-content: space-between; width: 100%;
-  }
-  .seccion-arrow { font-size: 20px; transition: transform 0.3s; margin-left: 10px; }
-  .seccion-arrow.collapsed { transform: rotate(-90deg); }
-  .seccion-content { transition: all 0.3s ease; overflow: hidden; }
-  .seccion-content.collapsed { display: none; }
+.seccion-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
 
-  .draft-banner {
-    background: #FFF3CD; border: 1px solid #FFC107; border-radius: 8px;
-    padding: 10px 16px; margin-bottom: 16px; display: none;
-    align-items: center; justify-content: space-between; gap: 10px;
-  }
-  .draft-banner.visible { display: flex; }
-  .draft-banner span { font-size: 13px; color: #856404; font-weight: bold; }
-  .btn-clear-draft { padding: 4px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.seccion-arrow {
+  font-size: 20px;
+  transition: transform 0.3s;
+  margin-left: 10px;
+}
 
+.seccion-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+
+.seccion-content {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.seccion-content.collapsed {
+  display: none;
+}
+.draft-banner {
+  background: #FFF3CD;
+  border: 1px solid #FFC107;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.draft-banner.visible { display: flex; }
+.draft-banner span { font-size: 13px; color: #856404; font-weight: bold; }
+.btn-clear-draft {
+  padding: 4px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
   .badge-count { background: rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 10px; font-size: 12px; margin-left: 8px; }
+
   .estado-general-select {
     padding: 8px 12px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.5);
     background: rgba(255,255,255,0.15); color: white; font-size: 13px;
@@ -105,31 +235,72 @@
   .estado-general-select option { background: #333; color: white; }
 
   .item-card {
-    background: #fafafa; border: 1.5px solid #e8e8e8;
-    border-radius: 8px; padding: 14px; margin-bottom: 10px; transition: border-color 0.3s;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%); border: 1px solid rgba(22,59,105,0.08);
+    border-radius: 22px; padding: 22px; margin-bottom: 18px; transition: all 0.28s ease; box-shadow: 0 4px 14px rgba(15,23,42,0.05), 0 1px 2px rgba(15,23,42,0.04); position: relative; overflow: hidden;
   }
-  .item-card:hover { border-color: #1B5E20; }
-  .item-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
-  .item-codigo { background: #1B5E20; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; flex-shrink: 0; }
-  .item-codigo-s2 { background: #2E7D32; }
-  .item-codigo-s3 { background: #388E3C; }
-  .item-codigo-s4 { background: #C55A11; }
-  .item-codigo-s5 { background: #1565C0; }
-  .item-codigo-s6 { background: #6B2C91; }
-  .item-codigo-s7 { background: #4E342E; }
-  .item-descripcion { font-size: 13px; color: #444; line-height: 1.5; }
+  .item-card:hover { transform: translateY(-2px); border-color: rgba(45,108,223,0.22); box-shadow: 0 10px 30px rgba(15,23,42,0.08), 0 2px 6px rgba(15,23,42,0.06); }
+  .item-header { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 18px; }
+  .item-codigo { background: linear-gradient(135deg, #163B69, #2D6CDF); color: white; padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; white-space: nowrap; flex-shrink: 0; box-shadow: 0 6px 18px rgba(45,108,223,0.25); }
+  /* ── BADGES POR SECCIÓN ── */
+.item-codigo-vg   { background: linear-gradient(135deg, #163B69, #2D6CDF); box-shadow: 0 6px 18px rgba(45,108,223,0.25); transition: all 0.25s ease; }
+.item-codigo-vg:hover   { background: linear-gradient(135deg, #1e4d8c, #3b82f6); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(45,108,223,0.4); }
 
-  .item-respuesta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-  .btn-respuesta { padding: 8px 16px; border: 2px solid #ddd; border-radius: 20px; background: white; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.2s; color: #555; }
-  .btn-respuesta.cumple.active { background: #1E6B3C; border-color: #1E6B3C; color: white; }
-  .btn-respuesta.nocumple.active { background: #C00000; border-color: #C00000; color: white; }
-  .btn-respuesta.na.active { background: #666; border-color: #666; color: white; }
+.item-codigo-rel  { background: linear-gradient(135deg, #92400E, #D97706); box-shadow: 0 6px 18px rgba(217,119,6,0.25); transition: all 0.25s ease; }
+.item-codigo-rel:hover  { background: linear-gradient(135deg, #b45309, #f59e0b); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(217,119,6,0.4); }
 
-  .item-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.item-codigo-ca   { background: linear-gradient(135deg, #7F1D1D, #DC2626); box-shadow: 0 6px 18px rgba(220,38,38,0.25); transition: all 0.25s ease; }
+.item-codigo-ca:hover   { background: linear-gradient(135deg, #991b1b, #ef4444); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(220,38,38,0.4); }
+
+.item-codigo-co   { background: linear-gradient(135deg, #78350F, #B45309); box-shadow: 0 6px 18px rgba(180,83,9,0.25); transition: all 0.25s ease; }
+.item-codigo-co:hover   { background: linear-gradient(135deg, #92400e, #d97706); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(180,83,9,0.4); }
+
+.item-codigo-gi   { background: linear-gradient(135deg, #14532D, #16A34A); box-shadow: 0 6px 18px rgba(22,163,74,0.25); transition: all 0.25s ease; }
+.item-codigo-gi:hover   { background: linear-gradient(135deg, #166534, #22c55e); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,163,74,0.4); }
+
+.item-codigo-at   { background: linear-gradient(135deg, #1E3A5F, #2563EB); box-shadow: 0 6px 18px rgba(37,99,235,0.25); transition: all 0.25s ease; }
+.item-codigo-at:hover   { background: linear-gradient(135deg, #1e40af, #3b82f6); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.4); }
+
+.item-codigo-re   { background: linear-gradient(135deg, #78350F, #C2410C); box-shadow: 0 6px 18px rgba(194,65,12,0.25); transition: all 0.25s ease; }
+.item-codigo-re:hover   { background: linear-gradient(135deg, #9a3412, #ea580c); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(194,65,12,0.4); }
+
+.item-codigo-rq   { background: linear-gradient(135deg, #14532D, #15803D); box-shadow: 0 6px 18px rgba(21,128,61,0.25); transition: all 0.25s ease; }
+.item-codigo-rq:hover   { background: linear-gradient(135deg, #166534, #16a34a); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(21,128,61,0.4); }
+
+.item-codigo-ri   { background: linear-gradient(135deg, #7F1D1D, #B91C1C); box-shadow: 0 6px 18px rgba(185,28,28,0.25); transition: all 0.25s ease; }
+.item-codigo-ri:hover   { background: linear-gradient(135deg, #991b1b, #dc2626); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(185,28,28,0.4); }
+
+.item-codigo-ec   { background: linear-gradient(135deg, #1C1917, #44403C); box-shadow: 0 6px 18px rgba(68,64,60,0.25); transition: all 0.25s ease; }
+.item-codigo-ec:hover   { background: linear-gradient(135deg, #292524, #57534e); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(68,64,60,0.4); }
+
+.item-codigo-rex  { background: linear-gradient(135deg, #C55A11, #EA580C); box-shadow: 0 6px 18px rgba(234,88,12,0.25); transition: all 0.25s ease; }
+.item-codigo-rex:hover  { background: linear-gradient(135deg, #c2410c, #f97316); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(234,88,12,0.4); }
+
+.item-codigo-rc   { background: linear-gradient(135deg, #831843, #BE185D); box-shadow: 0 6px 18px rgba(190,24,93,0.25); transition: all 0.25s ease; }
+.item-codigo-rc:hover   { background: linear-gradient(135deg, #9d174d, #db2777); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(190,24,93,0.4); }
+
+.item-codigo-resc { background: linear-gradient(135deg, #0C4A6E, #0284C7); box-shadow: 0 6px 18px rgba(2,132,199,0.25); transition: all 0.25s ease; }
+.item-codigo-resc:hover { background: linear-gradient(135deg, #075985, #0ea5e9); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(2,132,199,0.4); }
+
+.item-codigo-pp   { background: linear-gradient(135deg, #3730A3, #4F46E5); box-shadow: 0 6px 18px rgba(79,70,229,0.25); transition: all 0.25s ease; }
+.item-codigo-pp:hover   { background: linear-gradient(135deg, #4338ca, #6366f1); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(79,70,229,0.4); }
+
+.item-codigo-ge   { background: linear-gradient(135deg, #6B2C91, #9333EA); box-shadow: 0 6px 18px rgba(147,51,234,0.25); transition: all 0.25s ease; }
+.item-codigo-ge:hover   { background: linear-gradient(135deg, #7e22ce, #a855f7); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(147,51,234,0.4); }
+ 
+  .item-descripcion { font-size: 14px; color: #1E293B; line-height: 1.75; font-weight: 500; }
+
+  .item-respuesta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .btn-respuesta { padding: 11px 22px; border: 1.5px solid #CBD5E1; border-radius: 999px; background: white; cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.22s ease; color: #475569; min-width: 110px; }
+  .btn-respuesta:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(15,23,42,0.08); } 
+  .btn-respuesta.cumple.active { background: linear-gradient(135deg, #16A34A, #22C55E); border-color: #16A34A; color: white; box-shadow: 0 10px 24px rgba(34,197,94,0.28); }
+  .btn-respuesta.nocumple.active { background: linear-gradient(135deg, #DC2626, #EF4444); border-color: #DC2626; color: white; box-shadow: 0 10px 24px rgba(239,68,68,0.28); }
+  .btn-respuesta.na.active { background: linear-gradient(135deg, #64748B, #94A3B8); border-color: #64748B; color: white; box-shadow: 0 10px 24px rgba(100,116,139,0.22); }
+
+  .item-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
   @media (max-width: 600px) { .item-extra { grid-template-columns: 1fr; } }
   .item-obs label { font-size: 11px; color: #888; font-weight: bold; margin-bottom: 4px; display: block; }
-  .item-obs textarea { width: 100%; padding: 8px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 12px; resize: vertical; min-height: 60px; font-family: Arial, sans-serif; }
-
+  .item-obs textarea { width: 100%; padding: 14px 16px; border: 1.5px solid #D8E1EC; border-radius: 16px; font-size: 13px; background: #F8FAFC; transition: all 0.22s ease; resize: vertical; min-height: 100px; font-family: Arial, sans-serif; }
+  .item-obs textarea:focus { outline: none; border-color: #2D6CDF; background: white; box-shadow: 0 0 0 4px rgba(45,108,223,0.12); }
   .evidencia-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
   .evidencia-toggle label { font-size: 12px; color: #666; font-weight: bold; }
   .toggle-btn { display: flex; gap: 6px; }
@@ -138,16 +309,19 @@
   .toggle-btn button.active-no { background: #999; border-color: #999; color: white; }
   .evidencia-section { display: none; }
   .evidencia-section.visible { display: block; }
-  .file-upload { border: 2px dashed #ccc; border-radius: 6px; padding: 12px; text-align: center; cursor: pointer; background: white; transition: border-color 0.3s; }
-  .file-upload:hover { border-color: #1B5E20; }
+  .file-upload { border: 2px dashed #C7D2E2; border-radius: 22px; padding: 28px 20px; text-align: center; cursor: pointer; background: linear-gradient(180deg, #F8FBFF 0%, #F1F6FC 100%); transition: all 0.28s ease; position: relative; overflow: hidden; }
+  .file-upload:hover { border-color: #2D6CDF; background: linear-gradient(180deg, #EFF6FF 0%, #F8FBFF 100%); transform: translateY(-2px); box-shadow: 0 12px 28px rgba(45,108,223,0.10), 0 4px 10px rgba(15,23,42,0.04); }
   .file-upload input { display: none; }
-  .file-upload-label { font-size: 12px; color: #888; cursor: pointer; display: block; }
-  .file-preview { max-width: 100%; max-height: 120px; border-radius: 4px; margin-top: 8px; display: none; }
-
+  .upload-icon { width: 70px; height: 70px; margin: 0 auto 14px; border-radius: 50%; background: linear-gradient(135deg, #163B69, #2D6CDF); display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; box-shadow: 0 10px 25px rgba(45,108,223,0.25); }
+  .upload-title {font-size: 15px; font-weight: 700; color: #163B69; margin-bottom: 6px; }
+ .upload-subtitle { font-size: 13px; color: #64748B; margin-bottom: 10px; } 
+ .file-upload-label { font-size: 11px; font-weight: 700; color: #163B69; cursor: pointer; display: inline-block; padding: 8px 14px; border-radius: 999px; background: rgba(22,59,105,0.08); letter-spacing: 0.05em; }
+  .file-preview { width: 100%; max-width: 100%; max-height: 240px; object-fit: cover; border-radius: 18px; margin-top: 18px; display: none; border: 1px solid rgba(22,59,105,0.08); box-shadow: 0 8px 24px rgba(15,23,42,0.08); }
+ 
   .firma-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   @media (max-width: 600px) { .firma-container { grid-template-columns: 1fr; } }
   .firma-box { border: 2px solid #ddd; border-radius: 8px; overflow: hidden; }
-  .firma-titulo { background: #1B5E20; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 13px; }
+  .firma-titulo { background: #1F4E79; color: white; padding: 10px; text-align: center; font-weight: bold; font-size: 13px; }
   canvas { width: 100%; height: 150px; cursor: crosshair; touch-action: none; display: block; }
   .firma-actions { display: flex; gap: 8px; padding: 8px; background: #f5f5f5; justify-content: flex-end; }
   .btn-limpiar { padding: 6px 14px; background: #C55A11; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
@@ -156,11 +330,61 @@
   .btn-enviar:hover { background: #155c32; }
   .btn-enviar:disabled { background: #999; cursor: not-allowed; }
 
+  #success-screen { display: none; min-height: 100vh; background: linear-gradient(135deg, #1E6B3C, #27ae60); align-items: center; justify-content: center; }
+  .success-box { background: white; border-radius: 16px; padding: 50px 40px; text-align: center; max-width: 450px; width: 90%; }
+  .success-icon { font-size: 60px; margin-bottom: 20px; }
+  .success-title { font-size: 24px; font-weight: bold; color: #1E6B3C; margin-bottom: 10px; }
+  .success-msg { color: #666; margin-bottom: 20px; }
+  .success-codigo { font-size: 18px; font-weight: bold; color: #1F4E79; }
+  .btn-nueva { margin-top: 24px; padding: 14px 30px; background: #1F4E79; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+
   .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
   .loading-overlay.visible { display: flex; }
   .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-top: 5px solid white; border-radius: 50%; animation: spin 1s linear infinite; }
-  .loading-text { color: white; font-size: 16px; font-weight: bold; }
+ .loading-text { color: white; font-size: 16px; font-weight: bold; }
   @keyframes spin { to { transform: rotate(360deg); } }
+ 
+ select { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+ .rev-card {
+  background: rgba(255,255,255,0.82); backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.7); border-radius: 28px;
+  margin-bottom: 20px; overflow: hidden;
+  box-shadow: 0 12px 40px rgba(15,23,42,0.08);
+  transition: all 0.25s ease;
+}
+.rev-card:hover { transform: translateY(-2px); box-shadow: 0 18px 48px rgba(15,23,42,0.12); }
+
+.rev-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; cursor: pointer; user-select: none; transition: filter 0.2s;
+}
+.rev-card-header:hover { filter: brightness(1.1); }
+
+.rev-card-title { font-size: 15px; font-weight: 800; color: white; display: flex; align-items: center; gap: 10px; }
+.rev-card-arrow { font-size: 18px; color: white; transition: transform 0.3s; }
+.rev-card-arrow.collapsed { transform: rotate(-90deg); }
+
+.rev-card-body { padding: 0 24px; max-height: 2000px; transition: max-height 0.4s ease, padding 0.3s ease; overflow: hidden; }
+.rev-card-body.collapsed { max-height: 0; padding: 0 24px; }
+
+.rev-item-row {
+  display: flex; align-items: flex-start; padding: 10px 0;
+  border-bottom: 1px solid #eee; gap: 12px; transition: background 0.2s;
+  border-radius: 8px; padding: 10px 8px;
+}
+.rev-item-row:hover { background: #f8fafc; }
+
+.rev-badge {
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; white-space: nowrap;
+  color: white; flex-shrink: 0;
+}
+.rev-btn-editar {
+  padding: 6px 14px; color: white; border: none;
+  border-radius: 6px; cursor: pointer; font-size: 12px;
+  font-weight: 600; transition: all 0.2s; white-space: nowrap;
+}
+.rev-btn-editar:hover { filter: brightness(1.2); transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -172,31 +396,84 @@
 
 <!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-box">
-    <img src="logo.png" alt="UNITELEC" style="width:250px;margin-bottom:10px;" onerror="this.style.display='none'" />
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg" width="28" height="28" />
-      <span style="color:#0078D4;font-weight:bold;font-size:16px;">Outlook</span>
+  <div class="login-bg"></div>
+  <div class="login-overlay"></div>
+  <div class="login-glow-1"></div>
+  <div class="login-glow-2"></div>
+
+  <div class="login-header">
+    <img src="logo.png" alt="UNITELEC" onerror="this.style.display='none'" />
+    <span class="login-header-text">Sistema HSE</span>
+  </div>
+
+  <div class="login-main">
+    <div class="login-left">
+      <div class="login-left-title">Plataforma Corporativa</div>
+      <h1>Sistema de<br><span>Inspección de</span><br>Seguridad y Salud</h1>
+      <p class="login-left-desc">Gestione sus inspecciones HSE de manera eficiente, segura y profesional.</p>
+      <div class="login-features">
+        <div class="login-feature">
+          <div class="login-feature-icon">🛡️</div>
+          <div class="login-feature-text"><strong>Seguridad</strong><span>Protección de datos garantizada</span></div>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature-icon">📊</div>
+          <div class="login-feature-text"><strong>Eficiencia</strong><span>Optimice procesos y tiempos</span></div>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature-icon">✅</div>
+          <div class="login-feature-text"><strong>Cumplimiento</strong><span>Estándares HSE internacionales</span></div>
+        </div>
+      </div>
     </div>
-    <h2>Inicia sesión para continuar</h2>
-    <div style="text-align:left;margin-bottom:4px;">
-      <label style="font-size:12px;font-weight:bold;color:#333;text-transform:uppercase;letter-spacing:1px;">CORREO CORPORATIVO *</label>
+
+    <div class="login-card">
+      <div class="login-card-logo">
+        <img src="logo.png" alt="UNITELEC" onerror="this.style.display='none';document.getElementById('logo-fb').style.display='block'" />
+        <div id="logo-fb" class="login-card-logo-fallback" style="display:none;">UNITELEC</div>
+        <div class="login-card-logo-sub">Unión de Técnicos Electromecánicos</div>
+      </div>
+      <div class="login-card-divider"></div>
+      <div class="login-card-title">Bienvenido de nuevo</div>
+      <div class="login-card-subtitle">Inicia sesión para continuar</div>
+
+      <label class="login-field-label">Correo Corporativo *</label>
+      <div class="login-field-wrap">
+        <span class="login-field-icon">✉</span>
+        <input type="email" id="login-email" class="login-input-field" placeholder="nombre@unitelec.com.pe" autocomplete="email" />
+      </div>
+
+      <label class="login-field-label">Contraseña *</label>
+      <div class="login-field-wrap">
+        <span class="login-field-icon">🔒</span>
+        <input type="password" id="login-password" class="login-input-field" placeholder="Contraseña" style="padding-right:44px;" />
+        <span id="ojo" onclick="togglePassword()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:rgba(255,255,255,0.3);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </span>
+      </div>
+
+      <button class="btn-login" onclick="login()">Iniciar sesión →</button>
+
+      <div class="login-ms-divider">o continúa con</div>
+      <button class="login-ms-btn" type="button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" width="16" height="16" />
+        Microsoft
+      </button>
+
+      <div class="login-error" id="login-error"></div>
+      <div class="login-box" style="display:none;"></div>
     </div>
-    <div style="position:relative;">
-      <span style="position:absolute;left:12px;top:13px;color:#555;">✉</span>
-      <input type="email" id="login-email" placeholder="@unitelec.com.pe" style="width:100%;padding:12px 12px 12px 36px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:12px;" />
+  </div>
+
+  <div class="login-footer">
+    <span class="login-footer-copy">© 2025 UNITELEC HSE. Todos los derechos reservados.</span>
+    <div class="login-footer-badge">
+      <div class="login-footer-badge-icon">🛡️</div>
+      <span>Seguridad · Nuestro compromiso, tu protección</span>
     </div>
-    <div style="position:relative;">
-      <input type="password" id="login-password" placeholder="Introduce tu contraseña" style="width:100%;padding:12px 40px 12px 16px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:12px;" />
-      <span id="ojo" onclick="togglePassword()" style="position:absolute;right:12px;top:13px;cursor:pointer;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
-      </span>
-    </div>
-    <button class="btn-login" onclick="login()">Iniciar sesión</button>
-    <div class="login-error" id="login-error"></div>
   </div>
 </div>
 
@@ -207,7 +484,7 @@
       <img src="logo.png" alt="UNITELEC" style="height:38px;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none'" />
       <div>
         <div class="header-logo">UNITELEC HSE</div>
-        <div class="header-title">Inspección de Medio Ambiente</div>
+        <div class="header-title">Inspección de Seguridad y Salud</div>
       </div>
     </div>
     <div style="text-align:right">
@@ -218,13 +495,13 @@
 
   <div class="container">
     <div class="draft-banner" id="draft-banner">
-      <span>📋 Tienes un borrador guardado. ¿Deseas continuar donde lo dejaste?</span>
-      <div style="display:flex;gap:8px;">
-        <button class="btn-clear-draft" onclick="limpiarBorrador()">🗑️ Descartar</button>
-      </div>
-    </div>
+  <span>📋 Tienes un borrador guardado. ¿Deseas continuar donde lo dejaste?</span>
+  <div style="display:flex;gap:8px;">
+    <button class="btn-clear-draft" onclick="limpiarBorrador()">🗑️ Descartar</button>
+  </div>
+</div>
 
-    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
 
     <!-- DATOS GENERALES -->
     <div class="card">
@@ -235,8 +512,11 @@
           <label>Cliente *</label>
           <select id="cliente" required>
             <option value="">Seleccionar...</option>
-            <option>PLUZ</option><option>ISA</option><option>ORYGEN</option>
-            <option>ATLANTICA</option><option>ENGY</option>
+            <option>PLUZ</option>
+            <option>ISA</option>
+            <option>ORYGEN</option>
+            <option>ATLANTICA</option>
+            <option>ENGY</option>
           </select>
         </div>
 
@@ -258,6 +538,11 @@
             <option>HUGO DELFIN PIMENTEL MALVACEDA</option>
             <option>MARCO PAOLO SOVERO HUAMANI</option>
             <option>MANUEL CASTRO TAFUR</option>
+            <option>CHARLES ENOC PAREDES SAAVEDRA</option>
+            <option>ROBESPIERRE BAUDELAIRE MENA ARANA</option>
+            <option>ALFREDO ALEJANDRO QUEVEDO VALDERRAMA</option>
+            <option>MIRIAM DEYSI SONCCO QUISPE</option>
+            <option>ALEJANDRO ENRIQUE JULCA SALVADOR</option>
           </select>
         </div>
 
@@ -270,7 +555,9 @@
           <label>Estado de Ejecución *</label>
           <select id="estado_ejecucion" required>
             <option value="">Seleccionar...</option>
-            <option>Abierto</option><option>En progreso</option><option selected>Cerrado</option>
+            <option>Abierto</option>
+            <option>En progreso</option>
+            <option selected>Cerrado</option>
           </select>
         </div>
 
@@ -282,8 +569,11 @@
             <option>Mantenimiento de Transformadores Pluz</option>
             <option>Mantenimiento de Transformadores Orygen</option>
             <option>Mantenimiento de Líneas</option>
-            <option>Caudivilla</option><option>Yaros</option><option>Chimú</option>
-            <option>Chevez</option><option>Pico</option>
+            <option>Caudivilla</option>
+            <option>Yaros</option>
+            <option>Chimú</option>
+            <option>Chevez</option>
+            <option>Pico</option>
           </select>
         </div>
 
@@ -291,8 +581,10 @@
           <label>Área Inspectora *</label>
           <select id="area_inspectora" required>
             <option value="">Seleccionar...</option>
-            <option>SEGURIDAD LABORAL</option><option>OPERACIONES</option>
-            <option>AUDITORÍA</option><option>GERENCIA GENERAL</option>
+            <option>SEGURIDAD LABORAL</option>
+            <option>OPERACIONES</option>
+            <option>AUDITORÍA</option>
+            <option>GERENCIA GENERAL</option>
           </select>
         </div>
 
@@ -300,8 +592,10 @@
           <label>Área Inspeccionada *</label>
           <select id="area_inspeccionada" required>
             <option value="">Seleccionar...</option>
-            <option>OBRAS CIVILES</option><option>MONTAJE ELECTROMECÁNICO</option>
-            <option>MM.TT.LÍNEAS</option><option>MM.TT.TRAFOS</option>
+            <option>OBRAS CIVILES</option>
+            <option>MONTAJE ELECTROMECÁNICO</option>
+            <option>MM.TT.LÍNEAS</option>
+            <option>MM.TT.TRAFOS</option>
           </select>
         </div>
 
@@ -309,7 +603,8 @@
           <label>Empresa Inspectora *</label>
           <select id="empresa_inspectora" required>
             <option value="">Seleccionar...</option>
-            <option>Interno</option><option>Externo</option>
+            <option>Interno</option>
+            <option>Externo</option>
           </select>
         </div>
 
@@ -350,7 +645,8 @@
           <label>Tipo de Orden de Trabajo *</label>
           <select id="tipo_orden" required>
             <option value="">Seleccionar...</option>
-            <option>LCL</option><option>OT</option>
+            <option>LCL</option>
+            <option>OT</option>
           </select>
         </div>
 
@@ -393,8 +689,10 @@
           <label>Subproceso *</label>
           <select id="subproceso" required>
             <option value="">Seleccionar...</option>
-            <option>Mantenimiento Líneas AT</option><option>Mantenimiento SETS</option>
-            <option>Obras Líneas AT</option><option>Obras SETs AT</option>
+            <option>Mantenimiento Líneas AT</option>
+            <option>Mantenimiento SETS</option>
+            <option>Obras Líneas AT</option>
+            <option>Obras SETs AT</option>
             <option>Mantenimiento de Transformadores</option>
           </select>
         </div>
@@ -403,9 +701,13 @@
           <label>Tipo de Actividad *</label>
           <select id="tipo_actividad" required>
             <option value="">Seleccionar...</option>
-            <option>Eléctrico</option><option>Excavación</option><option>Izaje de cargas</option>
-            <option>Trabajos en altura</option><option>Trabajos en espacios confinados</option>
-            <option>Civil</option><option>Otros</option>
+            <option>Eléctrico</option>
+            <option>Excavación</option>
+            <option>Izaje de cargas</option>
+            <option>Trabajos en altura</option>
+            <option>Trabajos en espacios confinados</option>
+            <option>Civil</option>
+            <option>Otros</option>
           </select>
         </div>
 
@@ -413,8 +715,10 @@
           <label>Instalación Inspeccionada *</label>
           <select id="instalacion" required>
             <option value="">Seleccionar...</option>
-            <option>SET (SET de Transmisión)</option><option>Vía Pública</option>
-            <option>Centrales Hidroeléctricas</option><option>Centrales Térmicas</option>
+            <option>SET (SET de Transmisión)</option>
+            <option>Vía Pública</option>
+            <option>Centrales Hidroeléctricas</option>
+            <option>Centrales Térmicas</option>
             <option>Redes AT</option>
           </select>
         </div>
@@ -422,138 +726,290 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 1: GESTIÓN DE RESIDUOS -->
-    <div class="card">
-      <div class="seccion-header seccion-s1">
-        <div class="seccion-toggle" onclick="toggleSeccion('s1')">
-          <div class="seccion-titulo">GS 3.1 - GESTIÓN DE RESIDUOS <span class="badge-count">2 ítems</span></div>
-          <span class="seccion-arrow" id="arrow-s1">▼</span>
-        </div>
-        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s1', this.value)">
-          <option value="">-- Estado general --</option>
-          <option value="Cumple">Todos CUMPLE</option>
-          <option value="No cumple">Todos NO CUMPLE</option>
-          <option value="N/A">Todos N/A</option>
-        </select>
-      </div>
-      <div class="seccion-content" id="content-s1">
-        <div id="items-s1"></div>
-      </div>
+   <!-- VERIFICACIÓN GENERAL -->
+<div class="card">
+  <div class="seccion-header seccion-vg">
+    <div class="seccion-toggle" onclick="toggleSeccion('vg')">
+      <div class="seccion-titulo">VERIFICACIÓN GENERAL (OBLIGATORIO) <span class="badge-count">27 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-vg">▼</span>
     </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('vg', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-vg">
+    <div id="items-vg"></div>
+  </div>
+</div>
 
-    <!-- SECCIÓN 2: GESTIÓN DEL RUIDO -->
-    <div class="card">
-      <div class="seccion-header seccion-s2">
-        <div class="seccion-toggle" onclick="toggleSeccion('s2')">
-          <div class="seccion-titulo">GS 3.2 - GESTIÓN DEL RUIDO <span class="badge-count">1 ítem</span></div>
-          <span class="seccion-arrow" id="arrow-s2">▼</span>
-        </div>
-        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s2', this.value)">
-          <option value="">-- Estado general --</option>
-          <option value="Cumple">Todos CUMPLE</option>
-          <option value="No cumple">Todos NO CUMPLE</option>
-          <option value="N/A">Todos N/A</option>
-        </select>
-      </div>
-      <div class="seccion-content" id="content-s2">
-        <div id="items-s2"></div>
-      </div>
+<!-- RIESGO ELÉCTRICO -->
+<div class="card">
+  <div class="seccion-header seccion-rel">
+    <div class="seccion-toggle" onclick="toggleSeccion('rel')">
+      <div class="seccion-titulo">RIESGO ELÉCTRICO <span class="badge-count">13 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-rel">▼</span>
     </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('rel', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-rel">
+    <div id="items-rel"></div>
+  </div>
+</div>
 
-    <!-- SECCIÓN 3: GESTIÓN GASES SF6 -->
-    <div class="card">
-      <div class="seccion-header seccion-s3">
-        <div class="seccion-toggle" onclick="toggleSeccion('s3')">
-          <div class="seccion-titulo">GS 3.3 - GESTIÓN DE EQUIPOS CON GASES SF6 Y ACONDICIONAMIENTO <span class="badge-count">2 ítems</span></div>
-          <span class="seccion-arrow" id="arrow-s3">▼</span>
-        </div>
-        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s3', this.value)">
-          <option value="">-- Estado general --</option>
-          <option value="Cumple">Todos CUMPLE</option>
-          <option value="No cumple">Todos NO CUMPLE</option>
-          <option value="N/A">Todos N/A</option>
-        </select>
-      </div>
-      <div class="seccion-content" id="content-s3">
-        <div id="items-s3"></div>
-      </div>
+<!-- CAÍDA DE ALTURA -->
+<div class="card">
+  <div class="seccion-header seccion-ca">
+    <div class="seccion-toggle" onclick="toggleSeccion('ca')">
+      <div class="seccion-titulo">CAÍDA DE ALTURA <span class="badge-count">7 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-ca">▼</span>
     </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('ca', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-ca">
+    <div id="items-ca"></div>
+  </div>
+</div>
 
-    <!-- SECCIÓN 4: GESTIÓN DE ACEITES -->
-    <div class="card">
-      <div class="seccion-header seccion-s4">
-        <div class="seccion-toggle" onclick="toggleSeccion('s4')">
-          <div class="seccion-titulo">GS 3.4 - GESTIÓN DE ACEITES Y OTRAS SUSTANCIAS <span class="badge-count">2 ítems</span></div>
-          <span class="seccion-arrow" id="arrow-s4">▼</span>
-        </div>
-        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s4', this.value)">
-          <option value="">-- Estado general --</option>
-          <option value="Cumple">Todos CUMPLE</option>
-          <option value="No cumple">Todos NO CUMPLE</option>
-          <option value="N/A">Todos N/A</option>
-        </select>
-      </div>
-      <div class="seccion-content" id="content-s4">
-        <div id="items-s4"></div>
-      </div>
+<!-- CAÍDA/IMPACTO DE OBJETOS -->
+<div class="card">
+  <div class="seccion-header seccion-co">
+    <div class="seccion-toggle" onclick="toggleSeccion('co')">
+      <div class="seccion-titulo">CAÍDA/IMPACTO DE OBJETOS <span class="badge-count">7 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-co">▼</span>
     </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('co', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-co">
+    <div id="items-co"></div>
+  </div>
+</div>
 
-    <!-- SECCIÓN 5: ZONA DE TRABAJO -->
-    <div class="card">
-      <div class="seccion-header seccion-s5">
-        <div class="seccion-toggle" onclick="toggleSeccion('s5')">
-          <div class="seccion-titulo">GS 3.5 - ZONA DE TRABAJO <span class="badge-count">5 ítems</span></div>
-          <span class="seccion-arrow" id="arrow-s5">▼</span>
-        </div>
-        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s5', this.value)">
-          <option value="">-- Estado general --</option>
-          <option value="Cumple">Todos CUMPLE</option>
-          <option value="No cumple">Todos NO CUMPLE</option>
-          <option value="N/A">Todos N/A</option>
-        </select>
-      </div>
-      <div class="seccion-content" id="content-s5">
-        <div id="items-s5"></div>
-      </div>
+<!-- GESTIÓN DE INTERFERENCIAS -->
+<div class="card">
+  <div class="seccion-header seccion-gi">
+    <div class="seccion-toggle" onclick="toggleSeccion('gi')">
+      <div class="seccion-titulo">GESTIÓN DE INTERFERENCIAS <span class="badge-count">5 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-gi">▼</span>
     </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('gi', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-gi">
+    <div id="items-gi"></div>
+  </div>
+</div>
 
-    <!-- SECCIÓN 6: ÁREAS VERDES -->
-    <div class="card">
-      <div class="seccion-header seccion-s6">
-        <div class="seccion-toggle" onclick="toggleSeccion('s6')">
-          <div class="seccion-titulo">GS 3.6 - CUIDADO DE LAS ÁREAS VERDES <span class="badge-count">1 ítem</span></div>
-          <span class="seccion-arrow" id="arrow-s6">▼</span>
-        </div>
-        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s6', this.value)">
-          <option value="">-- Estado general --</option>
-          <option value="Cumple">Todos CUMPLE</option>
-          <option value="No cumple">Todos NO CUMPLE</option>
-          <option value="N/A">Todos N/A</option>
-        </select>
-      </div>
-      <div class="seccion-content" id="content-s6">
-        <div id="items-s6"></div>
-      </div>
+<!-- ATRAPAMIENTO -->
+<div class="card">
+  <div class="seccion-header seccion-at">
+    <div class="seccion-toggle" onclick="toggleSeccion('at')">
+      <div class="seccion-titulo">ATRAPAMIENTO <span class="badge-count">3 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-at">▼</span>
     </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('at', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-at">
+    <div id="items-at"></div>
+  </div>
+</div>
 
-    <!-- SECCIÓN 7: PERMISOS AMBIENTALES -->
-    <div class="card">
-      <div class="seccion-header seccion-s7">
-        <div class="seccion-toggle" onclick="toggleSeccion('s7')">
-          <div class="seccion-titulo">GS 3.7 - PERMISOS AMBIENTALES <span class="badge-count">1 ítem</span></div>
-          <span class="seccion-arrow" id="arrow-s7">▼</span>
-        </div>
-        <select class="estado-general-select" onchange="aplicarEstadoGeneral('s7', this.value)">
-          <option value="">-- Estado general --</option>
-          <option value="Cumple">Todos CUMPLE</option>
-          <option value="No cumple">Todos NO CUMPLE</option>
-          <option value="N/A">Todos N/A</option>
-        </select>
-      </div>
-      <div class="seccion-content" id="content-s7">
-        <div id="items-s7"></div>
-      </div>
+<!-- RIESGO DE EXCAVACIÓN -->
+<div class="card">
+  <div class="seccion-header seccion-re">
+    <div class="seccion-toggle" onclick="toggleSeccion('re')">
+      <div class="seccion-titulo">RIESGO DE EXCAVACIÓN <span class="badge-count">4 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-re">▼</span>
     </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('re', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-re">
+    <div id="items-re"></div>
+  </div>
+</div>
+
+<!-- RIESGO QUÍMICO -->
+<div class="card">
+  <div class="seccion-header seccion-rq">
+    <div class="seccion-toggle" onclick="toggleSeccion('rq')">
+      <div class="seccion-titulo">RIESGO QUÍMICO <span class="badge-count">1 ítem</span></div>
+      <span class="seccion-arrow" id="arrow-rq">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('rq', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-rq">
+    <div id="items-rq"></div>
+  </div>
+</div>
+
+<!-- RIESGO DE INCENDIO -->
+<div class="card">
+  <div class="seccion-header seccion-ri">
+    <div class="seccion-toggle" onclick="toggleSeccion('ri')">
+      <div class="seccion-titulo">RIESGO DE INCENDIO <span class="badge-count">1 ítem</span></div>
+      <span class="seccion-arrow" id="arrow-ri">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('ri', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-ri">
+    <div id="items-ri"></div>
+  </div>
+</div>
+
+<!-- ESPACIOS CONFINADOS -->
+<div class="card">
+  <div class="seccion-header seccion-ec">
+    <div class="seccion-toggle" onclick="toggleSeccion('ec')">
+      <div class="seccion-titulo">ESPACIOS CONFINADOS <span class="badge-count">3 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-ec">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('ec', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-ec">
+    <div id="items-ec"></div>
+  </div>
+</div>
+
+<!-- RIESGO DE EXPLOSIÓN -->
+<div class="card">
+  <div class="seccion-header seccion-rex">
+    <div class="seccion-toggle" onclick="toggleSeccion('rex')">
+      <div class="seccion-titulo">RIESGO DE EXPLOSIÓN <span class="badge-count">3 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-rex">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('rex', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-rex">
+    <div id="items-rex"></div>
+  </div>
+</div>
+
+<!-- RIESGO DE CORTES -->
+<div class="card">
+  <div class="seccion-header seccion-rc">
+    <div class="seccion-toggle" onclick="toggleSeccion('rc')">
+      <div class="seccion-titulo">RIESGO DE CORTES <span class="badge-count">2 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-rc">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('rc', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-rc">
+    <div id="items-rc"></div>
+  </div>
+</div>
+
+<!-- RIESGO DE ESTRÉS POR CALOR -->
+<div class="card">
+  <div class="seccion-header seccion-resc">
+    <div class="seccion-toggle" onclick="toggleSeccion('resc')">
+      <div class="seccion-titulo">RIESGO DE ESTRÉS POR CALOR <span class="badge-count">1 ítem</span></div>
+      <span class="seccion-arrow" id="arrow-resc">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('resc', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-resc">
+    <div id="items-resc"></div>
+  </div>
+</div>
+
+<!-- PROYECCIÓN DE PARTÍCULAS / FLUÍDOS -->
+<div class="card">
+  <div class="seccion-header seccion-pp">
+    <div class="seccion-toggle" onclick="toggleSeccion('pp')">
+      <div class="seccion-titulo">PROYECCIÓN DE PARTÍCULAS / FLUÍDOS <span class="badge-count">1 ítem</span></div>
+      <span class="seccion-arrow" id="arrow-pp">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('pp', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-pp">
+    <div id="items-pp"></div>
+  </div>
+</div>
+
+<!-- GESTIÓN DE EMERGENCIAS -->
+<div class="card">
+  <div class="seccion-header seccion-ge">
+    <div class="seccion-toggle" onclick="toggleSeccion('ge')">
+      <div class="seccion-titulo">GESTIÓN DE EMERGENCIAS (OBLIGATORIO) <span class="badge-count">3 ítems</span></div>
+      <span class="seccion-arrow" id="arrow-ge">▼</span>
+    </div>
+    <select class="estado-general-select" onchange="aplicarEstadoGeneral('ge', this.value)">
+      <option value="">-- Estado general --</option>
+      <option value="Cumple">Todos CUMPLE</option>
+      <option value="No cumple">Todos NO CUMPLE</option>
+      <option value="N/A">Todos N/A</option>
+    </select>
+  </div>
+  <div class="seccion-content" id="content-ge">
+    <div id="items-ge"></div>
+  </div>
+</div>
 
     <!-- FIRMAS -->
     <div class="card">
@@ -561,24 +1017,20 @@
       <div class="firma-container">
         <div class="firma-box">
           <div class="firma-titulo">INSPECTOR HSE</div>
-          <canvas id="canvas-inspector"
-            ontouchstart="startDraw(event,'inspector')" ontouchmove="draw(event,'inspector')" ontouchend="stopDraw('inspector')"
-            onmousedown="startDraw(event,'inspector')" onmousemove="draw(event,'inspector')" onmouseup="stopDraw('inspector')" onmouseleave="stopDraw('inspector')"></canvas>
+          <canvas id="canvas-inspector" ontouchstart="startDraw(event,'inspector')" ontouchmove="draw(event,'inspector')" ontouchend="stopDraw('inspector')" onmousedown="startDraw(event,'inspector')" onmousemove="draw(event,'inspector')" onmouseup="stopDraw('inspector')" onmouseleave="stopDraw('inspector')"></canvas>
           <div class="firma-actions"><button class="btn-limpiar" onclick="limpiarFirma('inspector')">Limpiar</button></div>
           <div style="padding:8px;font-size:12px;color:#666;text-align:center" id="nombre-inspector"></div>
         </div>
         <div class="firma-box">
           <div class="firma-titulo">JEFE DE CUADRILLA</div>
-          <canvas id="canvas-jefe"
-            ontouchstart="startDraw(event,'jefe')" ontouchmove="draw(event,'jefe')" ontouchend="stopDraw('jefe')"
-            onmousedown="startDraw(event,'jefe')" onmousemove="draw(event,'jefe')" onmouseup="stopDraw('jefe')" onmouseleave="stopDraw('jefe')"></canvas>
+          <canvas id="canvas-jefe" ontouchstart="startDraw(event,'jefe')" ontouchmove="draw(event,'jefe')" ontouchend="stopDraw('jefe')" onmousedown="startDraw(event,'jefe')" onmousemove="draw(event,'jefe')" onmouseup="stopDraw('jefe')" onmouseleave="stopDraw('jefe')"></canvas>
           <div class="firma-actions"><button class="btn-limpiar" onclick="limpiarFirma('jefe')">Limpiar</button></div>
           <div style="padding:8px;font-size:12px;color:#666;text-align:center" id="nombre-jefe"></div>
         </div>
       </div>
     </div>
 
-    <button class="btn-enviar" onclick="mostrarRevision()" id="btn-enviar">👁️ SIGUIENTE</button>
+    <button class="btn-enviar" onclick="mostrarRevision()" id="btn-enviar">SIGUIENTE</button>
   </div>
 </div>
 
@@ -589,7 +1041,7 @@
       <img src="logo.png" alt="UNITELEC" style="height:38px;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none'" />
       <div>
         <div class="header-logo">UNITELEC HSE</div>
-        <div class="header-title">Revisión de Inspección MA</div>
+        <div class="header-title">Revisión de Inspección</div>
       </div>
     </div>
     <div style="text-align:right">
@@ -597,74 +1049,230 @@
     </div>
   </div>
   <div class="container">
+
     <div style="background:#FFF3CD;border:1px solid #FFC107;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#856404;font-weight:bold;">
       ⚠️ Revisa toda la información antes de enviar. Una vez enviada no podrás modificarla.
     </div>
 
+    <!-- DATOS GENERALES -->
     <div class="card">
       <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
         📋 1. Información General
-        <button onclick="editarSeccion('datos')" style="padding:6px 14px;background:#1B5E20;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
+        <button onclick="editarSeccion('datos')" style="padding:6px 14px;background:#1F4E79;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
       </div>
       <div id="rev-datos"></div>
     </div>
 
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        GS 3.1 - Gestión de Residuos
-        <button onclick="editarSeccion('s1')" style="padding:6px 14px;background:#1B5E20;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
-      </div>
-      <div id="rev-s1"></div>
+   <!-- VERIFICACIÓN GENERAL -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#163B69,#2D6CDF);" onclick="toggleRevCard('vg')">
+    <div class="rev-card-title">✅ Verificación General</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('vg')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-vg">▼</span>
     </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-vg">
+    <div id="rev-vg" style="padding:8px 0;"></div>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        GS 3.2 - Gestión del Ruido
-        <button onclick="editarSeccion('s2')" style="padding:6px 14px;background:#2E7D32;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
-      </div>
-      <div id="rev-s2"></div>
+<!-- RIESGO ELÉCTRICO -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#92400E,#D97706);" onclick="toggleRevCard('rel')">
+    <div class="rev-card-title">⚡ Riesgo Eléctrico</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('rel')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-rel">▼</span>
     </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-rel">
+    <div id="rev-rel" style="padding:8px 0;"></div>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        GS 3.3 - Gestión Gases SF6
-        <button onclick="editarSeccion('s3')" style="padding:6px 14px;background:#388E3C;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
-      </div>
-      <div id="rev-s3"></div>
+<!-- CAÍDA DE ALTURA -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#7F1D1D,#DC2626);" onclick="toggleRevCard('ca')">
+    <div class="rev-card-title">🧗 Caída de Altura</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('ca')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-ca">▼</span>
     </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-ca">
+    <div id="rev-ca" style="padding:8px 0;"></div>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        GS 3.4 - Gestión de Aceites y Sustancias
-        <button onclick="editarSeccion('s4')" style="padding:6px 14px;background:#C55A11;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
-      </div>
-      <div id="rev-s4"></div>
+<!-- CAÍDA/IMPACTO DE OBJETOS -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#78350F,#B45309);" onclick="toggleRevCard('co')">
+    <div class="rev-card-title">🪨 Caída/Impacto de Objetos</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('co')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-co">▼</span>
     </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-co">
+    <div id="rev-co" style="padding:8px 0;"></div>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        GS 3.5 - Zona de Trabajo
-        <button onclick="editarSeccion('s5')" style="padding:6px 14px;background:#1565C0;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
-      </div>
-      <div id="rev-s5"></div>
+<!-- GESTIÓN DE INTERFERENCIAS -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#14532D,#16A34A);" onclick="toggleRevCard('gi')">
+    <div class="rev-card-title">🔀 Gestión de Interferencias</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('gi')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-gi">▼</span>
     </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-gi">
+    <div id="rev-gi" style="padding:8px 0;"></div>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        GS 3.6 - Cuidado de Áreas Verdes
-        <button onclick="editarSeccion('s6')" style="padding:6px 14px;background:#6B2C91;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
-      </div>
-      <div id="rev-s6"></div>
+<!-- ATRAPAMIENTO -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#1E3A5F,#2563EB);" onclick="toggleRevCard('at')">
+    <div class="rev-card-title">🦾 Atrapamiento</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('at')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-at">▼</span>
     </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-at">
+    <div id="rev-at" style="padding:8px 0;"></div>
+  </div>
+</div>
 
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        GS 3.7 - Permisos Ambientales
-        <button onclick="editarSeccion('s7')" style="padding:6px 14px;background:#4E342E;color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;">✏️ Editar</button>
-      </div>
-      <div id="rev-s7"></div>
+<!-- RIESGO DE EXCAVACIÓN -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#78350F,#C2410C);" onclick="toggleRevCard('re')">
+    <div class="rev-card-title">⛏️ Riesgo de Excavación</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('re')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-re">▼</span>
     </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-re">
+    <div id="rev-re" style="padding:8px 0;"></div>
+  </div>
+</div>
 
+<!-- RIESGO QUÍMICO -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#14532D,#15803D);" onclick="toggleRevCard('rq')">
+    <div class="rev-card-title">🧪 Riesgo Químico</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('rq')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-rq">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-rq">
+    <div id="rev-rq" style="padding:8px 0;"></div>
+  </div>
+</div>
+
+<!-- RIESGO DE INCENDIO -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#7F1D1D,#B91C1C);" onclick="toggleRevCard('ri')">
+    <div class="rev-card-title">🔥 Riesgo de Incendio</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('ri')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-ri">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-ri">
+    <div id="rev-ri" style="padding:8px 0;"></div>
+  </div>
+</div>
+
+<!-- ESPACIOS CONFINADOS -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#1C1917,#44403C);" onclick="toggleRevCard('ec')">
+    <div class="rev-card-title">🕳️ Espacios Confinados</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('ec')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-ec">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-ec">
+    <div id="rev-ec" style="padding:8px 0;"></div>
+  </div>
+</div>
+
+<!-- RIESGO DE EXPLOSIÓN -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#C55A11,#EA580C);" onclick="toggleRevCard('rex')">
+    <div class="rev-card-title">💥 Riesgo de Explosión</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('rex')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-rex">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-rex">
+    <div id="rev-rex" style="padding:8px 0;"></div>
+  </div>
+</div>
+
+<!-- RIESGO DE CORTES -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#831843,#BE185D);" onclick="toggleRevCard('rc')">
+    <div class="rev-card-title">🔪 Riesgo de Cortes</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('rc')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-rc">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-rc">
+    <div id="rev-rc" style="padding:8px 0;"></div>
+  </div>
+</div>
+
+<!-- ESTRÉS POR CALOR -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#0C4A6E,#0284C7);" onclick="toggleRevCard('resc')">
+    <div class="rev-card-title">🌡️ Estrés por Calor</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('resc')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-resc">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-resc">
+    <div id="rev-resc" style="padding:8px 0;"></div>
+  </div>
+</div>
+
+<!-- PROYECCIÓN DE PARTÍCULAS -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#3730A3,#4F46E5);" onclick="toggleRevCard('pp')">
+    <div class="rev-card-title">🌪️ Proyección de Partículas / Fluidos</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('pp')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-pp">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-pp">
+    <div id="rev-pp" style="padding:8px 0;"></div>
+  </div>
+</div>
+
+<!-- GESTIÓN DE EMERGENCIAS -->
+<div class="rev-card">
+  <div class="rev-card-header" style="background:linear-gradient(135deg,#6B2C91,#9333EA);" onclick="toggleRevCard('ge')">
+    <div class="rev-card-title">🚨 Gestión de Emergencias</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="rev-btn-editar" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);" onclick="event.stopPropagation();editarSeccion('ge')">✏️ Editar</button>
+      <span class="rev-card-arrow" id="rev-arrow-ge">▼</span>
+    </div>
+  </div>
+  <div class="rev-card-body" id="rev-body-ge">
+    <div id="rev-ge" style="padding:8px 0;"></div>
+  </div>
+</div>
+    <!-- BOTONES -->
     <div style="display:flex;gap:12px;margin-top:10px;">
       <button onclick="volverFormulario()" style="flex:1;padding:16px;background:#666;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;">
         ← Volver a editar
@@ -673,20 +1281,21 @@
         📤 CONFIRMAR Y ENVIAR
       </button>
     </div>
+
   </div>
 </div>
 
 <!-- ÉXITO -->
 <div id="success-screen" style="display:none;min-height:100vh;background-image:url('fondo.png');background-size:cover;background-position:center;background-repeat:no-repeat;align-items:center;justify-content:center;">
-  <div style="background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-radius:16px;padding:50px 40px;text-align:center;max-width:450px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+  <div class="success-box" style="background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-radius:16px;padding:50px 40px;text-align:center;max-width:450px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
     <img src="logo.png" alt="UNITELEC" style="width:180px;margin-bottom:20px;object-fit:contain;" onerror="this.style.display='none'" />
     <div style="font-size:60px;margin-bottom:20px;filter:grayscale(1) brightness(0.25);">✅</div>
     <div style="font-size:24px;font-weight:bold;color:#1E6B3C;margin-bottom:10px;">¡Inspección Enviada!</div>
     <div style="color:#666;margin-bottom:20px;">Registrada exitosamente en el sistema UNITELEC.</div>
-    <div style="font-size:18px;font-weight:bold;color:#1B5E20;" id="success-codigo"></div>
+    <div style="font-size:18px;font-weight:bold;color:#1F4E79;" id="success-codigo"></div>
     <br>
     <div style="font-size:13px;color:#888">Recibirás el PDF por correo en los próximos minutos.</div>
-    <button style="margin-top:24px;padding:14px 30px;background:#1B5E20;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;" onclick="location.reload()">Nueva Inspección</button>
+    <button style="margin-top:24px;padding:14px 30px;background:#1F4E79;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;" onclick="location.reload()">Nueva Inspección</button>
   </div>
 </div>
 
@@ -704,7 +1313,7 @@ const USUARIOS = {
   'ccuyotupa@unitelec.com.pe':   { password: 'unitelec2918', nombre: 'C. CUYOTUPA' },
   'cmontes@unitelec.com.pe':     { password: 'unitelec6043', nombre: 'C. MONTES' },
   'jaguilar@unitelec.com.pe':    { password: 'unitelec8751', nombre: 'J. AGUILAR' },
-  'jvelasquez@unitelec.com.pe':  { password: 'unitelec3196', nombre: 'J. VELASQUEZ' },
+  'jvelasquez@unitelec.com.pe':  { password: '72886354', nombre: 'J. VELASQUEZ' },
   'jansenquispe@unitelec.com.pe':{ password: 'unitelec4420', nombre: 'J. QUISPE' },
   'msovero@unitelec.com.pe':     { password: 'unitelec9873', nombre: 'M. SOVERO' },
   'hpimentel@unitelec.com.pe':   { password: 'unitelec1285', nombre: 'H. PIMENTEL' },
@@ -718,12 +1327,12 @@ const USUARIOS = {
   'flavado@unitelec.com.pe':   { password: '75356469', nombre: 'F. LAVADO' },
 };
 
-// ─── CLOUDINARY ───
+// ─── CLOUDINARY CONFIG ───
 const CLOUDINARY_CLOUD = 'df17abwyo';
 const CLOUDINARY_PRESET = 'unitelec_hse';
 
 async function comprimirImagen(base64, maxWidth = 800) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const img = new Image();
     img.onload = function() {
       const canvas = document.createElement('canvas');
@@ -746,10 +1355,12 @@ async function subirACloudinary(base64, nombre, folder) {
     fd.append('upload_preset', CLOUDINARY_PRESET);
     fd.append('public_id', `${nombre}_${Date.now()}`);
     fd.append('folder', `inspecciones/${folder}`);
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body: fd });
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+      method: 'POST', body: fd
+    });
     const d = await res.json();
     return d.secure_url || null;
-  } catch(e) { return null; }
+  } catch(e) { console.error('Error Cloudinary:', e); return null; }
 }
 
 async function subirArchivoACloudinary(file, nombre) {
@@ -765,60 +1376,143 @@ async function subirArchivoACloudinary(file, nombre) {
     fd.append('upload_preset', CLOUDINARY_PRESET);
     fd.append('public_id', `${nombre}_${Date.now()}`);
     fd.append('folder', 'inspecciones/evidencias');
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body: fd });
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+      method: 'POST', body: fd
+    });
     const d = await res.json();
     return d.secure_url || null;
-  } catch(e) { return null; }
+  } catch(e) { console.error('Error evidencia:', e); return null; }
 }
 
 // ─── ITEMS CHECKLIST ───
-const itemsS1 = [
-  { id:'gs3_1_1', codigo:'GS 3.1.1', campo:'GS 3.1.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados', obsField:'Obs GS 3.1.1', evidSiNoField:'Evid SiNo GS 3.1.1', evidField:'Evid GS 3.1.1', desc:'GS 3.1.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados.' },
-  { id:'gs3_1_1b', codigo:'GS 3.1.2', campo:'GS 3.1.2 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.1.2', evidSiNoField:'Evid SiNo GS 3.1.2', evidField:'Evid GS 3.1.2', desc:'GS 3.1.2 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.).' },
+// ── VERIFICACIÓN GENERAL (OBLIGATORIO) ──
+const itemsVG = [
+  {id:'1_1',  codigo:'1.1',  campo:'1.1. Los trabajadores dentro del área de trabajo están claramente identificados y coinciden con los roles y nombres autorizados que figuran en la documentación de trabajo: (áreas de entrega, registros, permiso de trabajo, etc.)', obsField:'Observaciones Item 1.1', evidSiNoField:'Evidencias iteam 1.1', evidField:'Evidencia item 1.1', desc:'1.1. Los trabajadores dentro del área de trabajo están claramente identificados y coinciden con los roles y nombres autorizados que figuran en la documentación de trabajo (áreas de entrega, registros, permiso de trabajo, etc.)'},
+  {id:'1_3',  codigo:'1.3',  campo:'1.3. Para actividades que no son de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.', obsField:'Observaciones item 1.3.', evidSiNoField:'Evidencias iteam 1.3', evidField:'Evidencia item 1.3', desc:'1.3. Para actividades que no son de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.'},
+  {id:'1_4',  codigo:'1.4',  campo:'1.4. Para actividades que no son de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas', obsField:'Observaciones Item 1.4.', evidSiNoField:'Evidencias iteam 1.4', evidField:'Evidencia item 1.4', desc:'1.4. Para actividades que no son de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas.'},
+  {id:'1_5',  codigo:'1.5',  campo:'1.5. La inspección previa fue realizada, documentada y disponible para consulta, se ajusta a la actividad y se ha completado correctamente.', obsField:'Observaciones iteam 1.5.', evidSiNoField:'Evidencias iteam 1.5', evidField:'Evidencia item 1.5', desc:'1.5. La inspección previa fue realizada, documentada y disponible para consulta, se ajusta a la actividad y se ha completado correctamente.'},
+  {id:'1_6',  codigo:'1.6',  campo:'1.6. La evaluación de riesgos (charla preoperacional escrita y grabada) está disponible y corresponde al contexto y actividades ejecutadas, en ejecución o por ejecutar.', obsField:'Observaciones iteam 1.6.', evidSiNoField:'Evidencias iteam 1.6', evidField:'Evidencia item 1.6', desc:'1.6. La evaluación de riesgos (charla preoperacional escrita y grabada) está disponible y corresponde al contexto y actividades ejecutadas, en ejecución o por ejecutar.'},
+  {id:'1_7',  codigo:'1.7',  campo:'1.7. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas.', obsField:'Observaciones iteam 1.7.', evidSiNoField:'Evidencias iteam 1.7', evidField:'Evidencia item 1.7', desc:'1.7. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas.'},
+  {id:'1_8',  codigo:'1.8',  campo:'1.8. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.', obsField:'Observaciones iteam 1.8.', evidSiNoField:'Evidencias iteam 1.8', evidField:'Evidencia item 1.8', desc:'1.8. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.'},
+  {id:'1_9',  codigo:'1.9',  campo:'1.9. Los equipos/herramientas contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), están en buen estado y son adecuados para la actividad.', obsField:'Observaciones iteam 1.9.', evidSiNoField:'Evidencias iteam 1.9', evidField:'Evidencia item 1.9', desc:'1.9. Los equipos/herramientas contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), están en buen estado y son adecuados para la actividad.'},
+  {id:'1_10', codigo:'1.10', campo:'1.10. Los equipos/herramientas contra RIESGO GENÉRICO que se utilizan (en uso), están en buen estado, son adecuados para la actividad. Y cuentan con su check list de revisión de pre uso.', obsField:'Observaciones iteam 1.10.', evidSiNoField:'Evidencias iteam 1.10', evidField:'Evidencia item 1.10', desc:'1.10. Los equipos/herramientas contra RIESGO GENÉRICO que se utilizan (en uso), están en buen estado, son adecuados para la actividad. Y cuentan con su check list de revisión de pre uso.'},
+  {id:'1_12', codigo:'1.12', campo:'1.12. Los vehículos/maquinaria y sus accesorios están operativos, certificados, autorizados y son adecuados para el trabajo. Asimismo estos vehículos fueron verificadas con el check list de pre uso.', obsField:'Observaciones iteam 1.12.', evidSiNoField:'Evidencias iteam 1.12', evidField:'Evidencia item 1.12', desc:'1.12. Los vehículos/maquinaria y sus accesorios están operativos, certificados, autorizados y son adecuados para el trabajo. Asimismo estos vehículos fueron verificadas con el check list de pre uso.'},
+  {id:'1_17', codigo:'1.17', campo:'1.17. La actividad cuenta con autorización de trabajo vigente por parte de PLUZ. Si existe la autorización, pero no se cuenta con el documento en campo, entonces no aplica este incumplimiento.', obsField:'Observaciones iteam 1.17.', evidSiNoField:'Evidencias iteam 1.17', evidField:'Evidencia item 1.17', desc:'1.17. La actividad cuenta con autorización de trabajo vigente por parte de PLUZ. Si existe la autorización, pero no se cuenta con el documento en campo, entonces no aplica este incumplimiento.'},
+  {id:'1_18', codigo:'1.18', campo:'1.18. Los procedimientos/métodos de trabajo están disponibles, son adecuados y corresponden al contexto de la actividad detallando las tareas a realizar y aplicando los controles preventivos', obsField:'Observaciones iteam 1.18.', evidSiNoField:'Evidencias iteam 1.18', evidField:'Evidencia item 1.18', desc:'1.18. Los procedimientos/métodos de trabajo están disponibles, son adecuados y corresponden al contexto de la actividad detallando las tareas a realizar y aplicando los controles preventivos.'},
+  {id:'1_19', codigo:'1.19', campo:'1.19. Las actividades con RIESGOS GENÉRICOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 1.19.', evidSiNoField:'Evidencias iteam 1.19', evidField:'Evidencia item 1.19', desc:'1.19. Las actividades con RIESGOS GENÉRICOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+  {id:'1_20', codigo:'1.20', campo:'1.20. La documentación del trabajo se completó de manera adecuada, de acuerdo al contexto de la actividad y los controles a efectuar.', obsField:'Observaciones iteam 1.20.', evidSiNoField:'Evidencias iteam 1.20', evidField:'Evidencia item 1.20', desc:'1.20. La documentación del trabajo se completó de manera adecuada, de acuerdo al contexto de la actividad y los controles a efectuar.'},
+  {id:'1_21', codigo:'1.21', campo:'1.21. Todo el personal involucrado en la actividad conoce la "POLÍTICA STOP WORK" y lo aplica en caso se requiera.', obsField:'Observaciones iteam 1.21.', evidSiNoField:'Evidencias iteam 1.21', evidField:'Evidencia item 1.21', desc:'1.21. Todo el personal involucrado en la actividad conoce la "POLÍTICA STOP WORK" y lo aplica en caso se requiera.'},
+  {id:'1_22', codigo:'1.22', campo:'1.22. Las condiciones climáticas son adecuadas para la realización de las actividades previstas.', obsField:'Observaciones iteam 1.22.', evidSiNoField:'Evidencias iteam 1.22', evidField:'Evidencia item 1.22', desc:'1.22. Las condiciones climáticas son adecuadas para la realización de las actividades previstas.'},
+  {id:'1_23', codigo:'1.23', campo:'1.23. Los lugares de trabajo se mantienen en condiciones de limpieza y el almacenamiento es adecuado.', obsField:'Observaciones iteam 1.23.', evidSiNoField:'Evidencias iteam 1.23', evidField:'Evidencia item 1.23', desc:'1.23. Los lugares de trabajo se mantienen en condiciones de limpieza y el almacenamiento es adecuado.'},
+  {id:'1_24', codigo:'1.24', campo:'1.24. El lugar de trabajo fue completamente delimitado y señalizado de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ. Aplica este incumplimiento si no se cuenta con ningún elemento de señalización.', obsField:'Observaciones iteam 1.24.', evidSiNoField:'Evidencias iteam 1.24', evidField:'Evidencia item 1.24', desc:'1.24. El lugar de trabajo fue completamente delimitado y señalizado de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ. Aplica este incumplimiento si no se cuenta con ningún elemento de señalización.'},
+  {id:'1_25', codigo:'1.25', campo:'1.25. El lugar de trabajo está delimitado y señalizado de manera adecuada. Se aplica incumplimiento si la zona de trabajo fue delimitado y señalizado de manera incompleta, falta elementos de señalización.', obsField:'Observaciones iteam 1.25.', evidSiNoField:'Evidencias iteam 1.25', evidField:'Evidencia item 1.25', desc:'1.25. El lugar de trabajo está delimitado y señalizado de manera adecuada. Se aplica incumplimiento si la zona de trabajo fue delimitado y señalizado de manera incompleta, falta elementos de señalización.'},
+  {id:'1_26', codigo:'1.26', campo:'1.26. El área identificada para las actividades de carga y descarga es adecuada en términos de espacio y condiciones de la zona de trabajo', obsField:'Observaciones iteam 1.26.', evidSiNoField:'Evidencias iteam 1.26', evidField:'Evidencia item 1.26', desc:'1.26. El área identificada para las actividades de carga y descarga es adecuada en términos de espacio y condiciones de la zona de trabajo.'},
+  {id:'1_27', codigo:'1.27', campo:'1.27. Los miembros del equipo conocen el objetivo y los principios del Aliado de la Seguridad y saben cómo aplicarlos en la práctica. Todos los Aliados de la Seguridad han sido identificados y cumplen su rol en cada etapa del trabajo.', obsField:'Observaciones iteam 1.27.', evidSiNoField:'Evidencias iteam 1.27', evidField:'Evidencia item 1.27', desc:'1.27. Los miembros del equipo conocen el objetivo y los principios del Aliado de la Seguridad y saben cómo aplicarlos en la práctica. Todos los Aliados de la Seguridad han sido identificados y cumplen su rol en cada etapa del trabajo.'},
+  {id:'1_28', codigo:'1.28', campo:'1.28. Las normas elementales de COMPORTAMIENTO SEGURO se cumplen al realizar el trabajo (Ej. Ojos en la tarea, sin prisas, sin distracciones, sin correr, sin saltar escalones, sin pasar por encima de una zanja y otros)', obsField:'Observaciones iteam 1.28.', evidSiNoField:'Evidencias iteam 1.28', evidField:'Evidencia item 1.28', desc:'1.28. Las normas elementales de COMPORTAMIENTO SEGURO se cumplen al realizar el trabajo (Ej. Ojos en la tarea, sin prisas, sin distracciones, sin correr, sin saltar escalones, sin pasar por encima de una zanja y otros)'},
+  {id:'1_29', codigo:'1.29', campo:'1.29. Las Máquinas están equipadas con dispositivos de señalización/advertencia, sistema visual y/o acústico y dispositivos de seguridad/emergencia (como emergencia), guardas de seguridad, boton de parada de emergencias, y están intactas y funcionales', obsField:'Observaciones iteam 1.29.', evidSiNoField:'Evidencias iteam 1.29', evidField:'Evidencia item 1.29', desc:'1.29. Las Máquinas están equipadas con dispositivos de señalización/advertencia, sistema visual y/o acústico y dispositivos de seguridad/emergencia (como emergencia), guardas de seguridad, boton de parada de emergencias, y están intactas y funcionales'},
+  {id:'1_30', codigo:'1.30', campo:'1.30. Los trabajadores mantienen distancias con respecto a la línea de fuego (Ej. objetos en movimiento, vehículos, proyecciones, desniveles, posibles cortes con equipos de rotación, etc.).', obsField:'Observaciones iteam 1.30.', evidSiNoField:'Evidencias iteam 1.30', evidField:'Evidencia item 1.30', desc:'1.30. Los trabajadores mantienen distancias con respecto a la línea de fuego (Ej. objetos en movimiento, vehículos, proyecciones, desniveles, posibles cortes con equipos de rotación, etc.).'},
+  {id:'1_31', codigo:'1.31', campo:'1.31. Los trabajos de tipo manual (por ejemplo, manipulación manual de cargas, trabajos metal mecánica, trabajos de carpintería en general) se llevan a cabo de acuerdo con principios ergonómicos.', obsField:'Observaciones iteam 1.31.', evidSiNoField:'Evidencias iteam 1.31', evidField:'Evidencia item 1.31', desc:'1.31. Los trabajos de tipo manual (por ejemplo, manipulación manual de cargas, trabajos metal mecánica, trabajos de carpintería en general) se llevan a cabo de acuerdo con principios ergonómicos.'},
+  {id:'1_32', codigo:'1.32', campo:'1.32. Para actividades de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas (Altura, Eléctrico, Excavación, Espacios confinados e Izaje de cargas)', obsField:'Observaciones iteam 1.32.', evidSiNoField:'Evidencias iteam 1.32', evidField:'Evidencia item 1.32', desc:'1.32. Para actividades de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas (Altura, Eléctrico, Excavación, Espacios confinados e Izaje de cargas)'},
+  {id:'1_33', codigo:'1.33', campo:'1.33. Las Empresas de Servicio Esporádico (ESE) son gestionadas de manera adecuada y cumple el estándar de gestión y seguridad exigido por PLUZ', obsField:'Observaciones iteam 1.33.', evidSiNoField:'Evidencias iteam 1.33', evidField:'Evidencia item 1.33', desc:'1.33. Las Empresas de Servicio Esporádico (ESE) son gestionadas de manera adecuada y cumple el estándar de gestión y seguridad exigido por PLUZ'},
+  {id:'1_34', codigo:'1.34', campo:'1.34. Para actividades de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.', obsField:'Observaciones iteam 1.34.', evidSiNoField:'Evidencias iteam 1.34', evidField:'Evidencia item 1.34', desc:'1.34. Para actividades de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.'},
 ];
-
-const itemsS2 = [
-  { id:'gs3_2_1', codigo:'GS 3.2.1', campo:'GS 3.2.1 Se ha evaluado el impacto de ruido ambiental', obsField:'Obs GS 3.2.1', evidSiNoField:'Evid SiNo GS 3.2.1', evidField:'Evid GS 3.2.1', desc:'GS 3.2.1 Se ha evaluado el impacto de ruido ambiental.' },
+// ── RIESGO ELÉCTRICO ──
+const itemsREL = [
+  {id:'2_1',  codigo:'2.1',  campo:'2.1. Se han realizado las desconexiones de todas las posibles fuentes de energía - 1era. Regla de oro.', obsField:'Observaciones iteam 2.1.', evidSiNoField:'Evidencias iteam 2.1', evidField:'Evidencia item 2.1', desc:'2.1. Se han realizado las desconexiones de todas las posibles fuentes de energía - 1era. Regla de oro.'},
+  {id:'2_2',  codigo:'2.2',  campo:'2.2. Los dispositivos de bloqueo de desconexión se aplican y señalan de manera efectiva (bloqueo de control, bloqueo personal, etiquetas) - 2da. Regla de oro.', obsField:'Observaciones iteam 2.2.', evidSiNoField:'Evidencias iteam 2.2', evidField:'Evidencia item 2.2', desc:'2.2. Los dispositivos de bloqueo de desconexión se aplican y señalan de manera efectiva (bloqueo de control, bloqueo personal, etiquetas) - 2da. Regla de oro.'},
+  {id:'2_3',  codigo:'2.3',  campo:'2.3. Se ha realizado la verificación específica de ausencia de tensión. - 3era Regla de oro.', obsField:'Observaciones iteam 2.3.', evidSiNoField:'Evidencias iteam 2.3', evidField:'Evidencia item 2.3', desc:'2.3. Se ha realizado la verificación específica de ausencia de tensión. - 3era Regla de oro.'},
+  {id:'2_4',  codigo:'2.4',  campo:'2.4. Se han aplicado correctamente en la zona de trabajo los dispositivos de puesta a tierra y cortocircuito necesarios - 4ta Regla de oro.', obsField:'Observaciones iteam 2.4.', evidSiNoField:'Evidencias iteam 2.4', evidField:'Evidencia item 2.4', desc:'2.4. Se han aplicado correctamente en la zona de trabajo los dispositivos de puesta a tierra y cortocircuito necesarios - 4ta Regla de oro.'},
+  {id:'2_6',  codigo:'2.6',  campo:'2.6. Se ha realizado la protección de las posibles partes vivas adyacentes (distancias, barreras, etc.) y de la zona de trabajo - 5ta. Regla de oro.', obsField:'Observaciones iteam 2.6.', evidSiNoField:'Evidencias iteam 2.6', evidField:'Evidencia item 2.6', desc:'2.6. Se ha realizado la protección de las posibles partes vivas adyacentes (distancias, barreras, etc.) y de la zona de trabajo - 5ta. Regla de oro.'},
+  {id:'2_7',  codigo:'2.7',  campo:'2.7. Las actividades con RIESGO ELÉCTRICO (fuera de servicio o línea viva) que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 2.7.', evidSiNoField:'Evidencias iteam 2.7', evidField:'Evidencia item 2.7', desc:'2.7. Las actividades con RIESGO ELÉCTRICO (fuera de servicio o línea viva) que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+  {id:'2_8',  codigo:'2.8',  campo:'2.8. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 2.8.', evidSiNoField:'Evidencias iteam 2.8', evidField:'Evidencia item 2.8', desc:'2.8. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
+  {id:'2_9',  codigo:'2.9',  campo:'2.9. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente', obsField:'Observaciones iteam 2.9.', evidSiNoField:'Evidencias iteam 2.9', evidField:'Evidencia item 2.9', desc:'2.9. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente'},
+  {id:'2_10', codigo:'2.10', campo:'2.10. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 2.10.', evidSiNoField:'Evidencias iteam 2.10', evidField:'Evidencia item 2.10', desc:'2.10. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
+  {id:'2_11', codigo:'2.11', campo:'2.11. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO que se utilizan (en uso) están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 2.11.', evidSiNoField:'Evidencias iteam 2.11', evidField:'Evidencia item 2.11', desc:'2.11. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO que se utilizan (en uso) están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
+  {id:'2_16', codigo:'2.16', campo:'2.16. Durante las actividades de trabajo, las DISTANCIAS SEGURAS de las líneas eléctricas aéreas se mantienen y garantizan a través de medidas específicas, identificadas y documentadas', obsField:'Observaciones iteam 2.16.', evidSiNoField:'Evidencias iteam 2.16', evidField:'Evidencia item 2.16', desc:'2.16. Durante las actividades de trabajo, las DISTANCIAS SEGURAS de las líneas eléctricas aéreas se mantienen y garantizan a través de medidas específicas, identificadas y documentadas'},
+  {id:'2_17', codigo:'2.17', campo:'2.17. Las Instalaciones eléctricas móviles (Grupos electrógenos para alimentar la red) están provistas de los sistemas de protección adecuados y certificados, y se aplican las medidas de seguridad para hacer segura la actividad.', obsField:'Observaciones iteam 2.17.', evidSiNoField:'Evidencias iteam 2.17', evidField:'Evidencia item 2.17', desc:'2.17. Las Instalaciones eléctricas móviles (Grupos electrógenos para alimentar la red) están provistas de los sistemas de protección adecuados y certificados, y se aplican las medidas de seguridad para hacer segura la actividad.'},
+  {id:'2_18', codigo:'2.18', campo:'2.18. Se evidencia la aplicación de las 5RO en las aplicaciones y herramientas digitales (APP5RO) vigentes.', obsField:'Observaciones iteam 2.18.', evidSiNoField:'Evidencias iteam 2.18', evidField:'Evidencia item 2.18', desc:'2.18. Se evidencia la aplicación de las 5RO en las aplicaciones y herramientas digitales (APP5RO) vigentes.'},
 ];
-
-const itemsS3 = [
-  { id:'gs3_3_1', codigo:'GS 3.3.1', campo:'GS 3.3.1 El acondicionamiento/mantenimiento es efectuado por personal capacitado (por ejemplo, en prevención de fugas de gas, tratamiento/clasificación de polvo, filtros, solución utilizada)', obsField:'Obs GS 3.3.1', evidSiNoField:'Evid SiNo GS 3.3.1', evidField:'Evid GS 3.3.1', desc:'GS 3.3.1 El acondicionamiento/mantenimiento es efectuado por personal capacitado (en prevención de fugas de gas, tratamiento/clasificación de polvo, filtros, solución utilizada).' },
-  { id:'gs3_3_2', codigo:'GS 3.3.2', campo:'GS 3.3.2 El gas se entrega a una persona autorizada para su reciclaje/eliminación', obsField:'Obs GS 3.3.2', evidSiNoField:'Evid SiNo GS 3.3.2', evidField:'Evid GS 3.3.2', desc:'GS 3.3.2 El gas se entrega a una persona autorizada para su reciclaje/eliminación.' },
+// ── CAÍDA DE ALTURA ──
+const itemsCA = [
+  {id:'3_1',  codigo:'3.1',  campo:'3.1. EPP/EPC contra TRABAJOS EN ALTURA disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 3.1.', evidSiNoField:'Evidencias iteam 3.1', evidField:'Evidencia item 3.1', desc:'3.1. EPP/EPC contra TRABAJOS EN ALTURA disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
+  {id:'3_2',  codigo:'3.2',  campo:'3.2. EPP/EPC contra TRABAJOS EN ALTURA que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.', obsField:'Observaciones iteam 3.2.', evidSiNoField:'Evidencias iteam 3.2', evidField:'Evidencia item 3.2', desc:'3.2. EPP/EPC contra TRABAJOS EN ALTURA que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.'},
+  {id:'3_4',  codigo:'3.4',  campo:'3.4. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 3.4.', evidSiNoField:'Evidencias iteam 3.4', evidField:'Evidencia item 3.4', desc:'3.4. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
+  {id:'3_5',  codigo:'3.5',  campo:'3.5. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) que se utilizan (en uso), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 3.5.', evidSiNoField:'Evidencias iteam 3.5', evidField:'Evidencia item 3.5', desc:'3.5. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) que se utilizan (en uso), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
+  {id:'3_6',  codigo:'3.6',  campo:'3.6. Los andamios son montados, desmontados o modificados por personal cualificado, se utilizan correctamente y los elementos han sido revisados en el antes y durante de la actividad.', obsField:'Observaciones iteam 3.6.', evidSiNoField:'Evidencias iteam 3.6', evidField:'Evidencia item 3.6', desc:'3.6. Los andamios son montados, desmontados o modificados por personal cualificado, se utilizan correctamente y los elementos han sido revisados en el antes y durante de la actividad.'},
+  {id:'3_9',  codigo:'3.9',  campo:'3.9. Para TRABAJOS EN ALTURA, el análisis de integridad/estabilidad/resistencia de la estructura de soporte o anclaje se ha realizado con antelación y cuando se requiera se aplican sistemas de refuerzo como arriostramientos.', obsField:'Observaciones iteam 3.9.', evidSiNoField:'Evidencias iteam 3.9', evidField:'Evidencia item 3.9', desc:'3.9. Para TRABAJOS EN ALTURA, el análisis de integridad/estabilidad/resistencia de la estructura de soporte o anclaje se ha realizado con antelación y cuando se requiera se aplican sistemas de refuerzo como arriostramientos.'},
+  {id:'3_10', codigo:'3.10', campo:'3.10. Los TRABAJOS EN ALTURA que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 3.10.', evidSiNoField:'Evidencias iteam 3.10', evidField:'Evidencia item 3.10', desc:'3.10. Los TRABAJOS EN ALTURA que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
 ];
-
-const itemsS4 = [
-  { id:'gs3_4_1', codigo:'GS 3.4.1', campo:'GS 3.4.1 Los productos químicos deben ser almacenados en lugares seguros, clasificados y debidamente separados', obsField:'Obs GS 3.4.1', evidSiNoField:'Evid SiNo GS 3.4.1', evidField:'Evid GS 3.4.1', desc:'GS 3.4.1 Los productos químicos deben ser almacenados en lugares seguros, clasificados y debidamente separados.' },
-  { id:'gs3_4_2', codigo:'GS 3.4.2', campo:'GS 3.4.2 Gestión correcta del uso, almacenamiento y transporte (cumplimiento de la normativa concerniente a los materiales peligrosos, planes de contingencia, porta y aplica el instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.4.2', evidSiNoField:'Evid SiNo GS 3.4.2', evidField:'Evid GS 3.4.2', desc:'GS 3.4.2 Gestión correcta del uso, almacenamiento y transporte (cumplimiento de la normativa de materiales peligrosos, planes de contingencia, instructivo, hojas MSDS, etc.).' },
+// ── CAÍDA/IMPACTO DE OBJETOS ──
+const itemsCO = [
+  {id:'4_1', codigo:'4.1', campo:'4.1. El área de trabajo está adecuadamente gestionada en cuanto al riesgo de caída de objetos, no se almacenan herramientas o equipos cerca de los bordes, sobre barandillas o superficies altas.', obsField:'Observaciones iteam 4.1.', evidSiNoField:'Evidencias iteam 4.1', evidField:'Evidencia item 4.1', desc:'4.1. El área de trabajo está adecuadamente gestionada en cuanto al riesgo de caída de objetos, no se almacenan herramientas o equipos cerca de los bordes, sobre barandillas o superficies altas.'},
+  {id:'4_2', codigo:'4.2', campo:'4.2. No existe personal ubicado en la zona de influencia (Línea de fuego) en las maniobras de IZAJE DE CARGA', obsField:'Observaciones iteam 4.2.', evidSiNoField:'Evidencias iteam 4.2', evidField:'Evidencia item 4.2', desc:'4.2. No existe personal ubicado en la zona de influencia (Línea de fuego) en las maniobras de IZAJE DE CARGA'},
+  {id:'4_3', codigo:'4.3', campo:'4.3. Los dispositivos/herramientas/equipos para gestionar IZAJE DE CARGAS disponibles en la zona de trabajo (no son usados) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 4.3.', evidSiNoField:'Evidencias iteam 4.3', evidField:'Evidencia item 4.3', desc:'4.3. Los dispositivos/herramientas/equipos para gestionar IZAJE DE CARGAS disponibles en la zona de trabajo (no son usados) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
+  {id:'4_4', codigo:'4.4', campo:'4.4. El vehículo de carga para el IZAJE DE CARGAS son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 4.4.', evidSiNoField:'Evidencias iteam 4.4', evidField:'Evidencia item 4.4', desc:'4.4. El vehículo de carga para el IZAJE DE CARGAS son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
+  {id:'4_5', codigo:'4.5', campo:'4.5. Los dispositivos / herramientas / equipos para gestionar IZAJE DE CARGAS que se utilizan son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 4.5.', evidSiNoField:'Evidencias iteam 4.5', evidField:'Evidencia item 4.5', desc:'4.5. Los dispositivos / herramientas / equipos para gestionar IZAJE DE CARGAS que se utilizan son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas. Asimismo, cuenta con su check list de revisión de pre uso.'},
+  {id:'4_6', codigo:'4.6', campo:'4.6. El área identificada para IZAJE DE CARGAS es adecuada en condiciones de espacio y terreno y esto ha sido evaluado.', obsField:'Observaciones iteam 4.6.', evidSiNoField:'Evidencias iteam 4.6', evidField:'Evidencia item 4.6', desc:'4.6. El área identificada para IZAJE DE CARGAS es adecuada en condiciones de espacio y terreno y esto ha sido evaluado.'},
+  {id:'4_7', codigo:'4.7', campo:'4.7. Las actividades de IZAJE DE CARGAS que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 4.7.', evidSiNoField:'Evidencias iteam 4.7', evidField:'Evidencia item 4.7', desc:'4.7. Las actividades de IZAJE DE CARGAS que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
 ];
-
-const itemsS5 = [
-  { id:'gs3_5_1', codigo:'GS 3.5.1', campo:'GS 3.5.1 Los "materiales excavados" deben colocarse de forma correcta y eliminados en los tiempos previstos', obsField:'Obs GS 3.5.1', evidSiNoField:'Evid SiNo GS 3.5.1', evidField:'Evid GS 3.5.1', desc:'GS 3.5.1 Los "materiales excavados" deben colocarse de forma correcta y eliminados en los tiempos previstos.' },
-  { id:'gs3_5_2', codigo:'GS 3.5.2', campo:'GS 3.5.2 Se garantiza la capacidad de controlar y corregir (sistemas de protección) cualquier derrame de aceite u otros contaminantes', obsField:'Obs GS 3.5.2', evidSiNoField:'Evid SiNo GS 3.5.2', evidField:'Evid GS 3.5.2', desc:'GS 3.5.2 Se garantiza la capacidad de controlar y corregir (sistemas de protección) cualquier derrame de aceite u otros contaminantes.' },
-  { id:'gs3_5_3', codigo:'GS 3.5.3', campo:'GS 3.5.3 Se evita la afectación al patrimonio cultural en la ejecución de los trabajos', obsField:'Obs GS 3.5.3', evidSiNoField:'Evid SiNo GS 3.5.3', evidField:'Evid GS 3.5.3', desc:'GS 3.5.3 Se evita la afectación al patrimonio cultural en la ejecución de los trabajos.' },
-  { id:'gs3_5_4', codigo:'GS 3.5.4', campo:'GS 3.5.4 En los trabajos en la vía pública se minimiza la afectación al público (control de la obstrucción de accesos a propiedades particulares, implementación de sendas peatonales, porta y aplica instructivo, orden/limpieza, señalización, etc.)', obsField:'Obs GS 3.5.4', evidSiNoField:'Evid SiNo GS 3.5.4', evidField:'Evid GS 3.5.4', desc:'GS 3.5.4 En los trabajos en la vía pública se minimiza la afectación al público (obstrucción de accesos, sendas peatonales, instructivo, orden/limpieza, señalización, etc.).' },
-  { id:'gs3_5_5', codigo:'GS 3.5.5', campo:'GS 3.5.5 Se evita el levantamiento de polvo en la generación y eliminación del material excavado', obsField:'Obs GS 3.5.5', evidSiNoField:'Evid SiNo GS 3.5.5', evidField:'Evid GS 3.5.5', desc:'GS 3.5.5 Se evita el levantamiento de polvo en la generación y eliminación del material excavado.' },
+// ── GESTIÓN DE INTERFERENCIAS ──
+const itemsGI = [
+  {id:'5_1', codigo:'5.1', campo:'5.1. Las interferencias con exposición de personas a un riesgo inminente (Ej. interferencias con actividades, líneas eléctricas, máquinas, vehículos, etc.) están bien gestionadas y se realizan según la normativa vigente brindada por PLUZ.', obsField:'Observaciones iteam 5.1.', evidSiNoField:'Evidencias iteam 5.1', evidField:'Evidencia item 5.1', desc:'5.1. Las interferencias con exposición de personas a un riesgo inminente (Ej. interferencias con actividades, líneas eléctricas, máquinas, vehículos, etc.) están bien gestionadas y se realizan según la normativa vigente brindada por PLUZ.'},
+  {id:'5_2', codigo:'5.2', campo:'5.2. En el caso de actividades complejas, la participación en las reuniones de coordinación se realiza y documenta.', obsField:'Observaciones iteam 5.2.', evidSiNoField:'Evidencias iteam 5.2', evidField:'Evidencia item 5.2', desc:'5.2. En el caso de actividades complejas, la participación en las reuniones de coordinación se realiza y documenta.'},
+  {id:'5_5', codigo:'5.5', campo:'5.5. Los movimientos y/u operaciones de la maquinaria son apoyados por una persona dedicada (Vigía, señalero) y en la vía pública cuando se alterna una vía el tráfico es dirigido por vigías.', obsField:'Observaciones iteam 5.5.', evidSiNoField:'Evidencias iteam 5.5', evidField:'Evidencia item 5.5', desc:'5.5. Los movimientos y/u operaciones de la maquinaria son apoyados por una persona dedicada (Vigía, señalero) y en la vía pública cuando se alterna una vía el tráfico es dirigido por vigías.'},
+  {id:'5_6', codigo:'5.6', campo:'5.6. Se ha identificado y evaluado la presencia de instalaciones subterráneas, cables, tuberías y otros elementos que generan interferencias en la actividad', obsField:'Observaciones iteam 5.6.', evidSiNoField:'Evidencias iteam 5.6', evidField:'Evidencia item 5.6', desc:'5.6. Se ha identificado y evaluado la presencia de instalaciones subterráneas, cables, tuberías y otros elementos que generan interferencias en la actividad'},
+  {id:'5_7', codigo:'5.7', campo:'5.7. Las actividades complejas son controladas a través de una supervisión (Supervisor de capa, jefe de cuadrilla, agente de descargo, Prevencionista, entre otros) según corresponda de acuerdo con la planificación.', obsField:'Observaciones iteam 5.7.', evidSiNoField:'Evidencias iteam 5.7', evidField:'Evidencia item 5.7', desc:'5.7. Las actividades complejas son controladas a través de una supervisión (Supervisor de capa, jefe de cuadrilla, agente de descargo, Prevencionista, entre otros) según corresponda de acuerdo con la planificación.'},
 ];
-
-const itemsS6 = [
-  { id:'gs3_6_1', codigo:'GS 3.6.1', campo:'GS 3.6.1 La poda se efectúa correctamente y aplica las normas locales sobre conservación de áreas verdes', obsField:'Obs GS 3.6.1', evidSiNoField:'Evid SiNo GS 3.6.1', evidField:'Evid GS 3.6.1', desc:'GS 3.6.1 La poda se efectúa correctamente y aplica las normas locales sobre conservación de áreas verdes.' },
+// ── ATRAPAMIENTO ──
+const itemsAT = [
+  {id:'6_1', codigo:'6.1', campo:'6.1. Las guardas, protecciones o barreras utilizados para evitar el contacto con las partes móviles de la maquinaria están presentes, intactos y funcionales', obsField:'Observaciones iteam 6.1.', evidSiNoField:'Evidencias iteam 6.1', evidField:'Evidencia item 6.1', desc:'6.1. Las guardas, protecciones o barreras utilizados para evitar el contacto con las partes móviles de la maquinaria están presentes, intactos y funcionales'},
+  {id:'6_3', codigo:'6.3', campo:'6.3. Los trabajadores usan ropa y equipamiento adecuado para evitar accidentes por atrapamiento. Además, no se utilizan collares, cabello largo no recogido y ropa no adherente al cuerpo', obsField:'Observaciones iteam 6.3.', evidSiNoField:'Evidencias iteam 6.3', evidField:'Evidencia item 6.3', desc:'6.3. Los trabajadores usan ropa y equipamiento adecuado para evitar accidentes por atrapamiento. Además, no se utilizan collares, cabello largo no recogido y ropa no adherente al cuerpo'},
+  {id:'6_4', codigo:'6.4', campo:'6.4. Las actividades con riesgo de ATRAPAMIENTO que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 6.4.', evidSiNoField:'Evidencias iteam 6.4', evidField:'Evidencia item 6.4', desc:'6.4. Las actividades con riesgo de ATRAPAMIENTO que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
 ];
-
-const itemsS7 = [
-  { id:'gs3_7_1', codigo:'GS 3.7.1', campo:'GS 3.7.1 Cumplimiento de la legislación local/permisos locales sobre requisitos ambientales específicos (Autorizaciones municipales para rotura de pistas/veredas, poda; certificado vehicular RTV si está apto en la emisión de gases, etc.)', obsField:'Obs GS 3.7.1', evidSiNoField:'Evid SiNo GS 3.7.1', evidField:'Evid GS 3.7.1', desc:'GS 3.7.1 Cumplimiento de la legislación local/permisos locales sobre requisitos ambientales específicos (autorizaciones municipales para rotura de pistas/veredas, poda; certificado vehicular RTV, etc.).' },
+// ── RIESGO DE EXCAVACIÓN ──
+const itemsRE = [
+  {id:'7_1', codigo:'7.1', campo:'7.1. Las actividades de EXCAVACIÓN (excavaciones profundas mayores a 1.5 m.) se llevan a cabo correctamente para evitar el riesgo de colapso de estructuras/ terrenos (entibaciones según las profundidades, apuntalamiento, etc.)', obsField:'Observaciones iteam 7.1.', evidSiNoField:'Evidencias iteam 7.1', evidField:'Evidencia item 7.1', desc:'7.1. Las actividades de EXCAVACIÓN (excavaciones profundas mayores a 1.5 m.) se llevan a cabo correctamente para evitar el riesgo de colapso de estructuras/ terrenos (entibaciones según las profundidades, apuntalamiento, etc.)'},
+  {id:'7_2', codigo:'7.2', campo:'7.2. Se realizó el sondeo con el detector de flujo para identificar posibles interferencias eléctricas', obsField:'Observaciones iteam 7.2.', evidSiNoField:'Evidencias iteam 7.2', evidField:'Evidencia item 7.2', desc:'7.2. Se realizó el sondeo con el detector de flujo para identificar posibles interferencias eléctricas.'},
+  {id:'7_3', codigo:'7.3', campo:'7.3. La maquinaria (Retroexcavadora, Bobcat, otras) para la actividad de EXCAVACIÓN son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y están autorizadas.', obsField:'Observaciones iteam 7.3.', evidSiNoField:'Evidencias iteam 7.3', evidField:'Evidencia item 7.3', desc:'7.3. La maquinaria (Retroexcavadora, Bobcat, otras) para la actividad de EXCAVACIÓN son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y están autorizadas.'},
+  {id:'7_4', codigo:'7.4', campo:'7.4. Las actividades con riesgo de EXCAVACIÓN que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 7.4.', evidSiNoField:'Evidencias iteam 7.4', evidField:'Evidencia item 7.4', desc:'7.4. Las actividades con riesgo de EXCAVACIÓN que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
 ];
-
-const todasSecciones = [
-  { key: 's1', items: itemsS1 },
-  { key: 's2', items: itemsS2 },
-  { key: 's3', items: itemsS3 },
-  { key: 's4', items: itemsS4 },
-  { key: 's5', items: itemsS5 },
-  { key: 's6', items: itemsS6 },
-  { key: 's7', items: itemsS7 },
+// ── RIESGO QUÍMICO ──
+const itemsRQ = [
+  {id:'10_1', codigo:'10.1', campo:'10.1. Las sustancias/preparados químicos disponibles en el área de trabajo están autorizados, son manipulados, almacenados y en uso de acuerdo con su Ficha de Datos de Seguridad, asimismo cuentan con este documento en campo.', obsField:'Observaciones iteam 10.1.', evidSiNoField:'Evidencias iteam 10.1', evidField:'Evidencia item 10.1', desc:'10.1. Las sustancias/preparados químicos disponibles en el área de trabajo están autorizados, son manipulados, almacenados y en uso de acuerdo con su Ficha de Datos de Seguridad, asimismo cuentan con este documento en campo.'},
 ];
-
-const coloresCodigo = { s1:'', s2:'item-codigo-s2', s3:'item-codigo-s3', s4:'item-codigo-s4', s5:'item-codigo-s5', s6:'item-codigo-s6', s7:'item-codigo-s7' };
-
+// ── RIESGO DE INCENDIO ──
+const itemsRI = [
+  {id:'12_1', codigo:'12.1', campo:'12.1. Las actividades de TRABAJOS CON RIESGO DE INCENDIO (Soldadura, esmerilado, cortes, etc.) que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 12.1.', evidSiNoField:'Evidencias iteam 12.1', evidField:'Evidencia item 12.1', desc:'12.1. Las actividades de TRABAJOS CON RIESGO DE INCENDIO (Soldadura, esmerilado, cortes, etc.) que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+];
+// ── ESPACIOS CONFINADOS ──
+const itemsEC = [
+  {id:'13_1', codigo:'13.1', campo:'13.1. Para las actividades en ESPACIOS CONFINADOS se realiza el monitoreo de la atmosfera para la detección de gases, y este equipo está disponible, es eficiente y adecuado (intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 13.1.', evidSiNoField:'Evidencias iteam 13.1', evidField:'Evidencia item 13.1', desc:'13.1. Para las actividades en ESPACIOS CONFINADOS se realiza el monitoreo de la atmosfera para la detección de gases, y este equipo está disponible, es eficiente y adecuado (intactos, certificados y verificados) según exigencias normativas'},
+  {id:'13_5', codigo:'13.5', campo:'13.5. En caso de lugares con un intercambio de aire inadecuado, existe un sistema de ventilación forzada (intactos, certificados y verificados) según exigencias normativas.', obsField:'Observaciones iteam 13.5.', evidSiNoField:'Evidencias iteam 13.5', evidField:'Evidencia item 13.5', desc:'13.5. En caso de lugares con un intercambio de aire inadecuado, existe un sistema de ventilación forzada (intactos, certificados y verificados) según exigencias normativas.'},
+  {id:'13_6', codigo:'13.6', campo:'13.6. Las actividades en ESPACIOS CONFINADOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 13.6.', evidSiNoField:'Evidencias iteam 13.6', evidField:'Evidencia item 13.6', desc:'13.6. Las actividades en ESPACIOS CONFINADOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+];
+// ── RIESGO DE EXPLOSIÓN ──
+const itemsREX = [
+  {id:'14_1', codigo:'14.1', campo:'14.1. Si durante la ejecución del trabajo existe el riesgo de formación de atmósferas explosivas o un aumento en el nivel de riesgo, la concentración se controla continuamente mediante explosímetros.', obsField:'Observaciones iteam 14.1.', evidSiNoField:'Evidencias iteam 14.1', evidField:'Evidencia item 14.1', desc:'14.1. Si durante la ejecución del trabajo existe el riesgo de formación de atmósferas explosivas o un aumento en el nivel de riesgo, la concentración se controla continuamente mediante explosímetros.'},
+  {id:'14_2', codigo:'14.2', campo:'14.2. Los equipos electrónicos (teléfonos móviles, emisoras de radio, etc.) introducidos en las zonas de trabajo son adecuados para el tipo de clasificación de la zona.', obsField:'Observaciones iteam 14.2.', evidSiNoField:'Evidencias iteam 14.2', evidField:'Evidencia item 14.2', desc:'14.2. Los equipos electrónicos (teléfonos móviles, emisoras de radio, etc.) introducidos en las zonas de trabajo son adecuados para el tipo de clasificación de la zona.'},
+  {id:'14_3', codigo:'14.3', campo:'14.3. Los equipos/herramientas y actividades son adecuados para el tipo de clasificación de la zona con riesgo de formación de atmósferas explosivas.', obsField:'Observaciones iteam 14.3.', evidSiNoField:'Evidencias iteam 14.3', evidField:'Evidencia item 14.3', desc:'14.3. Los equipos/herramientas y actividades son adecuados para el tipo de clasificación de la zona con riesgo de formación de atmósferas explosivas.'},
+];
+// ── RIESGO DE CORTES ──
+const itemsRC = [
+  {id:'15_1', codigo:'15.1', campo:'15.1. EPP/EPC y Ropa para protección contra CORTES que se utilizan (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas brindadas por PLUZ.', obsField:'Observaciones iteam 15.1.', evidSiNoField:'Evidencias iteam 15.1', evidField:'Evidencia item 15.1', desc:'15.1. EPP/EPC y Ropa para protección contra CORTES que se utilizan (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas brindadas por PLUZ.'},
+  {id:'15_2', codigo:'15.2', campo:'15.2. Las guardas, protecciones o barreras utilizados para evitar CORTES con las partes móviles de la maquinaria están presentes, intactos y funcionales.', obsField:'Observaciones iteam 15.2.', evidSiNoField:'Evidencias iteam 15.2', evidField:'Evidencia item 15.2', desc:'15.2. Las guardas, protecciones o barreras utilizados para evitar CORTES con las partes móviles de la maquinaria están presentes, intactos y funcionales.'},
+];
+// ── RIESGO DE ESTRÉS POR CALOR ──
+const itemsRESC = [
+  {id:'16_1', codigo:'16.1', campo:'16.1. Las guardas, protecciones o barreras utilizadas para proteger contra las PROYECCIONES de fluidos y materiales están presentes, intactos y funcionales.', obsField:'Observaciones iteam 16.1.', evidSiNoField:'Evidencias iteam 16.1', evidField:'Evidencia item 16.1', desc:'16.1. Las guardas, protecciones o barreras utilizadas para proteger contra las PROYECCIONES de fluidos y materiales están presentes, intactos y funcionales.'},
+];
+// ── PROYECCIÓN DE PARTÍCULAS / FLUÍDOS ──
+const itemsPP = [
+  {id:'17_1', codigo:'17.1', campo:'17.1. En relación con las condiciones ambientales desfavorables (Ej. altas o bajas temperaturas), que podrían afectar la salud de los trabajadores, se aplican medidas preventivas de acuerdo con la evaluación de riesgos.', obsField:'Observaciones iteam 17.1.', evidSiNoField:'Evidencias iteam 17.1', evidField:'Evidencia item 17.1', desc:'17.1. En relación con las condiciones ambientales desfavorables (Ej. altas o bajas temperaturas), que podrían afectar la salud de los trabajadores, se aplican medidas preventivas de acuerdo con la evaluación de riesgos.'},
+];
+// ── GESTIÓN DE EMERGENCIAS (OBLIGATORIO) ──
+const itemsGE = [
+  {id:'18_1', codigo:'18.1', campo:'18.1. El Plan de emergencias / procedimientos/instrucciones están disponibles en el lugar de trabajo, adecuados para el tipo y contexto de los trabajos. Los trabajadores conocen los procedimientos de emergencia que deben adoptarse.', obsField:'Observaciones iteam 18.1', evidSiNoField:'Evidencias iteam 18.1', evidField:'Evidencia item 18.1', desc:'18.1. El Plan de emergencias / procedimientos/instrucciones están disponibles en el lugar de trabajo, adecuados para el tipo y contexto de los trabajos. Los trabajadores conocen los procedimientos de emergencia que deben adoptarse.'},
+  {id:'18_2', codigo:'18.2', campo:'18.2. Todas las medidas contempladas en el plan/procedimiento/instrucción de emergencias (Ej. Extintores, botiquines de primeros auxilios, dispositivos de rescate, etc.), se implementan, son adecuadas, eficientes y se revisan periódicamente y funciona para los riesgos de la actividad en exposición.', obsField:'Observaciones iteam 18.2.', evidSiNoField:'Evidencias iteam 18.2', evidField:'Evidencia item 18.2', desc:'18.2. Todas las medidas contempladas en el plan/procedimiento/instrucción de emergencias (Ej. Extintores, botiquines de primeros auxilios, dispositivos de rescate, etc.), se implementan, son adecuadas, eficientes y se revisan periódicamente y funciona para los riesgos de la actividad en exposición.'},
+  {id:'18_3', codigo:'18.3', campo:'18.3. Si los trabajadores realizar su actividad SOLOS Y AISLADOS, se implementa un dispositivo de comunicación para que el empleado pueda pedir ayuda en caso de emergencia.', obsField:'Observaciones iteam 18.3.', evidSiNoField:'Evidencias iteam 18.3', evidField:'Evidencia item 18.3', desc:'18.3. Si los trabajadores realizar su actividad SOLOS Y AISLADOS, se implementa un dispositivo de comunicación para que el empleado pueda pedir ayuda en caso de emergencia.'},
+];
+ 
 // ─── ESTADO ───
 let usuarioActual = '';
 let respuestas = {};
@@ -869,15 +1563,31 @@ function togglePassword() {
 
 function logout() { if (confirm('¿Deseas cerrar sesión?')) location.reload(); }
 
-// ─── RENDER ───
+// ─── RENDER ITEMS ───
 function renderItems() {
-  todasSecciones.forEach(({ key, items }) => {
-    document.getElementById(`items-${key}`).innerHTML = items.map(item => itemHTML(item, key)).join('');
-  });
+  renderSeccion('items-vg',   itemsVG,   'vg');
+  renderSeccion('items-rel',  itemsREL,  'rel');
+  renderSeccion('items-ca',   itemsCA,   'ca');
+  renderSeccion('items-co',   itemsCO,   'co');
+  renderSeccion('items-gi',   itemsGI,   'gi');
+  renderSeccion('items-at',   itemsAT,   'at');
+  renderSeccion('items-re',   itemsRE,   're');
+  renderSeccion('items-rq',   itemsRQ,   'rq');
+  renderSeccion('items-ri',   itemsRI,   'ri');
+  renderSeccion('items-ec',   itemsEC,   'ec');
+  renderSeccion('items-rex',  itemsREX,  'rex');
+  renderSeccion('items-rc',   itemsRC,   'rc');
+  renderSeccion('items-resc', itemsRESC, 'resc');
+  renderSeccion('items-pp',   itemsPP,   'pp');
+  renderSeccion('items-ge',   itemsGE,   'ge');
 }
 
-function itemHTML(item, sec) {
-  const cc = coloresCodigo[sec] || '';
+function renderSeccion(containerId, items, tipo) {
+  document.getElementById(containerId).innerHTML = items.map(item => itemHTML(item, tipo)).join('');
+}
+
+function itemHTML(item, tipo) {
+  const cc = tipo ? `item-codigo-${tipo}` : 'item-codigo-vg';
   return `
     <div class="item-card" id="card-${item.id}">
       <div class="item-header">
@@ -902,18 +1612,36 @@ function itemHTML(item, sec) {
               <button id="eno-${item.id}" class="active-no" onclick="toggleEvid('${item.id}',false)">No</button>
             </div>
           </div>
-          <div class="evidencia-section" id="evid-${item.id}">
-            <div class="file-upload" onclick="document.getElementById('file-${item.id}').click()">
-              <input type="file" id="file-${item.id}" accept="image/*" onchange="previewImg('${item.id}',this)">
-              <label class="file-upload-label">📁 Toca para subir foto</label>
-              <img id="prev-${item.id}" class="file-preview" />
-            </div>
-          </div>
+<div class="evidencia-section" id="evid-${item.id}">
+  <div class="file-upload" onclick="document.getElementById('file-${item.id}').click()">
+
+    <div class="upload-icon">☁️</div>
+
+    <div class="upload-title">
+      Arrastra tu evidencia aquí
+    </div>
+
+    <div class="upload-subtitle">
+      o haz clic para seleccionar una imagen
+    </div>
+
+    <input 
+      type="file"
+      id="file-${item.id}"
+      accept="image/*"
+      onchange="previewImg('${item.id}',this)"
+    />
+
+    <img id="prev-${item.id}" class="file-preview" />
+
+  </div>
+</div>
         </div>
       </div>
     </div>`;
 }
 
+// ─── RESPUESTAS ───
 function setResp(id, val) {
   respuestas[id] = val;
   ['cumple','nocumple','na'].forEach(t => document.getElementById(`btn-${id}-${t}`)?.classList.remove('active'));
@@ -921,18 +1649,44 @@ function setResp(id, val) {
   document.getElementById(`btn-${id}-${m[val]}`)?.classList.add('active');
   updateProgress();
 }
-
+function toggleRevCard(sec) {
+  const body = document.getElementById(`rev-body-${sec}`);
+  const arrow = document.getElementById(`rev-arrow-${sec}`);
+  body.classList.toggle('collapsed');
+  arrow.classList.toggle('collapsed');
+}
 function toggleSeccion(sec) {
-  document.getElementById(`content-${sec}`).classList.toggle('collapsed');
-  document.getElementById(`arrow-${sec}`).classList.toggle('collapsed');
+  const content = document.getElementById(`content-${sec}`);
+  const arrow = document.getElementById(`arrow-${sec}`);
+  content.classList.toggle('collapsed');
+  arrow.classList.toggle('collapsed');
 }
 
 function aplicarEstadoGeneral(sec, val) {
-  if (!val) return;
-  const map = { s1:itemsS1, s2:itemsS2, s3:itemsS3, s4:itemsS4, s5:itemsS5, s6:itemsS6, s7:itemsS7 };
-  (map[sec] || []).forEach(item => setResp(item.id, val));
+  if (!val || val === 'Mixto') return;
+  const mapa = {
+    'vg':   itemsVG,
+    'rel':  itemsREL,
+    'ca':   itemsCA,
+    'co':   itemsCO,
+    'gi':   itemsGI,
+    'at':   itemsAT,
+    're':   itemsRE,
+    'rq':   itemsRQ,
+    'ri':   itemsRI,
+    'ec':   itemsEC,
+    'rex':  itemsREX,
+    'rc':   itemsRC,
+    'resc': itemsRESC,
+    'pp':   itemsPP,
+    'ge':   itemsGE
+  };
+  const items = mapa[sec];
+  if (!items) return;
+  items.forEach(item => setResp(item.id, val));
 }
 
+// ─── EVIDENCIAS ───
 function toggleEvid(id, show) {
   document.getElementById(`evid-${id}`).classList.toggle('visible', show);
   document.getElementById(`esi-${id}`).className = show ? 'active-si' : '';
@@ -942,26 +1696,32 @@ function toggleEvid(id, show) {
 function previewImg(id, input) {
   if (input.files?.[0]) {
     const reader = new FileReader();
-    reader.onload = e => { const p = document.getElementById(`prev-${id}`); p.src = e.target.result; p.style.display = 'block'; };
+    reader.onload = e => {
+      const p = document.getElementById(`prev-${id}`);
+      p.src = e.target.result;
+      p.style.display = 'block';
+    };
     reader.readAsDataURL(input.files[0]);
   }
 }
 
-// ─── CANVAS ───
+// ─── CANVAS FIRMAS ───
 function initCanvas() {
   ['inspector','jefe'].forEach(t => {
     const c = document.getElementById(`canvas-${t}`);
     c.width = c.offsetWidth; c.height = 150;
     const ctx = c.getContext('2d');
-    ctx.strokeStyle = '#1B5E20'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.strokeStyle = '#1F4E79'; ctx.lineWidth = 2; ctx.lineCap = 'round';
   });
 }
+
 function getPos(e, c) {
   const r = c.getBoundingClientRect();
   const sx = c.width/r.width, sy = c.height/r.height;
   const src = e.touches ? e.touches[0] : e;
   return { x: (src.clientX-r.left)*sx, y: (src.clientY-r.top)*sy };
 }
+
 function startDraw(e,t) { e.preventDefault(); drawing[t]=true; lastPos[t]=getPos(e,document.getElementById(`canvas-${t}`)); }
 function draw(e,t) {
   e.preventDefault(); if(!drawing[t]) return;
@@ -972,77 +1732,140 @@ function draw(e,t) {
 function stopDraw(t) { drawing[t]=false; firmas[t]=document.getElementById(`canvas-${t}`).toDataURL(); }
 function limpiarFirma(t) { const c=document.getElementById(`canvas-${t}`); c.getContext('2d').clearRect(0,0,c.width,c.height); firmas[t]=null; }
 
-// ─── BORRADOR ───
+// ─── BORRADOR AUTOMÁTICO ───
 function guardarBorrador() {
   if (!usuarioActual) return;
-  const campos = ['cliente','responsable','estado_ejecucion','area_inspectora','area_inspeccionada',
-    'empresa_inspectora','proyecto','distrito','direccion','tipo_orden','num_trabajo',
-    'descripcion_tarea','num_contrato','jefe_cuadrilla','dni_jefe','supervisor',
-    'dni_supervisor','subproceso','tipo_actividad','instalacion'];
-  const datos = { usuario: usuarioActual, respuestas };
-  campos.forEach(id => { const el = document.getElementById(id); if (el) datos[id] = el.value; });
-  localStorage.setItem('borrador_ma_hse', JSON.stringify(datos));
+  const datos = {
+    cliente: document.getElementById('cliente')?.value,
+    responsable: document.getElementById('responsable')?.value,
+    fecha_apertura: document.getElementById('fecha_apertura')?.value,
+    estado_ejecucion: document.getElementById('estado_ejecucion')?.value,
+    area_inspectora: document.getElementById('area_inspectora')?.value,
+    area_inspeccionada: document.getElementById('area_inspeccionada')?.value,
+    empresa_inspectora: document.getElementById('empresa_inspectora')?.value,
+    proyecto: document.getElementById('proyecto')?.value,
+    distrito: document.getElementById('distrito')?.value,
+    direccion: document.getElementById('direccion')?.value,
+    tipo_orden: document.getElementById('tipo_orden')?.value,
+    num_trabajo: document.getElementById('num_trabajo')?.value,
+    descripcion_tarea: document.getElementById('descripcion_tarea')?.value,
+    num_contrato: document.getElementById('num_contrato')?.value,
+    jefe_cuadrilla: document.getElementById('jefe_cuadrilla')?.value,
+    dni_jefe: document.getElementById('dni_jefe')?.value,
+    supervisor: document.getElementById('supervisor')?.value,
+    dni_supervisor: document.getElementById('dni_supervisor')?.value,
+    subproceso: document.getElementById('subproceso')?.value,
+    tipo_actividad: document.getElementById('tipo_actividad')?.value,
+    instalacion: document.getElementById('instalacion')?.value,
+    respuestas: respuestas,
+    usuario: usuarioActual,
+  };
+  localStorage.setItem('borrador_hse', JSON.stringify(datos));
 }
 
 function cargarBorrador() {
-  const guardado = localStorage.getItem('borrador_ma_hse');
+  const guardado = localStorage.getItem('borrador_hse');
   if (!guardado) return;
   const datos = JSON.parse(guardado);
   if (datos.usuario !== usuarioActual) return;
+
   document.getElementById('draft-banner').classList.add('visible');
-  const campos = ['cliente','responsable','estado_ejecucion','area_inspectora','area_inspeccionada',
-    'empresa_inspectora','proyecto','distrito','direccion','tipo_orden','num_trabajo',
-    'descripcion_tarea','num_contrato','jefe_cuadrilla','dni_jefe','supervisor',
-    'dni_supervisor','subproceso','tipo_actividad','instalacion'];
-  campos.forEach(id => { const el = document.getElementById(id); if (el && datos[id]) el.value = datos[id]; });
-  if (datos.respuestas) Object.entries(datos.respuestas).forEach(([id, val]) => setResp(id, val));
+
+  const campos = ['cliente','responsable','estado_ejecucion','area_inspectora',
+    'area_inspeccionada','empresa_inspectora','proyecto','distrito','direccion',
+    'tipo_orden','num_trabajo','descripcion_tarea','num_contrato','jefe_cuadrilla',
+    'dni_jefe','supervisor','dni_supervisor','subproceso','tipo_actividad','instalacion'];
+
+  campos.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && datos[id]) el.value = datos[id];
+  });
+
+  if (datos.respuestas) {
+    Object.entries(datos.respuestas).forEach(([id, val]) => {
+      setResp(id, val);
+    });
+  }
 }
 
 function limpiarBorrador() {
-  localStorage.removeItem('borrador_ma_hse');
+  localStorage.removeItem('borrador_hse');
   document.getElementById('draft-banner').classList.remove('visible');
-}
-
-// ─── PROGRESO ───
-function updateProgress() {
-  const todosItems = [...itemsS1,...itemsS2,...itemsS3,...itemsS4,...itemsS5,...itemsS6,...itemsS7];
-  document.getElementById('progress').style.width = Math.round(Object.keys(respuestas).length / todosItems.length * 100) + '%';
-  guardarBorrador();
 }
 
 // ─── REVISIÓN ───
 function mostrarRevision() {
   const datosGen = [
-    ['Cliente', 'cliente'], ['Responsable', 'responsable'], ['Fecha Apertura', 'fecha_apertura'],
-    ['Estado', 'estado_ejecucion'], ['Proyecto', 'proyecto'], ['Área Inspectora', 'area_inspectora'],
-    ['Área Inspeccionada', 'area_inspeccionada'], ['Empresa Inspectora', 'empresa_inspectora'],
-    ['Tipo Inspección', 'tipo_inspeccion'], ['Distrito', 'distrito'], ['Dirección', 'direccion'],
-    ['Tipo Orden', 'tipo_orden'], ['N° Trabajo', 'num_trabajo'], ['Descripción Tarea', 'descripcion_tarea'],
-    ['N° Contrato', 'num_contrato'], ['Jefe de Cuadrilla', 'jefe_cuadrilla'], ['DNI Jefe', 'dni_jefe'],
-    ['Supervisor Operativo', 'supervisor'], ['DNI Supervisor', 'dni_supervisor'],
-    ['Subproceso', 'subproceso'], ['Tipo Actividad', 'tipo_actividad'], ['Instalación', 'instalacion'],
+    ['Cliente', document.getElementById('cliente')?.value],
+    ['Responsable', document.getElementById('responsable')?.value],
+    ['Fecha Apertura', document.getElementById('fecha_apertura')?.value],
+    ['Estado', document.getElementById('estado_ejecucion')?.value],
+    ['Proyecto', document.getElementById('proyecto')?.value],
+    ['Área Inspectora', document.getElementById('area_inspectora')?.value],
+    ['Área Inspeccionada', document.getElementById('area_inspeccionada')?.value],
+    ['Empresa Inspectora', document.getElementById('empresa_inspectora')?.value],
+    ['Tipo Inspección', document.getElementById('tipo_inspeccion')?.value],
+    ['Distrito', document.getElementById('distrito')?.value],
+    ['Dirección', document.getElementById('direccion')?.value],
+    ['Tipo Orden', document.getElementById('tipo_orden')?.value],
+    ['N° Trabajo', document.getElementById('num_trabajo')?.value],
+    ['Descripción Tarea', document.getElementById('descripcion_tarea')?.value],
+    ['N° Contrato', document.getElementById('num_contrato')?.value],
+    ['Jefe de Cuadrilla', document.getElementById('jefe_cuadrilla')?.value],
+    ['DNI Jefe', document.getElementById('dni_jefe')?.value],
+    ['Supervisor Operativo', document.getElementById('supervisor')?.value],
+    ['DNI Supervisor', document.getElementById('dni_supervisor')?.value],
+    ['Subproceso', document.getElementById('subproceso')?.value],
+    ['Tipo Actividad', document.getElementById('tipo_actividad')?.value],
+    ['Instalación', document.getElementById('instalacion')?.value],
   ];
-  document.getElementById('rev-datos').innerHTML = datosGen
-    .map(([label, id]) => [label, document.getElementById(id)?.value])
-    .filter(([, v]) => v)
-    .map(([k, v]) => `<div style="display:flex;padding:8px 0;border-bottom:1px solid #eee;gap:12px;"><div style="font-weight:bold;color:#555;font-size:13px;min-width:160px;">${k}</div><div style="font-size:13px;color:#333;">${v}</div></div>`)
-    .join('');
 
-  const colores = { 'Cumple': '#1E6B3C', 'No cumple': '#C00000', 'N/A': '#666' };
+  document.getElementById('rev-datos').innerHTML = datosGen
+    .filter(([k, v]) => v)
+    .map(([k, v]) => `
+      <div style="display:flex;padding:8px 0;border-bottom:1px solid #eee;gap:12px;">
+        <div style="font-weight:bold;color:#555;font-size:13px;min-width:160px;">${k}</div>
+        <div style="font-size:13px;color:#333;">${v}</div>
+      </div>
+    `).join('');
+
+  const colores = {
+    'Cumple': '#1E6B3C',
+    'No cumple': '#C00000',
+    'N/A': '#666'
+  };
+
   const renderRevItems = (items, containerId) => {
     document.getElementById(containerId).innerHTML = items.map(item => {
       const resp = respuestas[item.id] || '—';
+      const color = colores[resp] || '#999';
       const obs = document.getElementById(`obs-${item.id}`)?.value || '';
-      return `<div style="display:flex;align-items:flex-start;padding:8px 0;border-bottom:1px solid #eee;gap:12px;">
-        <div style="background:#1B5E20;color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:bold;white-space:nowrap;">${item.codigo}</div>
-        <div style="flex:1;font-size:12px;color:#444;">${item.desc}</div>
-        <div style="font-weight:bold;color:${colores[resp]||'#999'};font-size:12px;white-space:nowrap;">${resp}</div>
-        ${obs ? `<div style="font-size:11px;color:#888;font-style:italic;">${obs}</div>` : ''}
-      </div>`;
+      return `
+        <div style="display:flex;align-items:flex-start;padding:8px 0;border-bottom:1px solid #eee;gap:12px;">
+          <div style="background:#1F4E79;color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:bold;white-space:nowrap;">${item.codigo}</div>
+          <div style="flex:1;font-size:12px;color:#444;">${item.desc}</div>
+          <div style="font-weight:bold;color:${color};font-size:12px;white-space:nowrap;">${resp}</div>
+          ${obs ? `<div style="font-size:11px;color:#888;font-style:italic;">${obs}</div>` : ''}
+        </div>
+      `;
     }).join('');
   };
 
-  todasSecciones.forEach(({ key, items }) => renderRevItems(items, `rev-${key}`));
+renderRevItems(itemsVG,   'rev-vg');
+renderRevItems(itemsREL,  'rev-rel');
+renderRevItems(itemsCA,   'rev-ca');
+renderRevItems(itemsCO,   'rev-co');
+renderRevItems(itemsGI,   'rev-gi');
+renderRevItems(itemsAT,   'rev-at');
+renderRevItems(itemsRE,   'rev-re');
+renderRevItems(itemsRQ,   'rev-rq');
+renderRevItems(itemsRI,   'rev-ri');
+renderRevItems(itemsEC,   'rev-ec');
+renderRevItems(itemsREX,  'rev-rex');
+renderRevItems(itemsRC,   'rev-rc');
+renderRevItems(itemsRESC, 'rev-resc');
+renderRevItems(itemsPP,   'rev-pp');
+renderRevItems(itemsGE,   'rev-ge');
 
   document.getElementById('form-screen').style.display = 'none';
   document.getElementById('revision-screen').style.display = 'block';
@@ -1060,22 +1883,50 @@ function editarSeccion(seccion) {
   document.getElementById('revision-screen').style.display = 'none';
   document.getElementById('form-screen').style.display = 'block';
   window.scrollTo(0, 0);
+
   setTimeout(() => {
-    const ids = { datos:'area_inspectora', s1:'items-s1', s2:'items-s2', s3:'items-s3', s4:'items-s4', s5:'items-s5', s6:'items-s6', s7:'items-s7' };
+    const ids = {
+      'datos': 'area_inspectora',
+      'vg':   'items-vg',
+      'rel':  'items-rel',
+      'ca':   'items-ca',
+      'co':   'items-co',
+      'gi':   'items-gi',
+      'at':   'items-at',
+      're':   'items-re',
+      'rq':   'items-rq',
+      'ri':   'items-ri',
+      'ec':   'items-ec',
+      'rex':  'items-rex',
+      'rc':   'items-rc',
+      'resc': 'items-resc',
+      'pp':   'items-pp',
+      'ge':   'items-ge'
+    };
     const el = document.getElementById(ids[seccion]);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
 }
 
+function updateProgress() {
+  const total = itemsVG.length + itemsREL.length + itemsCA.length + itemsCO.length +
+              itemsGI.length + itemsAT.length + itemsRE.length + itemsRQ.length +
+              itemsRI.length + itemsEC.length + itemsREX.length + itemsRC.length +
+              itemsRESC.length + itemsPP.length + itemsGE.length;
+  document.getElementById('progress').style.width = Math.round(Object.keys(respuestas).length/total*100)+'%';
+  guardarBorrador();
+}
+
 // ─── ENVIAR ───
 async function enviarInspeccion() {
-  const reqs = ['cliente','responsable','fecha_apertura','estado_ejecucion','area_inspectora',
-    'area_inspeccionada','empresa_inspectora','proyecto','distrito','direccion',
-    'tipo_orden','num_trabajo','descripcion_tarea','jefe_cuadrilla','dni_jefe',
-    'subproceso','tipo_actividad','instalacion'];
+  const reqs = ['cliente','responsable','fecha_apertura','estado_ejecucion','area_inspectora','area_inspeccionada','empresa_inspectora','proyecto','distrito','direccion','tipo_orden','num_trabajo','descripcion_tarea','jefe_cuadrilla','dni_jefe','subproceso','tipo_actividad','instalacion'];
   for (const id of reqs) {
     const el = document.getElementById(id);
-    if (!el || !el.value) { alert('Por favor completa todos los campos obligatorios (*)'); el?.focus(); return; }
+    if (!el || !el.value) {
+      alert('Por favor completa todos los campos obligatorios (*)');
+      el?.focus();
+      return;
+    }
   }
 
   document.getElementById('loading').classList.add('visible');
@@ -1083,9 +1934,11 @@ async function enviarInspeccion() {
 
   try {
     const firmaInspURL = await subirACloudinary(firmas.inspector, 'firma_inspector', 'firmas');
-    const todosItems = [...itemsS1,...itemsS2,...itemsS3,...itemsS4,...itemsS5,...itemsS6,...itemsS7];
+
     const evidURLs = {};
-    for (const item of todosItems) {
+   for (const item of [...itemsVG, ...itemsREL, ...itemsCA, ...itemsCO, ...itemsGI,
+                    ...itemsAT, ...itemsRE, ...itemsRQ, ...itemsRI, ...itemsEC,
+                    ...itemsREX, ...itemsRC, ...itemsRESC, ...itemsPP, ...itemsGE]) {
       const fi = document.getElementById(`file-${item.id}`);
       if (fi?.files?.[0]) {
         const url = await subirArchivoACloudinary(fi.files[0], `evid_${item.id}`);
@@ -1120,10 +1973,16 @@ async function enviarInspeccion() {
 
     const contrato = Number(document.getElementById('num_contrato').value);
     if (contrato) campos['N° de Contrato'] = contrato;
-    Object.keys(campos).forEach(k => { if (!campos[k]) delete campos[k]; });
+
+    Object.keys(campos).forEach(k => {
+      if (campos[k] === null || campos[k] === '' || campos[k] === undefined || campos[k] === 0) delete campos[k];
+    });
+
     if (firmaInspURL) campos['FIRMA DEL INSPECTOR HSE'] = [{ url: firmaInspURL }];
 
-    todosItems.forEach(item => {
+    [...itemsVG, ...itemsREL, ...itemsCA, ...itemsCO, ...itemsGI,
+     ...itemsAT, ...itemsRE, ...itemsRQ, ...itemsRI, ...itemsEC,
+     ...itemsREX, ...itemsRC, ...itemsRESC, ...itemsPP, ...itemsGE].forEach(item => {
       if (respuestas[item.id]) campos[item.campo] = respuestas[item.id];
       const obs = document.getElementById(`obs-${item.id}`)?.value;
       if (obs && item.obsField) campos[item.obsField] = obs;
@@ -1132,20 +1991,25 @@ async function enviarInspeccion() {
       if (evidURLs[item.id] && item.evidField) campos[item.evidField] = [{ url: evidURLs[item.id] }];
     });
 
-    const MAKE_WEBHOOK = 'https://hook.us2.make.com/7kv267l7e2s2sala59lh4sjo0459f5ss';
+    const MAKE_WEBHOOK = 'https://hook.us2.make.com/pt0v8y4y7x95ctbhs3ceyorajvj9smfx';
+
     const response = await fetch(MAKE_WEBHOOK, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(campos)
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(campos)
     });
 
     if (response.ok) {
       document.getElementById('loading').classList.remove('visible');
       document.getElementById('revision-screen').style.display = 'none';
       limpiarBorrador();
-      document.getElementById('success-screen').style.display = 'flex';
-      document.getElementById('success-codigo').textContent = '¡Inspección de Medio Ambiente registrada exitosamente!';
+      const ss = document.getElementById('success-screen');
+      ss.style.display = 'flex';
+      document.getElementById('success-codigo').textContent = '¡Inspección registrada exitosamente!';
     } else {
       throw new Error('Error al enviar al servidor. Intenta nuevamente.');
     }
+
   } catch (err) {
     document.getElementById('loading').classList.remove('visible');
     document.getElementById('btn-confirmar').disabled = false;
@@ -1153,6 +2017,7 @@ async function enviarInspeccion() {
   }
 }
 
+// Actualizar nombre jefe + guardar borrador
 document.addEventListener('input', e => {
   guardarBorrador();
   if (e.target.id === 'jefe_cuadrilla') {
