@@ -242,50 +242,89 @@
   .item-header { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 18px; }
   .item-codigo { background: linear-gradient(135deg, #163B69, #2D6CDF); color: white; padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; white-space: nowrap; flex-shrink: 0; box-shadow: 0 6px 18px rgba(45,108,223,0.25); }
   /* ── BADGES POR SECCIÓN ── */
-.item-codigo-vg   { background: linear-gradient(135deg, #163B69, #2D6CDF); box-shadow: 0 6px 18px rgba(45,108,223,0.25); transition: all 0.25s ease; }
-.item-codigo-vg:hover   { background: linear-gradient(135deg, #1e4d8c, #3b82f6); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(45,108,223,0.4); }
+/* ── GESTIÓN DE RESIDUOS ── */
+.item-codigo-gere {
+  background: linear-gradient(135deg, #065F46, #10B981);
+  box-shadow: 0 6px 18px rgba(16,185,129,0.25);
+  transition: all 0.25s ease;
+}
+.item-codigo-gere:hover {
+  background: linear-gradient(135deg, #047857, #34D399);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(16,185,129,0.4);
+}
 
-.item-codigo-rel  { background: linear-gradient(135deg, #92400E, #D97706); box-shadow: 0 6px 18px rgba(217,119,6,0.25); transition: all 0.25s ease; }
-.item-codigo-rel:hover  { background: linear-gradient(135deg, #b45309, #f59e0b); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(217,119,6,0.4); }
+/* ── GESTIÓN DE RUIDO ── */
+.item-codigo-geru {
+  background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+  box-shadow: 0 6px 18px rgba(59,130,246,0.25);
+  transition: all 0.25s ease;
+}
+.item-codigo-geru:hover {
+  background: linear-gradient(135deg, #1D4ED8, #60A5FA);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(59,130,246,0.4);
+}
 
-.item-codigo-ca   { background: linear-gradient(135deg, #7F1D1D, #DC2626); box-shadow: 0 6px 18px rgba(220,38,38,0.25); transition: all 0.25s ease; }
-.item-codigo-ca:hover   { background: linear-gradient(135deg, #991b1b, #ef4444); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(220,38,38,0.4); }
+/* ── GESTIÓN DE GAS ── */
+.item-codigo-geg {
+  background: linear-gradient(135deg, #7C2D12, #EA580C);
+  box-shadow: 0 6px 18px rgba(234,88,12,0.25);
+  transition: all 0.25s ease;
+}
+.item-codigo-geg:hover {
+  background: linear-gradient(135deg, #9A3412, #F97316);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(234,88,12,0.4);
+}
 
-.item-codigo-co   { background: linear-gradient(135deg, #78350F, #B45309); box-shadow: 0 6px 18px rgba(180,83,9,0.25); transition: all 0.25s ease; }
-.item-codigo-co:hover   { background: linear-gradient(135deg, #92400e, #d97706); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(180,83,9,0.4); }
+/* ── GESTIÓN DE AGENTES QUÍMICOS ── */
+.item-codigo-gea {
+  background: linear-gradient(135deg, #7F1D1D, #DC2626);
+  box-shadow: 0 6px 18px rgba(220,38,38,0.25);
+  transition: all 0.25s ease;
+}
+.item-codigo-gea:hover {
+  background: linear-gradient(135deg, #991B1B, #EF4444);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(220,38,38,0.4);
+}
 
-.item-codigo-gi   { background: linear-gradient(135deg, #14532D, #16A34A); box-shadow: 0 6px 18px rgba(22,163,74,0.25); transition: all 0.25s ease; }
-.item-codigo-gi:hover   { background: linear-gradient(135deg, #166534, #22c55e); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,163,74,0.4); }
+/* ── ZANJAS Y TERRENO ── */
+.item-codigo-zt {
+  background: linear-gradient(135deg, #78350F, #D97706);
+  box-shadow: 0 6px 18px rgba(217,119,6,0.25);
+  transition: all 0.25s ease;
+}
+.item-codigo-zt:hover {
+  background: linear-gradient(135deg, #92400E, #F59E0B);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(217,119,6,0.4);
+}
 
-.item-codigo-at   { background: linear-gradient(135deg, #1E3A5F, #2563EB); box-shadow: 0 6px 18px rgba(37,99,235,0.25); transition: all 0.25s ease; }
-.item-codigo-at:hover   { background: linear-gradient(135deg, #1e40af, #3b82f6); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.4); }
+/* ── CONSERVACIÓN DE ÁREAS VERDES ── */
+.item-codigo-cav {
+  background: linear-gradient(135deg, #14532D, #22C55E);
+  box-shadow: 0 6px 18px rgba(34,197,94,0.25);
+  transition: all 0.25s ease;
+}
+.item-codigo-cav:hover {
+  background: linear-gradient(135deg, #166534, #4ADE80);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(34,197,94,0.4);
+}
 
-.item-codigo-re   { background: linear-gradient(135deg, #78350F, #C2410C); box-shadow: 0 6px 18px rgba(194,65,12,0.25); transition: all 0.25s ease; }
-.item-codigo-re:hover   { background: linear-gradient(135deg, #9a3412, #ea580c); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(194,65,12,0.4); }
-
-.item-codigo-rq   { background: linear-gradient(135deg, #14532D, #15803D); box-shadow: 0 6px 18px rgba(21,128,61,0.25); transition: all 0.25s ease; }
-.item-codigo-rq:hover   { background: linear-gradient(135deg, #166534, #16a34a); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(21,128,61,0.4); }
-
-.item-codigo-ri   { background: linear-gradient(135deg, #7F1D1D, #B91C1C); box-shadow: 0 6px 18px rgba(185,28,28,0.25); transition: all 0.25s ease; }
-.item-codigo-ri:hover   { background: linear-gradient(135deg, #991b1b, #dc2626); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(185,28,28,0.4); }
-
-.item-codigo-ec   { background: linear-gradient(135deg, #1C1917, #44403C); box-shadow: 0 6px 18px rgba(68,64,60,0.25); transition: all 0.25s ease; }
-.item-codigo-ec:hover   { background: linear-gradient(135deg, #292524, #57534e); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(68,64,60,0.4); }
-
-.item-codigo-rex  { background: linear-gradient(135deg, #C55A11, #EA580C); box-shadow: 0 6px 18px rgba(234,88,12,0.25); transition: all 0.25s ease; }
-.item-codigo-rex:hover  { background: linear-gradient(135deg, #c2410c, #f97316); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(234,88,12,0.4); }
-
-.item-codigo-rc   { background: linear-gradient(135deg, #831843, #BE185D); box-shadow: 0 6px 18px rgba(190,24,93,0.25); transition: all 0.25s ease; }
-.item-codigo-rc:hover   { background: linear-gradient(135deg, #9d174d, #db2777); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(190,24,93,0.4); }
-
-.item-codigo-resc { background: linear-gradient(135deg, #0C4A6E, #0284C7); box-shadow: 0 6px 18px rgba(2,132,199,0.25); transition: all 0.25s ease; }
-.item-codigo-resc:hover { background: linear-gradient(135deg, #075985, #0ea5e9); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(2,132,199,0.4); }
-
-.item-codigo-pp   { background: linear-gradient(135deg, #3730A3, #4F46E5); box-shadow: 0 6px 18px rgba(79,70,229,0.25); transition: all 0.25s ease; }
-.item-codigo-pp:hover   { background: linear-gradient(135deg, #4338ca, #6366f1); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(79,70,229,0.4); }
-
-.item-codigo-ge   { background: linear-gradient(135deg, #6B2C91, #9333EA); box-shadow: 0 6px 18px rgba(147,51,234,0.25); transition: all 0.25s ease; }
-.item-codigo-ge:hover   { background: linear-gradient(135deg, #7e22ce, #a855f7); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(147,51,234,0.4); }
+/* ── PERMISOS AMBIENTALES ── */
+.item-codigo-pa {
+  background: linear-gradient(135deg, #4C1D95, #8B5CF6);
+  box-shadow: 0 6px 18px rgba(139,92,246,0.25);
+  transition: all 0.25s ease;
+}
+.item-codigo-pa:hover {
+  background: linear-gradient(135deg, #5B21B6, #A78BFA);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(139,92,246,0.4);
+}
  
   .item-descripcion { font-size: 14px; color: #1E293B; line-height: 1.75; font-weight: 500; }
 
@@ -1385,132 +1424,39 @@ async function subirArchivoACloudinary(file, nombre) {
 }
 
 // ─── ITEMS CHECKLIST ───
-// ── VERIFICACIÓN GENERAL (OBLIGATORIO) ──
-const itemsVG = [
-  {id:'1_1',  codigo:'1.1',  campo:'1.1. Los trabajadores dentro del área de trabajo están claramente identificados y coinciden con los roles y nombres autorizados que figuran en la documentación de trabajo: (áreas de entrega, registros, permiso de trabajo, etc.)', obsField:'Observaciones Item 1.1', evidSiNoField:'Evidencias iteam 1.1', evidField:'Evidencia item 1.1', desc:'1.1. Los trabajadores dentro del área de trabajo están claramente identificados y coinciden con los roles y nombres autorizados que figuran en la documentación de trabajo (áreas de entrega, registros, permiso de trabajo, etc.)'},
-  {id:'1_3',  codigo:'1.3',  campo:'1.3. Para actividades que no son de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.', obsField:'Observaciones item 1.3.', evidSiNoField:'Evidencias iteam 1.3', evidField:'Evidencia item 1.3', desc:'1.3. Para actividades que no son de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.'},
-  {id:'1_4',  codigo:'1.4',  campo:'1.4. Para actividades que no son de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas', obsField:'Observaciones Item 1.4.', evidSiNoField:'Evidencias iteam 1.4', evidField:'Evidencia item 1.4', desc:'1.4. Para actividades que no son de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas.'},
-  {id:'1_5',  codigo:'1.5',  campo:'1.5. La inspección previa fue realizada, documentada y disponible para consulta, se ajusta a la actividad y se ha completado correctamente.', obsField:'Observaciones iteam 1.5.', evidSiNoField:'Evidencias iteam 1.5', evidField:'Evidencia item 1.5', desc:'1.5. La inspección previa fue realizada, documentada y disponible para consulta, se ajusta a la actividad y se ha completado correctamente.'},
-  {id:'1_6',  codigo:'1.6',  campo:'1.6. La evaluación de riesgos (charla preoperacional escrita y grabada) está disponible y corresponde al contexto y actividades ejecutadas, en ejecución o por ejecutar.', obsField:'Observaciones iteam 1.6.', evidSiNoField:'Evidencias iteam 1.6', evidField:'Evidencia item 1.6', desc:'1.6. La evaluación de riesgos (charla preoperacional escrita y grabada) está disponible y corresponde al contexto y actividades ejecutadas, en ejecución o por ejecutar.'},
-  {id:'1_7',  codigo:'1.7',  campo:'1.7. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas.', obsField:'Observaciones iteam 1.7.', evidSiNoField:'Evidencias iteam 1.7', evidField:'Evidencia item 1.7', desc:'1.7. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas.'},
-  {id:'1_8',  codigo:'1.8',  campo:'1.8. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.', obsField:'Observaciones iteam 1.8.', evidSiNoField:'Evidencias iteam 1.8', evidField:'Evidencia item 1.8', desc:'1.8. EPP/EPC/Ropa de trabajo contra RIESGO GENÉRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.'},
-  {id:'1_9',  codigo:'1.9',  campo:'1.9. Los equipos/herramientas contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), están en buen estado y son adecuados para la actividad.', obsField:'Observaciones iteam 1.9.', evidSiNoField:'Evidencias iteam 1.9', evidField:'Evidencia item 1.9', desc:'1.9. Los equipos/herramientas contra RIESGO GENÉRICO disponibles en la zona de trabajo (no son usados), están en buen estado y son adecuados para la actividad.'},
-  {id:'1_10', codigo:'1.10', campo:'1.10. Los equipos/herramientas contra RIESGO GENÉRICO que se utilizan (en uso), están en buen estado, son adecuados para la actividad. Y cuentan con su check list de revisión de pre uso.', obsField:'Observaciones iteam 1.10.', evidSiNoField:'Evidencias iteam 1.10', evidField:'Evidencia item 1.10', desc:'1.10. Los equipos/herramientas contra RIESGO GENÉRICO que se utilizan (en uso), están en buen estado, son adecuados para la actividad. Y cuentan con su check list de revisión de pre uso.'},
-  {id:'1_12', codigo:'1.12', campo:'1.12. Los vehículos/maquinaria y sus accesorios están operativos, certificados, autorizados y son adecuados para el trabajo. Asimismo estos vehículos fueron verificadas con el check list de pre uso.', obsField:'Observaciones iteam 1.12.', evidSiNoField:'Evidencias iteam 1.12', evidField:'Evidencia item 1.12', desc:'1.12. Los vehículos/maquinaria y sus accesorios están operativos, certificados, autorizados y son adecuados para el trabajo. Asimismo estos vehículos fueron verificadas con el check list de pre uso.'},
-  {id:'1_17', codigo:'1.17', campo:'1.17. La actividad cuenta con autorización de trabajo vigente por parte de PLUZ. Si existe la autorización, pero no se cuenta con el documento en campo, entonces no aplica este incumplimiento.', obsField:'Observaciones iteam 1.17.', evidSiNoField:'Evidencias iteam 1.17', evidField:'Evidencia item 1.17', desc:'1.17. La actividad cuenta con autorización de trabajo vigente por parte de PLUZ. Si existe la autorización, pero no se cuenta con el documento en campo, entonces no aplica este incumplimiento.'},
-  {id:'1_18', codigo:'1.18', campo:'1.18. Los procedimientos/métodos de trabajo están disponibles, son adecuados y corresponden al contexto de la actividad detallando las tareas a realizar y aplicando los controles preventivos', obsField:'Observaciones iteam 1.18.', evidSiNoField:'Evidencias iteam 1.18', evidField:'Evidencia item 1.18', desc:'1.18. Los procedimientos/métodos de trabajo están disponibles, son adecuados y corresponden al contexto de la actividad detallando las tareas a realizar y aplicando los controles preventivos.'},
-  {id:'1_19', codigo:'1.19', campo:'1.19. Las actividades con RIESGOS GENÉRICOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 1.19.', evidSiNoField:'Evidencias iteam 1.19', evidField:'Evidencia item 1.19', desc:'1.19. Las actividades con RIESGOS GENÉRICOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
-  {id:'1_20', codigo:'1.20', campo:'1.20. La documentación del trabajo se completó de manera adecuada, de acuerdo al contexto de la actividad y los controles a efectuar.', obsField:'Observaciones iteam 1.20.', evidSiNoField:'Evidencias iteam 1.20', evidField:'Evidencia item 1.20', desc:'1.20. La documentación del trabajo se completó de manera adecuada, de acuerdo al contexto de la actividad y los controles a efectuar.'},
-  {id:'1_21', codigo:'1.21', campo:'1.21. Todo el personal involucrado en la actividad conoce la "POLÍTICA STOP WORK" y lo aplica en caso se requiera.', obsField:'Observaciones iteam 1.21.', evidSiNoField:'Evidencias iteam 1.21', evidField:'Evidencia item 1.21', desc:'1.21. Todo el personal involucrado en la actividad conoce la "POLÍTICA STOP WORK" y lo aplica en caso se requiera.'},
-  {id:'1_22', codigo:'1.22', campo:'1.22. Las condiciones climáticas son adecuadas para la realización de las actividades previstas.', obsField:'Observaciones iteam 1.22.', evidSiNoField:'Evidencias iteam 1.22', evidField:'Evidencia item 1.22', desc:'1.22. Las condiciones climáticas son adecuadas para la realización de las actividades previstas.'},
-  {id:'1_23', codigo:'1.23', campo:'1.23. Los lugares de trabajo se mantienen en condiciones de limpieza y el almacenamiento es adecuado.', obsField:'Observaciones iteam 1.23.', evidSiNoField:'Evidencias iteam 1.23', evidField:'Evidencia item 1.23', desc:'1.23. Los lugares de trabajo se mantienen en condiciones de limpieza y el almacenamiento es adecuado.'},
-  {id:'1_24', codigo:'1.24', campo:'1.24. El lugar de trabajo fue completamente delimitado y señalizado de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ. Aplica este incumplimiento si no se cuenta con ningún elemento de señalización.', obsField:'Observaciones iteam 1.24.', evidSiNoField:'Evidencias iteam 1.24', evidField:'Evidencia item 1.24', desc:'1.24. El lugar de trabajo fue completamente delimitado y señalizado de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ. Aplica este incumplimiento si no se cuenta con ningún elemento de señalización.'},
-  {id:'1_25', codigo:'1.25', campo:'1.25. El lugar de trabajo está delimitado y señalizado de manera adecuada. Se aplica incumplimiento si la zona de trabajo fue delimitado y señalizado de manera incompleta, falta elementos de señalización.', obsField:'Observaciones iteam 1.25.', evidSiNoField:'Evidencias iteam 1.25', evidField:'Evidencia item 1.25', desc:'1.25. El lugar de trabajo está delimitado y señalizado de manera adecuada. Se aplica incumplimiento si la zona de trabajo fue delimitado y señalizado de manera incompleta, falta elementos de señalización.'},
-  {id:'1_26', codigo:'1.26', campo:'1.26. El área identificada para las actividades de carga y descarga es adecuada en términos de espacio y condiciones de la zona de trabajo', obsField:'Observaciones iteam 1.26.', evidSiNoField:'Evidencias iteam 1.26', evidField:'Evidencia item 1.26', desc:'1.26. El área identificada para las actividades de carga y descarga es adecuada en términos de espacio y condiciones de la zona de trabajo.'},
-  {id:'1_27', codigo:'1.27', campo:'1.27. Los miembros del equipo conocen el objetivo y los principios del Aliado de la Seguridad y saben cómo aplicarlos en la práctica. Todos los Aliados de la Seguridad han sido identificados y cumplen su rol en cada etapa del trabajo.', obsField:'Observaciones iteam 1.27.', evidSiNoField:'Evidencias iteam 1.27', evidField:'Evidencia item 1.27', desc:'1.27. Los miembros del equipo conocen el objetivo y los principios del Aliado de la Seguridad y saben cómo aplicarlos en la práctica. Todos los Aliados de la Seguridad han sido identificados y cumplen su rol en cada etapa del trabajo.'},
-  {id:'1_28', codigo:'1.28', campo:'1.28. Las normas elementales de COMPORTAMIENTO SEGURO se cumplen al realizar el trabajo (Ej. Ojos en la tarea, sin prisas, sin distracciones, sin correr, sin saltar escalones, sin pasar por encima de una zanja y otros)', obsField:'Observaciones iteam 1.28.', evidSiNoField:'Evidencias iteam 1.28', evidField:'Evidencia item 1.28', desc:'1.28. Las normas elementales de COMPORTAMIENTO SEGURO se cumplen al realizar el trabajo (Ej. Ojos en la tarea, sin prisas, sin distracciones, sin correr, sin saltar escalones, sin pasar por encima de una zanja y otros)'},
-  {id:'1_29', codigo:'1.29', campo:'1.29. Las Máquinas están equipadas con dispositivos de señalización/advertencia, sistema visual y/o acústico y dispositivos de seguridad/emergencia (como emergencia), guardas de seguridad, boton de parada de emergencias, y están intactas y funcionales', obsField:'Observaciones iteam 1.29.', evidSiNoField:'Evidencias iteam 1.29', evidField:'Evidencia item 1.29', desc:'1.29. Las Máquinas están equipadas con dispositivos de señalización/advertencia, sistema visual y/o acústico y dispositivos de seguridad/emergencia (como emergencia), guardas de seguridad, boton de parada de emergencias, y están intactas y funcionales'},
-  {id:'1_30', codigo:'1.30', campo:'1.30. Los trabajadores mantienen distancias con respecto a la línea de fuego (Ej. objetos en movimiento, vehículos, proyecciones, desniveles, posibles cortes con equipos de rotación, etc.).', obsField:'Observaciones iteam 1.30.', evidSiNoField:'Evidencias iteam 1.30', evidField:'Evidencia item 1.30', desc:'1.30. Los trabajadores mantienen distancias con respecto a la línea de fuego (Ej. objetos en movimiento, vehículos, proyecciones, desniveles, posibles cortes con equipos de rotación, etc.).'},
-  {id:'1_31', codigo:'1.31', campo:'1.31. Los trabajos de tipo manual (por ejemplo, manipulación manual de cargas, trabajos metal mecánica, trabajos de carpintería en general) se llevan a cabo de acuerdo con principios ergonómicos.', obsField:'Observaciones iteam 1.31.', evidSiNoField:'Evidencias iteam 1.31', evidField:'Evidencia item 1.31', desc:'1.31. Los trabajos de tipo manual (por ejemplo, manipulación manual de cargas, trabajos metal mecánica, trabajos de carpintería en general) se llevan a cabo de acuerdo con principios ergonómicos.'},
-  {id:'1_32', codigo:'1.32', campo:'1.32. Para actividades de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas (Altura, Eléctrico, Excavación, Espacios confinados e Izaje de cargas)', obsField:'Observaciones iteam 1.32.', evidSiNoField:'Evidencias iteam 1.32', evidField:'Evidencia item 1.32', desc:'1.32. Para actividades de alto riesgo: Los trabajadores tienen el perfil profesional, habilidades y competencias requeridas (Altura, Eléctrico, Excavación, Espacios confinados e Izaje de cargas)'},
-  {id:'1_33', codigo:'1.33', campo:'1.33. Las Empresas de Servicio Esporádico (ESE) son gestionadas de manera adecuada y cumple el estándar de gestión y seguridad exigido por PLUZ', obsField:'Observaciones iteam 1.33.', evidSiNoField:'Evidencias iteam 1.33', evidField:'Evidencia item 1.33', desc:'1.33. Las Empresas de Servicio Esporádico (ESE) son gestionadas de manera adecuada y cumple el estándar de gestión y seguridad exigido por PLUZ'},
-  {id:'1_34', codigo:'1.34', campo:'1.34. Para actividades de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.', obsField:'Observaciones iteam 1.34.', evidSiNoField:'Evidencias iteam 1.34', evidField:'Evidencia item 1.34', desc:'1.34. Para actividades de alto riesgo: El responsable del trabajo está identificado y presente en el terreno y garantiza que se apliquen las medidas de seguridad.'},
+const itemsGERE = [
+  { id:'gs3_1_1', codigo:'GS 3.1.1', campo:'GS 3.1.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados', obsField:'Obs GS 3.1.1', evidSiNoField:'Evid SiNo GS 3.1.1', evidField:'Evid GS 3.1.1', desc:'GS 3.1.1 Los residuos se separan, identifican y, si es posible, almacenados debidamente en cajas/contenedores adecuados y rotulados.' },
+  { id:'gs3_1_1b', codigo:'GS 3.1.2', campo:'GS 3.1.2 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.1.2', evidSiNoField:'Evid SiNo GS 3.1.2', evidField:'Evid GS 3.1.2', desc:'GS 3.1.2 Comprobación de la documentación concerniente al almacenamiento, transporte y entrega de residuos a la planta de reciclaje/eliminación (Reporte de residuos generados, manifiestos, plan de contingencia, instructivo, hojas MSDS, etc.).' },
 ];
-// ── RIESGO ELÉCTRICO ──
-const itemsREL = [
-  {id:'2_1',  codigo:'2.1',  campo:'2.1. Se han realizado las desconexiones de todas las posibles fuentes de energía - 1era. Regla de oro.', obsField:'Observaciones iteam 2.1.', evidSiNoField:'Evidencias iteam 2.1', evidField:'Evidencia item 2.1', desc:'2.1. Se han realizado las desconexiones de todas las posibles fuentes de energía - 1era. Regla de oro.'},
-  {id:'2_2',  codigo:'2.2',  campo:'2.2. Los dispositivos de bloqueo de desconexión se aplican y señalan de manera efectiva (bloqueo de control, bloqueo personal, etiquetas) - 2da. Regla de oro.', obsField:'Observaciones iteam 2.2.', evidSiNoField:'Evidencias iteam 2.2', evidField:'Evidencia item 2.2', desc:'2.2. Los dispositivos de bloqueo de desconexión se aplican y señalan de manera efectiva (bloqueo de control, bloqueo personal, etiquetas) - 2da. Regla de oro.'},
-  {id:'2_3',  codigo:'2.3',  campo:'2.3. Se ha realizado la verificación específica de ausencia de tensión. - 3era Regla de oro.', obsField:'Observaciones iteam 2.3.', evidSiNoField:'Evidencias iteam 2.3', evidField:'Evidencia item 2.3', desc:'2.3. Se ha realizado la verificación específica de ausencia de tensión. - 3era Regla de oro.'},
-  {id:'2_4',  codigo:'2.4',  campo:'2.4. Se han aplicado correctamente en la zona de trabajo los dispositivos de puesta a tierra y cortocircuito necesarios - 4ta Regla de oro.', obsField:'Observaciones iteam 2.4.', evidSiNoField:'Evidencias iteam 2.4', evidField:'Evidencia item 2.4', desc:'2.4. Se han aplicado correctamente en la zona de trabajo los dispositivos de puesta a tierra y cortocircuito necesarios - 4ta Regla de oro.'},
-  {id:'2_6',  codigo:'2.6',  campo:'2.6. Se ha realizado la protección de las posibles partes vivas adyacentes (distancias, barreras, etc.) y de la zona de trabajo - 5ta. Regla de oro.', obsField:'Observaciones iteam 2.6.', evidSiNoField:'Evidencias iteam 2.6', evidField:'Evidencia item 2.6', desc:'2.6. Se ha realizado la protección de las posibles partes vivas adyacentes (distancias, barreras, etc.) y de la zona de trabajo - 5ta. Regla de oro.'},
-  {id:'2_7',  codigo:'2.7',  campo:'2.7. Las actividades con RIESGO ELÉCTRICO (fuera de servicio o línea viva) que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 2.7.', evidSiNoField:'Evidencias iteam 2.7', evidField:'Evidencia item 2.7', desc:'2.7. Las actividades con RIESGO ELÉCTRICO (fuera de servicio o línea viva) que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
-  {id:'2_8',  codigo:'2.8',  campo:'2.8. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 2.8.', evidSiNoField:'Evidencias iteam 2.8', evidField:'Evidencia item 2.8', desc:'2.8. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
-  {id:'2_9',  codigo:'2.9',  campo:'2.9. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente', obsField:'Observaciones iteam 2.9.', evidSiNoField:'Evidencias iteam 2.9', evidField:'Evidencia item 2.9', desc:'2.9. EPP/EPC/Ropa de trabajo contra RIESGO ELÉCTRICO que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente'},
-  {id:'2_10', codigo:'2.10', campo:'2.10. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 2.10.', evidSiNoField:'Evidencias iteam 2.10', evidField:'Evidencia item 2.10', desc:'2.10. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
-  {id:'2_11', codigo:'2.11', campo:'2.11. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO que se utilizan (en uso) están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 2.11.', evidSiNoField:'Evidencias iteam 2.11', evidField:'Evidencia item 2.11', desc:'2.11. Los dispositivos/herramientas/equipos contra RIESGO ELÉCTRICO que se utilizan (en uso) están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
-  {id:'2_16', codigo:'2.16', campo:'2.16. Durante las actividades de trabajo, las DISTANCIAS SEGURAS de las líneas eléctricas aéreas se mantienen y garantizan a través de medidas específicas, identificadas y documentadas', obsField:'Observaciones iteam 2.16.', evidSiNoField:'Evidencias iteam 2.16', evidField:'Evidencia item 2.16', desc:'2.16. Durante las actividades de trabajo, las DISTANCIAS SEGURAS de las líneas eléctricas aéreas se mantienen y garantizan a través de medidas específicas, identificadas y documentadas'},
-  {id:'2_17', codigo:'2.17', campo:'2.17. Las Instalaciones eléctricas móviles (Grupos electrógenos para alimentar la red) están provistas de los sistemas de protección adecuados y certificados, y se aplican las medidas de seguridad para hacer segura la actividad.', obsField:'Observaciones iteam 2.17.', evidSiNoField:'Evidencias iteam 2.17', evidField:'Evidencia item 2.17', desc:'2.17. Las Instalaciones eléctricas móviles (Grupos electrógenos para alimentar la red) están provistas de los sistemas de protección adecuados y certificados, y se aplican las medidas de seguridad para hacer segura la actividad.'},
-  {id:'2_18', codigo:'2.18', campo:'2.18. Se evidencia la aplicación de las 5RO en las aplicaciones y herramientas digitales (APP5RO) vigentes.', obsField:'Observaciones iteam 2.18.', evidSiNoField:'Evidencias iteam 2.18', evidField:'Evidencia item 2.18', desc:'2.18. Se evidencia la aplicación de las 5RO en las aplicaciones y herramientas digitales (APP5RO) vigentes.'},
+
+const itemsGERU = [
+  { id:'gs3_2_1', codigo:'GS 3.2.1', campo:'GS 3.2.1 Se ha evaluado el impacto de ruido ambiental', obsField:'Obs GS 3.2.1', evidSiNoField:'Evid SiNo GS 3.2.1', evidField:'Evid GS 3.2.1', desc:'GS 3.2.1 Se ha evaluado el impacto de ruido ambiental.' },
 ];
-// ── CAÍDA DE ALTURA ──
-const itemsCA = [
-  {id:'3_1',  codigo:'3.1',  campo:'3.1. EPP/EPC contra TRABAJOS EN ALTURA disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 3.1.', evidSiNoField:'Evidencias iteam 3.1', evidField:'Evidencia item 3.1', desc:'3.1. EPP/EPC contra TRABAJOS EN ALTURA disponibles en la zona de trabajo (no son usados), son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
-  {id:'3_2',  codigo:'3.2',  campo:'3.2. EPP/EPC contra TRABAJOS EN ALTURA que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.', obsField:'Observaciones iteam 3.2.', evidSiNoField:'Evidencias iteam 3.2', evidField:'Evidencia item 3.2', desc:'3.2. EPP/EPC contra TRABAJOS EN ALTURA que se llevan puestos (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y se utilizan correctamente.'},
-  {id:'3_4',  codigo:'3.4',  campo:'3.4. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 3.4.', evidSiNoField:'Evidencias iteam 3.4', evidField:'Evidencia item 3.4', desc:'3.4. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) disponibles en la zona de trabajo (no son usados), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
-  {id:'3_5',  codigo:'3.5',  campo:'3.5. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) que se utilizan (en uso), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 3.5.', evidSiNoField:'Evidencias iteam 3.5', evidField:'Evidencia item 3.5', desc:'3.5. Los equipos de acceso en alturas (escaleras, ménsulas, crampones, andamios móviles) que se utilizan (en uso), están en buen estado, certificados y revisados periódicamente. Asimismo, cuenta con su check list de revisión de pre uso.'},
-  {id:'3_6',  codigo:'3.6',  campo:'3.6. Los andamios son montados, desmontados o modificados por personal cualificado, se utilizan correctamente y los elementos han sido revisados en el antes y durante de la actividad.', obsField:'Observaciones iteam 3.6.', evidSiNoField:'Evidencias iteam 3.6', evidField:'Evidencia item 3.6', desc:'3.6. Los andamios son montados, desmontados o modificados por personal cualificado, se utilizan correctamente y los elementos han sido revisados en el antes y durante de la actividad.'},
-  {id:'3_9',  codigo:'3.9',  campo:'3.9. Para TRABAJOS EN ALTURA, el análisis de integridad/estabilidad/resistencia de la estructura de soporte o anclaje se ha realizado con antelación y cuando se requiera se aplican sistemas de refuerzo como arriostramientos.', obsField:'Observaciones iteam 3.9.', evidSiNoField:'Evidencias iteam 3.9', evidField:'Evidencia item 3.9', desc:'3.9. Para TRABAJOS EN ALTURA, el análisis de integridad/estabilidad/resistencia de la estructura de soporte o anclaje se ha realizado con antelación y cuando se requiera se aplican sistemas de refuerzo como arriostramientos.'},
-  {id:'3_10', codigo:'3.10', campo:'3.10. Los TRABAJOS EN ALTURA que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 3.10.', evidSiNoField:'Evidencias iteam 3.10', evidField:'Evidencia item 3.10', desc:'3.10. Los TRABAJOS EN ALTURA que pongan en riesgo inminente al trabajador se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+
+const itemsGEG = [
+  { id:'gs3_3_1', codigo:'GS 3.3.1', campo:'GS 3.3.1 El acondicionamiento/mantenimiento es efectuado por personal capacitado (por ejemplo, en prevención de fugas de gas, tratamiento/clasificación de polvo, filtros, solución utilizada)', obsField:'Obs GS 3.3.1', evidSiNoField:'Evid SiNo GS 3.3.1', evidField:'Evid GS 3.3.1', desc:'GS 3.3.1 El acondicionamiento/mantenimiento es efectuado por personal capacitado (en prevención de fugas de gas, tratamiento/clasificación de polvo, filtros, solución utilizada).' },
+  { id:'gs3_3_2', codigo:'GS 3.3.2', campo:'GS 3.3.2 El gas se entrega a una persona autorizada para su reciclaje/eliminación', obsField:'Obs GS 3.3.2', evidSiNoField:'Evid SiNo GS 3.3.2', evidField:'Evid GS 3.3.2', desc:'GS 3.3.2 El gas se entrega a una persona autorizada para su reciclaje/eliminación.' },
 ];
-// ── CAÍDA/IMPACTO DE OBJETOS ──
-const itemsCO = [
-  {id:'4_1', codigo:'4.1', campo:'4.1. El área de trabajo está adecuadamente gestionada en cuanto al riesgo de caída de objetos, no se almacenan herramientas o equipos cerca de los bordes, sobre barandillas o superficies altas.', obsField:'Observaciones iteam 4.1.', evidSiNoField:'Evidencias iteam 4.1', evidField:'Evidencia item 4.1', desc:'4.1. El área de trabajo está adecuadamente gestionada en cuanto al riesgo de caída de objetos, no se almacenan herramientas o equipos cerca de los bordes, sobre barandillas o superficies altas.'},
-  {id:'4_2', codigo:'4.2', campo:'4.2. No existe personal ubicado en la zona de influencia (Línea de fuego) en las maniobras de IZAJE DE CARGA', obsField:'Observaciones iteam 4.2.', evidSiNoField:'Evidencias iteam 4.2', evidField:'Evidencia item 4.2', desc:'4.2. No existe personal ubicado en la zona de influencia (Línea de fuego) en las maniobras de IZAJE DE CARGA'},
-  {id:'4_3', codigo:'4.3', campo:'4.3. Los dispositivos/herramientas/equipos para gestionar IZAJE DE CARGAS disponibles en la zona de trabajo (no son usados) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 4.3.', evidSiNoField:'Evidencias iteam 4.3', evidField:'Evidencia item 4.3', desc:'4.3. Los dispositivos/herramientas/equipos para gestionar IZAJE DE CARGAS disponibles en la zona de trabajo (no son usados) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
-  {id:'4_4', codigo:'4.4', campo:'4.4. El vehículo de carga para el IZAJE DE CARGAS son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 4.4.', evidSiNoField:'Evidencias iteam 4.4', evidField:'Evidencia item 4.4', desc:'4.4. El vehículo de carga para el IZAJE DE CARGAS son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas'},
-  {id:'4_5', codigo:'4.5', campo:'4.5. Los dispositivos / herramientas / equipos para gestionar IZAJE DE CARGAS que se utilizan son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas. Asimismo, cuenta con su check list de revisión de pre uso.', obsField:'Observaciones iteam 4.5.', evidSiNoField:'Evidencias iteam 4.5', evidField:'Evidencia item 4.5', desc:'4.5. Los dispositivos / herramientas / equipos para gestionar IZAJE DE CARGAS que se utilizan son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas. Asimismo, cuenta con su check list de revisión de pre uso.'},
-  {id:'4_6', codigo:'4.6', campo:'4.6. El área identificada para IZAJE DE CARGAS es adecuada en condiciones de espacio y terreno y esto ha sido evaluado.', obsField:'Observaciones iteam 4.6.', evidSiNoField:'Evidencias iteam 4.6', evidField:'Evidencia item 4.6', desc:'4.6. El área identificada para IZAJE DE CARGAS es adecuada en condiciones de espacio y terreno y esto ha sido evaluado.'},
-  {id:'4_7', codigo:'4.7', campo:'4.7. Las actividades de IZAJE DE CARGAS que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 4.7.', evidSiNoField:'Evidencias iteam 4.7', evidField:'Evidencia item 4.7', desc:'4.7. Las actividades de IZAJE DE CARGAS que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+
+const itemsGEA = [
+  { id:'gs3_4_1', codigo:'GS 3.4.1', campo:'GS 3.4.1 Los productos químicos deben ser almacenados en lugares seguros, clasificados y debidamente separados', obsField:'Obs GS 3.4.1', evidSiNoField:'Evid SiNo GS 3.4.1', evidField:'Evid GS 3.4.1', desc:'GS 3.4.1 Los productos químicos deben ser almacenados en lugares seguros, clasificados y debidamente separados.' },
+  { id:'gs3_4_2', codigo:'GS 3.4.2', campo:'GS 3.4.2 Gestión correcta del uso, almacenamiento y transporte (cumplimiento de la normativa concerniente a los materiales peligrosos, planes de contingencia, porta y aplica el instructivo, hojas MSDS, etc.)', obsField:'Obs GS 3.4.2', evidSiNoField:'Evid SiNo GS 3.4.2', evidField:'Evid GS 3.4.2', desc:'GS 3.4.2 Gestión correcta del uso, almacenamiento y transporte (cumplimiento de la normativa de materiales peligrosos, planes de contingencia, instructivo, hojas MSDS, etc.).' },
 ];
-// ── GESTIÓN DE INTERFERENCIAS ──
-const itemsGI = [
-  {id:'5_1', codigo:'5.1', campo:'5.1. Las interferencias con exposición de personas a un riesgo inminente (Ej. interferencias con actividades, líneas eléctricas, máquinas, vehículos, etc.) están bien gestionadas y se realizan según la normativa vigente brindada por PLUZ.', obsField:'Observaciones iteam 5.1.', evidSiNoField:'Evidencias iteam 5.1', evidField:'Evidencia item 5.1', desc:'5.1. Las interferencias con exposición de personas a un riesgo inminente (Ej. interferencias con actividades, líneas eléctricas, máquinas, vehículos, etc.) están bien gestionadas y se realizan según la normativa vigente brindada por PLUZ.'},
-  {id:'5_2', codigo:'5.2', campo:'5.2. En el caso de actividades complejas, la participación en las reuniones de coordinación se realiza y documenta.', obsField:'Observaciones iteam 5.2.', evidSiNoField:'Evidencias iteam 5.2', evidField:'Evidencia item 5.2', desc:'5.2. En el caso de actividades complejas, la participación en las reuniones de coordinación se realiza y documenta.'},
-  {id:'5_5', codigo:'5.5', campo:'5.5. Los movimientos y/u operaciones de la maquinaria son apoyados por una persona dedicada (Vigía, señalero) y en la vía pública cuando se alterna una vía el tráfico es dirigido por vigías.', obsField:'Observaciones iteam 5.5.', evidSiNoField:'Evidencias iteam 5.5', evidField:'Evidencia item 5.5', desc:'5.5. Los movimientos y/u operaciones de la maquinaria son apoyados por una persona dedicada (Vigía, señalero) y en la vía pública cuando se alterna una vía el tráfico es dirigido por vigías.'},
-  {id:'5_6', codigo:'5.6', campo:'5.6. Se ha identificado y evaluado la presencia de instalaciones subterráneas, cables, tuberías y otros elementos que generan interferencias en la actividad', obsField:'Observaciones iteam 5.6.', evidSiNoField:'Evidencias iteam 5.6', evidField:'Evidencia item 5.6', desc:'5.6. Se ha identificado y evaluado la presencia de instalaciones subterráneas, cables, tuberías y otros elementos que generan interferencias en la actividad'},
-  {id:'5_7', codigo:'5.7', campo:'5.7. Las actividades complejas son controladas a través de una supervisión (Supervisor de capa, jefe de cuadrilla, agente de descargo, Prevencionista, entre otros) según corresponda de acuerdo con la planificación.', obsField:'Observaciones iteam 5.7.', evidSiNoField:'Evidencias iteam 5.7', evidField:'Evidencia item 5.7', desc:'5.7. Las actividades complejas son controladas a través de una supervisión (Supervisor de capa, jefe de cuadrilla, agente de descargo, Prevencionista, entre otros) según corresponda de acuerdo con la planificación.'},
+
+const itemsZT = [
+  { id:'gs3_5_1', codigo:'GS 3.5.1', campo:'GS 3.5.1 Los "materiales excavados" deben colocarse de forma correcta y eliminados en los tiempos previstos', obsField:'Obs GS 3.5.1', evidSiNoField:'Evid SiNo GS 3.5.1', evidField:'Evid GS 3.5.1', desc:'GS 3.5.1 Los "materiales excavados" deben colocarse de forma correcta y eliminados en los tiempos previstos.' },
+  { id:'gs3_5_2', codigo:'GS 3.5.2', campo:'GS 3.5.2 Se garantiza la capacidad de controlar y corregir (sistemas de protección) cualquier derrame de aceite u otros contaminantes', obsField:'Obs GS 3.5.2', evidSiNoField:'Evid SiNo GS 3.5.2', evidField:'Evid GS 3.5.2', desc:'GS 3.5.2 Se garantiza la capacidad de controlar y corregir (sistemas de protección) cualquier derrame de aceite u otros contaminantes.' },
+  { id:'gs3_5_3', codigo:'GS 3.5.3', campo:'GS 3.5.3 Se evita la afectación al patrimonio cultural en la ejecución de los trabajos', obsField:'Obs GS 3.5.3', evidSiNoField:'Evid SiNo GS 3.5.3', evidField:'Evid GS 3.5.3', desc:'GS 3.5.3 Se evita la afectación al patrimonio cultural en la ejecución de los trabajos.' },
+  { id:'gs3_5_4', codigo:'GS 3.5.4', campo:'GS 3.5.4 En los trabajos en la vía pública se minimiza la afectación al público (control de la obstrucción de accesos a propiedades particulares, implementación de sendas peatonales, porta y aplica instructivo, orden/limpieza, señalización, etc.)', obsField:'Obs GS 3.5.4', evidSiNoField:'Evid SiNo GS 3.5.4', evidField:'Evid GS 3.5.4', desc:'GS 3.5.4 En los trabajos en la vía pública se minimiza la afectación al público (obstrucción de accesos, sendas peatonales, instructivo, orden/limpieza, señalización, etc.).' },
+  { id:'gs3_5_5', codigo:'GS 3.5.5', campo:'GS 3.5.5 Se evita el levantamiento de polvo en la generación y eliminación del material excavado', obsField:'Obs GS 3.5.5', evidSiNoField:'Evid SiNo GS 3.5.5', evidField:'Evid GS 3.5.5', desc:'GS 3.5.5 Se evita el levantamiento de polvo en la generación y eliminación del material excavado.' },
 ];
-// ── ATRAPAMIENTO ──
-const itemsAT = [
-  {id:'6_1', codigo:'6.1', campo:'6.1. Las guardas, protecciones o barreras utilizados para evitar el contacto con las partes móviles de la maquinaria están presentes, intactos y funcionales', obsField:'Observaciones iteam 6.1.', evidSiNoField:'Evidencias iteam 6.1', evidField:'Evidencia item 6.1', desc:'6.1. Las guardas, protecciones o barreras utilizados para evitar el contacto con las partes móviles de la maquinaria están presentes, intactos y funcionales'},
-  {id:'6_3', codigo:'6.3', campo:'6.3. Los trabajadores usan ropa y equipamiento adecuado para evitar accidentes por atrapamiento. Además, no se utilizan collares, cabello largo no recogido y ropa no adherente al cuerpo', obsField:'Observaciones iteam 6.3.', evidSiNoField:'Evidencias iteam 6.3', evidField:'Evidencia item 6.3', desc:'6.3. Los trabajadores usan ropa y equipamiento adecuado para evitar accidentes por atrapamiento. Además, no se utilizan collares, cabello largo no recogido y ropa no adherente al cuerpo'},
-  {id:'6_4', codigo:'6.4', campo:'6.4. Las actividades con riesgo de ATRAPAMIENTO que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 6.4.', evidSiNoField:'Evidencias iteam 6.4', evidField:'Evidencia item 6.4', desc:'6.4. Las actividades con riesgo de ATRAPAMIENTO que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
+
+const itemsCAV = [
+  { id:'gs3_6_1', codigo:'GS 3.6.1', campo:'GS 3.6.1 La poda se efectúa correctamente y aplica las normas locales sobre conservación de áreas verdes', obsField:'Obs GS 3.6.1', evidSiNoField:'Evid SiNo GS 3.6.1', evidField:'Evid GS 3.6.1', desc:'GS 3.6.1 La poda se efectúa correctamente y aplica las normas locales sobre conservación de áreas verdes.' },
 ];
-// ── RIESGO DE EXCAVACIÓN ──
-const itemsRE = [
-  {id:'7_1', codigo:'7.1', campo:'7.1. Las actividades de EXCAVACIÓN (excavaciones profundas mayores a 1.5 m.) se llevan a cabo correctamente para evitar el riesgo de colapso de estructuras/ terrenos (entibaciones según las profundidades, apuntalamiento, etc.)', obsField:'Observaciones iteam 7.1.', evidSiNoField:'Evidencias iteam 7.1', evidField:'Evidencia item 7.1', desc:'7.1. Las actividades de EXCAVACIÓN (excavaciones profundas mayores a 1.5 m.) se llevan a cabo correctamente para evitar el riesgo de colapso de estructuras/ terrenos (entibaciones según las profundidades, apuntalamiento, etc.)'},
-  {id:'7_2', codigo:'7.2', campo:'7.2. Se realizó el sondeo con el detector de flujo para identificar posibles interferencias eléctricas', obsField:'Observaciones iteam 7.2.', evidSiNoField:'Evidencias iteam 7.2', evidField:'Evidencia item 7.2', desc:'7.2. Se realizó el sondeo con el detector de flujo para identificar posibles interferencias eléctricas.'},
-  {id:'7_3', codigo:'7.3', campo:'7.3. La maquinaria (Retroexcavadora, Bobcat, otras) para la actividad de EXCAVACIÓN son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y están autorizadas.', obsField:'Observaciones iteam 7.3.', evidSiNoField:'Evidencias iteam 7.3', evidField:'Evidencia item 7.3', desc:'7.3. La maquinaria (Retroexcavadora, Bobcat, otras) para la actividad de EXCAVACIÓN son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas y están autorizadas.'},
-  {id:'7_4', codigo:'7.4', campo:'7.4. Las actividades con riesgo de EXCAVACIÓN que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 7.4.', evidSiNoField:'Evidencias iteam 7.4', evidField:'Evidencia item 7.4', desc:'7.4. Las actividades con riesgo de EXCAVACIÓN que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
-];
-// ── RIESGO QUÍMICO ──
-const itemsRQ = [
-  {id:'10_1', codigo:'10.1', campo:'10.1. Las sustancias/preparados químicos disponibles en el área de trabajo están autorizados, son manipulados, almacenados y en uso de acuerdo con su Ficha de Datos de Seguridad, asimismo cuentan con este documento en campo.', obsField:'Observaciones iteam 10.1.', evidSiNoField:'Evidencias iteam 10.1', evidField:'Evidencia item 10.1', desc:'10.1. Las sustancias/preparados químicos disponibles en el área de trabajo están autorizados, son manipulados, almacenados y en uso de acuerdo con su Ficha de Datos de Seguridad, asimismo cuentan con este documento en campo.'},
-];
-// ── RIESGO DE INCENDIO ──
-const itemsRI = [
-  {id:'12_1', codigo:'12.1', campo:'12.1. Las actividades de TRABAJOS CON RIESGO DE INCENDIO (Soldadura, esmerilado, cortes, etc.) que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 12.1.', evidSiNoField:'Evidencias iteam 12.1', evidField:'Evidencia item 12.1', desc:'12.1. Las actividades de TRABAJOS CON RIESGO DE INCENDIO (Soldadura, esmerilado, cortes, etc.) que se realizan se llevan a cabo de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
-];
-// ── ESPACIOS CONFINADOS ──
-const itemsEC = [
-  {id:'13_1', codigo:'13.1', campo:'13.1. Para las actividades en ESPACIOS CONFINADOS se realiza el monitoreo de la atmosfera para la detección de gases, y este equipo está disponible, es eficiente y adecuado (intactos, certificados y verificados) según exigencias normativas', obsField:'Observaciones iteam 13.1.', evidSiNoField:'Evidencias iteam 13.1', evidField:'Evidencia item 13.1', desc:'13.1. Para las actividades en ESPACIOS CONFINADOS se realiza el monitoreo de la atmosfera para la detección de gases, y este equipo está disponible, es eficiente y adecuado (intactos, certificados y verificados) según exigencias normativas'},
-  {id:'13_5', codigo:'13.5', campo:'13.5. En caso de lugares con un intercambio de aire inadecuado, existe un sistema de ventilación forzada (intactos, certificados y verificados) según exigencias normativas.', obsField:'Observaciones iteam 13.5.', evidSiNoField:'Evidencias iteam 13.5', evidField:'Evidencia item 13.5', desc:'13.5. En caso de lugares con un intercambio de aire inadecuado, existe un sistema de ventilación forzada (intactos, certificados y verificados) según exigencias normativas.'},
-  {id:'13_6', codigo:'13.6', campo:'13.6. Las actividades en ESPACIOS CONFINADOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.', obsField:'Observaciones iteam 13.6.', evidSiNoField:'Evidencias iteam 13.6', evidField:'Evidencia item 13.6', desc:'13.6. Las actividades en ESPACIOS CONFINADOS se realizan de acuerdo con los requisitos legales, normativos y disposiciones de seguridad brindadas por PLUZ.'},
-];
-// ── RIESGO DE EXPLOSIÓN ──
-const itemsREX = [
-  {id:'14_1', codigo:'14.1', campo:'14.1. Si durante la ejecución del trabajo existe el riesgo de formación de atmósferas explosivas o un aumento en el nivel de riesgo, la concentración se controla continuamente mediante explosímetros.', obsField:'Observaciones iteam 14.1.', evidSiNoField:'Evidencias iteam 14.1', evidField:'Evidencia item 14.1', desc:'14.1. Si durante la ejecución del trabajo existe el riesgo de formación de atmósferas explosivas o un aumento en el nivel de riesgo, la concentración se controla continuamente mediante explosímetros.'},
-  {id:'14_2', codigo:'14.2', campo:'14.2. Los equipos electrónicos (teléfonos móviles, emisoras de radio, etc.) introducidos en las zonas de trabajo son adecuados para el tipo de clasificación de la zona.', obsField:'Observaciones iteam 14.2.', evidSiNoField:'Evidencias iteam 14.2', evidField:'Evidencia item 14.2', desc:'14.2. Los equipos electrónicos (teléfonos móviles, emisoras de radio, etc.) introducidos en las zonas de trabajo son adecuados para el tipo de clasificación de la zona.'},
-  {id:'14_3', codigo:'14.3', campo:'14.3. Los equipos/herramientas y actividades son adecuados para el tipo de clasificación de la zona con riesgo de formación de atmósferas explosivas.', obsField:'Observaciones iteam 14.3.', evidSiNoField:'Evidencias iteam 14.3', evidField:'Evidencia item 14.3', desc:'14.3. Los equipos/herramientas y actividades son adecuados para el tipo de clasificación de la zona con riesgo de formación de atmósferas explosivas.'},
-];
-// ── RIESGO DE CORTES ──
-const itemsRC = [
-  {id:'15_1', codigo:'15.1', campo:'15.1. EPP/EPC y Ropa para protección contra CORTES que se utilizan (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas brindadas por PLUZ.', obsField:'Observaciones iteam 15.1.', evidSiNoField:'Evidencias iteam 15.1', evidField:'Evidencia item 15.1', desc:'15.1. EPP/EPC y Ropa para protección contra CORTES que se utilizan (en uso) son eficaces y adecuados (completos, intactos, certificados y verificados) según exigencias normativas brindadas por PLUZ.'},
-  {id:'15_2', codigo:'15.2', campo:'15.2. Las guardas, protecciones o barreras utilizados para evitar CORTES con las partes móviles de la maquinaria están presentes, intactos y funcionales.', obsField:'Observaciones iteam 15.2.', evidSiNoField:'Evidencias iteam 15.2', evidField:'Evidencia item 15.2', desc:'15.2. Las guardas, protecciones o barreras utilizados para evitar CORTES con las partes móviles de la maquinaria están presentes, intactos y funcionales.'},
-];
-// ── RIESGO DE ESTRÉS POR CALOR ──
-const itemsRESC = [
-  {id:'16_1', codigo:'16.1', campo:'16.1. Las guardas, protecciones o barreras utilizadas para proteger contra las PROYECCIONES de fluidos y materiales están presentes, intactos y funcionales.', obsField:'Observaciones iteam 16.1.', evidSiNoField:'Evidencias iteam 16.1', evidField:'Evidencia item 16.1', desc:'16.1. Las guardas, protecciones o barreras utilizadas para proteger contra las PROYECCIONES de fluidos y materiales están presentes, intactos y funcionales.'},
-];
-// ── PROYECCIÓN DE PARTÍCULAS / FLUÍDOS ──
-const itemsPP = [
-  {id:'17_1', codigo:'17.1', campo:'17.1. En relación con las condiciones ambientales desfavorables (Ej. altas o bajas temperaturas), que podrían afectar la salud de los trabajadores, se aplican medidas preventivas de acuerdo con la evaluación de riesgos.', obsField:'Observaciones iteam 17.1.', evidSiNoField:'Evidencias iteam 17.1', evidField:'Evidencia item 17.1', desc:'17.1. En relación con las condiciones ambientales desfavorables (Ej. altas o bajas temperaturas), que podrían afectar la salud de los trabajadores, se aplican medidas preventivas de acuerdo con la evaluación de riesgos.'},
-];
-// ── GESTIÓN DE EMERGENCIAS (OBLIGATORIO) ──
-const itemsGE = [
-  {id:'18_1', codigo:'18.1', campo:'18.1. El Plan de emergencias / procedimientos/instrucciones están disponibles en el lugar de trabajo, adecuados para el tipo y contexto de los trabajos. Los trabajadores conocen los procedimientos de emergencia que deben adoptarse.', obsField:'Observaciones iteam 18.1', evidSiNoField:'Evidencias iteam 18.1', evidField:'Evidencia item 18.1', desc:'18.1. El Plan de emergencias / procedimientos/instrucciones están disponibles en el lugar de trabajo, adecuados para el tipo y contexto de los trabajos. Los trabajadores conocen los procedimientos de emergencia que deben adoptarse.'},
-  {id:'18_2', codigo:'18.2', campo:'18.2. Todas las medidas contempladas en el plan/procedimiento/instrucción de emergencias (Ej. Extintores, botiquines de primeros auxilios, dispositivos de rescate, etc.), se implementan, son adecuadas, eficientes y se revisan periódicamente y funciona para los riesgos de la actividad en exposición.', obsField:'Observaciones iteam 18.2.', evidSiNoField:'Evidencias iteam 18.2', evidField:'Evidencia item 18.2', desc:'18.2. Todas las medidas contempladas en el plan/procedimiento/instrucción de emergencias (Ej. Extintores, botiquines de primeros auxilios, dispositivos de rescate, etc.), se implementan, son adecuadas, eficientes y se revisan periódicamente y funciona para los riesgos de la actividad en exposición.'},
-  {id:'18_3', codigo:'18.3', campo:'18.3. Si los trabajadores realizar su actividad SOLOS Y AISLADOS, se implementa un dispositivo de comunicación para que el empleado pueda pedir ayuda en caso de emergencia.', obsField:'Observaciones iteam 18.3.', evidSiNoField:'Evidencias iteam 18.3', evidField:'Evidencia item 18.3', desc:'18.3. Si los trabajadores realizar su actividad SOLOS Y AISLADOS, se implementa un dispositivo de comunicación para que el empleado pueda pedir ayuda en caso de emergencia.'},
+
+const itemsPA = [
+  { id:'gs3_7_1', codigo:'GS 3.7.1', campo:'GS 3.7.1 Cumplimiento de la legislación local/permisos locales sobre requisitos ambientales específicos (Autorizaciones municipales para rotura de pistas/veredas, poda; certificado vehicular RTV si está apto en la emisión de gases, etc.)', obsField:'Obs GS 3.7.1', evidSiNoField:'Evid SiNo GS 3.7.1', evidField:'Evid GS 3.7.1', desc:'GS 3.7.1 Cumplimiento de la legislación local/permisos locales sobre requisitos ambientales específicos (autorizaciones municipales para rotura de pistas/veredas, poda; certificado vehicular RTV, etc.).' },
 ];
  
 // ─── ESTADO ───
@@ -1565,21 +1511,13 @@ function logout() { if (confirm('¿Deseas cerrar sesión?')) location.reload(); 
 
 // ─── RENDER ITEMS ───
 function renderItems() {
-  renderSeccion('items-vg',   itemsVG,   'vg');
-  renderSeccion('items-rel',  itemsREL,  'rel');
-  renderSeccion('items-ca',   itemsCA,   'ca');
-  renderSeccion('items-co',   itemsCO,   'co');
-  renderSeccion('items-gi',   itemsGI,   'gi');
-  renderSeccion('items-at',   itemsAT,   'at');
-  renderSeccion('items-re',   itemsRE,   're');
-  renderSeccion('items-rq',   itemsRQ,   'rq');
-  renderSeccion('items-ri',   itemsRI,   'ri');
-  renderSeccion('items-ec',   itemsEC,   'ec');
-  renderSeccion('items-rex',  itemsREX,  'rex');
-  renderSeccion('items-rc',   itemsRC,   'rc');
-  renderSeccion('items-resc', itemsRESC, 'resc');
-  renderSeccion('items-pp',   itemsPP,   'pp');
-  renderSeccion('items-ge',   itemsGE,   'ge');
+  renderSeccion('items-gere', itemsGERE, 'gere');
+  renderSeccion('items-geru', itemsGERU, 'geru');
+  renderSeccion('items-geg',  itemsGEG,  'geg');
+  renderSeccion('items-gea',  itemsGEA,  'gea');
+  renderSeccion('items-zt',   itemsZT,   'zt');
+  renderSeccion('items-cav',  itemsCAV,  'cav');
+  renderSeccion('items-pa',   itemsPA,   'pa');
 }
 
 function renderSeccion(containerId, items, tipo) {
@@ -1587,7 +1525,7 @@ function renderSeccion(containerId, items, tipo) {
 }
 
 function itemHTML(item, tipo) {
-  const cc = tipo ? `item-codigo-${tipo}` : 'item-codigo-vg';
+  const cc = tipo ? `item-codigo-${tipo}` : 'item-codigo-gere';
   return `
     <div class="item-card" id="card-${item.id}">
       <div class="item-header">
